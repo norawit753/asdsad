@@ -24,6 +24,9 @@ import { clearErrors } from "../../actions/main/errorAction";
 import { withRouter } from "react-router-dom";
 import delay from "../../utilis/delay";
 
+// Complaint
+import CardComplaint from "../complaint/Card";
+
 const Login = (props) => {
   const imgStyle = {
     maxWidth: 350,

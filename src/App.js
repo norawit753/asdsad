@@ -1,22 +1,15 @@
-import React, { useState, useMemo, Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useLocation,
-} from "react-router-dom";
-import { Container, Fade, Col, Row } from "reactstrap";
+import { Fade } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 // Main
 import AppNavbar from "./components/main/AppNavbar";
 import AppFooter from "./components/main/AppFooter";
-import Login from "./components/main/Login";
-// Main Page
-import UserPage from "./components/Page/main/UserPage";
 
+// Main Page
+import MainPage from "./components/Page/main/MainPage";
 // Loading
 import * as loadingData from "./utilis/lf30_editor_wvri0o27.json";
 import Lottie from "react-lottie";
@@ -49,7 +42,7 @@ const App = (props) => {
       setloading(true);
       setTimeout(() => {
         dispatch({ type: "PAGE_LOADED" });
-      }, 1000);
+      }, 1500);
     } else {
       setloading(false);
     }
@@ -75,12 +68,7 @@ const App = (props) => {
           <br />
           <br />
           <br />
-          <Switch>
-            <Route exact path="/">
-              <Login />
-            </Route>
-            <Route path="/users" component={UserPage} />
-          </Switch>
+          <MainPage />
           <br />
           <br />
           <br />

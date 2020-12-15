@@ -1,5 +1,8 @@
 import { combineReducers } from "redux";
-import combinMain from "./main/index";
+import combineMain from "./main/index";
+import combineComplaint from "./complaint/index";
+
 export default combineReducers({
-  main: combinMain,
+  main: combineMain,
+  complaint: combineComplaint,
 });
