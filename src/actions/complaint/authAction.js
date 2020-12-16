@@ -23,6 +23,7 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
   const body = JSON.stringify({ buasri_id });
   axios
     .post("http://localhost:5002/api/auth", body, config)
+
     .then((res) => {
       console.log(res.data);
       if (res.data.token) {
@@ -32,16 +33,12 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
         });
       }
     })
-    .then(() =>
+    .catch((err) => {
+      dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
-        type: PAGE_LOADING,
-      }).catch((err) => {
-        dispatch(returnErrors(err.response.data, err.response.status));
-        dispatch({
-          type: COMPLAINT_AUTH_FAIL,
-        });
-      })
-    );
+        type: COMPLAINT_AUTH_FAIL,
+      });
+    });
 };
 
 // Setup config/headers and token

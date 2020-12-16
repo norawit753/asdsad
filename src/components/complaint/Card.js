@@ -15,6 +15,7 @@ import { auth_user } from "../../actions/complaint/authAction";
 
 const CardComplaint = (props) => {
   const auth = useSelector((state) => state.main.auth.user);
+  const dispatch = useDispatch();
 
   const imgStyle = {
     maxWidth: 300,
@@ -31,6 +32,7 @@ const CardComplaint = (props) => {
       buasri_id: auth.buasri_id,
     };
     await auth_user(newUserComplaint);
+    await dispatch({ type: "PAGE_LOADING" });
     await props.history.push("/complaint");
   };
 
@@ -51,7 +53,7 @@ const CardComplaint = (props) => {
           <CardText>แจ้งร้องเรียน - ปัญหาต่าง ๆ ภายในคณะวิทยาศาสตร์</CardText>
           {auth ? (
             <Fragment>
-              <Button onClick={onClick} block>
+              <Button color="dark" onClick={onClick} block>
                 เข้าใช้งาน
               </Button>
             </Fragment>
