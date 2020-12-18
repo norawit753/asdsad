@@ -26,6 +26,7 @@ import {
 import { register } from "../../../actions/complaint/registerAction";
 import FormButton from "../../complaint/FormButton";
 import FormPage from "./FormPage";
+import FormPageV2 from "./FormPage_V2";
 
 const MainPage = (props) => {
   const user = useSelector((state) => state.main.auth.user);
@@ -64,7 +65,7 @@ const MainPage = (props) => {
             <Route exact path="/complaint">
               <FormButton />
             </Route>
-            <Route path="/complaint/form" component={FormPage} />
+            <Route path="/complaint/form" component={FormPageV2} />
           </Switch>
         </Container>
       ) : (

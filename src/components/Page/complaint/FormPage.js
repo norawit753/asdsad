@@ -18,7 +18,6 @@ import { uploadfile } from "../../../actions/complaint/formAction";
 const ComplaintFormPage = (props) => {
   const user = useSelector((state) => state.complaint.auth.user);
   const token = useSelector((state) => state.complaint.auth.token);
-  const dispatch = useDispatch();
 
   const [email, setemail] = useState(user.email);
   const [phone, setphone] = useState("");
@@ -224,13 +223,6 @@ const ComplaintFormPage = (props) => {
                 <Button color={"danger"} onClick={cancelUpload}>
                   ยกเลิก Upload
                 </Button>
-              </Fragment>
-            ) : null}
-          </FormGroup>
-
-          <FormGroup>
-            {Image.preview ? (
-              <Fragment>
                 <img src={Image.preview} alt="" width="300" />
               </Fragment>
             ) : null}

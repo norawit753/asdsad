@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
-import { connect, useSelector } from "react-redux";
+import React, { Fragment, useEffect } from "react";
+import { connect, useSelector, useDispatch } from "react-redux";
 import { Container, Col, Row } from "reactstrap";
 import { Route, Switch } from "react-router-dom";
 
@@ -13,6 +13,7 @@ import ComplaintPage from "../complaint/MainPage";
 
 const MainPage = (props) => {
   const checkToken = useSelector((state) => state.main.auth.token);
+
   return (
     <Fragment>
       {checkToken ? (
