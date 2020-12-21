@@ -24,12 +24,23 @@ import {
   useLocation,
 } from "react-router-dom";
 import { register } from "../../../actions/complaint/registerAction";
+import {
+  getlist_all,
+  getlist_user,
+} from "../../../actions/complaint/listAction";
 import FormButton from "../../complaint/FormButton";
 import FormPage from "./FormPage";
-import FormPageV2 from "./FormPage_V2";
-
+import MainTableUser from "../../complaint/MainTableUser";
+import MainTableAdmin from "../../complaint/MainTableAdmin.js";
+import DetailPage from "./DetailPage";
 const MainPage = (props) => {
+  // Main
   const user = useSelector((state) => state.main.auth.user);
+  // Complaint
+  const complaintUser = useSelector((state) => state.complaint.auth.user);
+  const listdata = useSelector((state) => state.complaint.list.list);
+  const complaintToken = useSelector((state) => state.complaint.auth.token);
+
   const dispatch = useDispatch();
   const checkTokenComplaint = useSelector(
     (state) => state.complaint.auth.token
@@ -37,8 +48,10 @@ const MainPage = (props) => {
 
   MainPage.propTypes = {
     register: PropTypes.func.isRequired,
+    getlist_all: PropTypes.func.isRequired,
+    getlist_user: PropTypes.func.isRequired,
   };
-  const { register } = props;
+  const { register, getlist_all, getlist_user } = props;
 
   const RegisterComplaint = (e) => {
     e.preventDefault();
@@ -57,6 +70,27 @@ const MainPage = (props) => {
     dispatch({ type: "PAGE_LOADING" });
     props.history.push("/");
   };
+
+  useMemo(() => {
+    if (complaintUser.position) {
+      const getListData = async () => {
+        const sendBuasriID = await {
+          token: complaintToken,
+          buasri_id: complaintUser.buasri_id,
+        };
+        if (complaintUser.position === "ADMIN") {
+          getlist_all(sendBuasriID);
+        }
+
+        if (complaintUser.position === "USER") {
+          getlist_user(sendBuasriID);
+        }
+      };
+
+      getListData();
+    }
+  }, [complaintUser.position]);
+
   return (
     <Fragment>
       {checkTokenComplaint ? (
@@ -64,8 +98,15 @@ const MainPage = (props) => {
           <Switch>
             <Route exact path="/complaint">
               <FormButton />
+              {complaintUser.position === "USER" && listdata ? (
+                <MainTableUser />
+              ) : null}
+              {complaintUser.position === "ADMIN" && listdata ? (
+                <MainTableAdmin />
+              ) : null}
             </Route>
-            <Route path="/complaint/form" component={FormPageV2} />
+            <Route path="/complaint/form" component={FormPage} />
+            <Route path="/complaint/detail" component={DetailPage} />
           </Switch>
         </Container>
       ) : (
@@ -99,4 +140,4 @@ const MainPage = (props) => {
   );
 };
 
-export default connect(null, { register })(MainPage);
+export default connect(null, { register, getlist_all, getlist_user })(MainPage);

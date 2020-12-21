@@ -30,7 +30,7 @@ export const register = ({ buasri_id, email, position, active }) => (
         returnErrors(
           err.response.data,
           err.response.status,
-          "COMPLAINT_REGISTER_FAIL"
+          COMPLAINT_REGISTER_FAIL
         )
       );
     });

@@ -3,12 +3,7 @@ import { returnErrors } from "../main/errorAction";
 import {
   COMPLAINT_AUTH_SUCCESS,
   COMPLAINT_AUTH_FAIL,
-  COMPLAINT_LOADING,
-  COMPLAINT_LOADED,
-  COMPLAINT_REGISTER_SUCCESS,
-  COMPLAINT_REGISTER_FAIL,
 } from "../../type/complaint/type";
-import { PAGE_LOADING } from "../../type/main/type";
 
 // Auth User
 export const auth_user = ({ buasri_id }) => (dispatch) => {
@@ -25,7 +20,7 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
     .post("http://localhost:5002/api/auth", body, config)
 
     .then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.token) {
         dispatch({
           type: COMPLAINT_AUTH_SUCCESS,
