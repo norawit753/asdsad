@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   COMPLAINT_GET_LIST_USER,
   COMPLAINT_GET_LIST_ALL,
+  COMPLAINT_SELECT_LIST,
   COMPLAINT_ERROR,
 } from "../../type/complaint/type";
 
@@ -64,7 +65,20 @@ export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
       "x-auth-token": token,
     },
   };
-  const body = JSON.stringify({ id, buasri_id });
-  console.log(body);
-  // axios.post("http://localhost:5002/api/list/user/select", body, config);
+  const body = JSON.stringify({ buasri_id, id });
+  // console.log(body);
+  axios
+    .post("http://localhost:5002/api/list/user/select", body, config)
+    .then((res) => {
+      dispatch({
+        type: COMPLAINT_SELECT_LIST,
+        payload: res.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: COMPLAINT_ERROR,
+        payload: error.status,
+      });
+    });
 };

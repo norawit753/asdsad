@@ -6,10 +6,12 @@ import { useTable } from "react-table";
 import { withRouter } from "react-router-dom";
 
 import { getdetail_list } from "../../actions/complaint/listAction";
+
 const MainTableAdmin = (props) => {
   // Complaint
   const data = useSelector((state) => state.complaint.list.list);
   const token = useSelector((state) => state.complaint.auth.token);
+  const dispatch = useDispatch();
 
   MainTableAdmin.propTypes = {
     getdetail_list: PropTypes.func.isRequired,
@@ -23,7 +25,9 @@ const MainTableAdmin = (props) => {
       id: getValue[0],
       buasri_id: getValue[1],
     };
-    getdetail_list(Detail);
+    await getdetail_list(Detail);
+    await dispatch({ type: "PAGE_LOADING" });
+    await props.history.push("/complaint/detail");
   };
   const columns = React.useMemo(
     () => [

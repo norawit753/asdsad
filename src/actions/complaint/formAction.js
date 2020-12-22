@@ -49,7 +49,6 @@ export const newlist = ({
     },
   };
   const body = JSON.stringify({
-    token,
     buasri_id,
     type,
     member,
@@ -61,7 +60,7 @@ export const newlist = ({
     file_name,
     file_path,
   });
-  // console.log(body);
+  console.log(body);
   axios
     .put("http://localhost:5002/api/list/user/add", body, config)
     .then((res) => {

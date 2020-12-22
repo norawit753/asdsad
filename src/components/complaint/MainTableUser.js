@@ -3,18 +3,40 @@ import { connect, useSelector, useDispatch } from "react-redux";
 import { Table, Button } from "reactstrap";
 import PropTypes from "prop-types";
 import { useTable } from "react-table";
+import { withRouter } from "react-router-dom";
+
+import { getdetail_list } from "../../actions/complaint/listAction";
 
 const MainTableUser = (props) => {
   // Complaint
-  //   const complaintUser = useSelector((state) => state.complaint.auth.user);
   const data = useSelector((state) => state.complaint.list.list);
+  const token = useSelector((state) => state.complaint.auth.token);
+  const dispatch = useDispatch();
 
+  MainTableUser.propTypes = {
+    getdetail_list: PropTypes.func.isRequired,
+  };
+
+  const { getdetail_list } = props;
   const onClick = async (e) => {
-    console.log(e.value);
+    const getValue = await e.target.value.split(",");
+    const Detail = await {
+      token: token,
+      id: getValue[0],
+      buasri_id: getValue[1],
+    };
+    // console.log(getValue);
+    await getdetail_list(Detail);
+    await dispatch({ type: "PAGE_LOADING" });
+    await props.history.push("/complaint/detail");
   };
 
   const columns = React.useMemo(
     () => [
+      {
+        Header: "Buasri ID",
+        accessor: "buasri_id",
+      },
       {
         Header: "ประเภท",
         accessor: "type",
@@ -28,7 +50,10 @@ const MainTableUser = (props) => {
         Header: "รายละเอียด",
         accessor: "_id",
         Cell: ({ cell }) => (
-          <Button value={cell.row.values._id} onClick={onClick}>
+          <Button
+            value={[cell.row.values._id, cell.row.values.buasri_id]}
+            onClick={onClick}
+          >
             รายละเอียด
           </Button>
         ),
@@ -79,4 +104,4 @@ const MainTableUser = (props) => {
   );
 };
 
-export default connect(null, null)(MainTableUser);
+export default withRouter(connect(null, { getdetail_list })(MainTableUser));
