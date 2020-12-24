@@ -16,7 +16,7 @@ export const getlist_user = ({ buasri_id, token }) => (dispatch) => {
   };
   const body = JSON.stringify({ buasri_id });
   axios
-    .post("http://localhost:5002/api/list/user/", body, config)
+    .post("http://10.1.5.143:5002/api/list/user/", body, config)
     .then((res) => {
       dispatch({
         type: COMPLAINT_GET_LIST_USER,
@@ -41,7 +41,7 @@ export const getlist_all = ({ token }) => (dispatch) => {
   };
   if (token) {
     axios
-      .get("http://localhost:5002/api/list/user/all", config)
+      .get("http://10.1.5.143:5002/api/list/user/all", config)
       .then((res) => {
         dispatch({
           type: COMPLAINT_GET_LIST_ALL,
@@ -68,7 +68,7 @@ export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
   const body = JSON.stringify({ buasri_id, id });
   // console.log(body);
   axios
-    .post("http://localhost:5002/api/list/user/select", body, config)
+    .post("http://10.1.5.143:5002/api/list/user/select", body, config)
     .then((res) => {
       dispatch({
         type: COMPLAINT_SELECT_LIST,

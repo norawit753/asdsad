@@ -225,6 +225,7 @@ const UpdateStatusModal = (props) => {
       id: e.no_id,
       buasri_id: detail[0].buasri_id,
       email: detail[0].email,
+      member: detail[0].member,
       phone: detail[0].phone,
       topic: detail[0].topic,
       note: e.note,

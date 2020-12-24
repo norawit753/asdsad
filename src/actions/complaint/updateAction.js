@@ -9,6 +9,7 @@ export const sendUpdateStatus = (
   {
     id,
     buasri_id,
+    member,
     status,
     topic,
     note,
@@ -46,6 +47,7 @@ export const sendUpdateStatus = (
     id,
     email,
     phone,
+    member,
     status,
     status_before,
     topic,
@@ -54,12 +56,12 @@ export const sendUpdateStatus = (
   //   console.log(body);
 
   axios
-    .put("http://localhost:5002/api/update/status", body, config)
+    .put("http://10.1.5.143:5002/api/update/status", body, config)
     .then((res) => {
       if (res) {
         axios
           .post(
-            "http://localhost:2279/noti_update_user.php",
+            "http://10.1.5.143:2279/noti_update_user.php",
             sendemail,
             configemail
           )
@@ -67,7 +69,7 @@ export const sendUpdateStatus = (
             if (res.data.Result) {
               axios
                 .post(
-                  "http://localhost:2279/noti_update_admin.php",
+                  "http://10.1.5.143:2279/noti_update_admin.php",
                   sendemail,
                   configemail
                 )
