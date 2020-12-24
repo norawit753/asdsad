@@ -63,20 +63,20 @@ const UpdateStatusModal = (props) => {
   // status ก่อนเปลี่ยน
   useEffect(() => {
     if (detail) {
-      if (detail[0].status.status) {
-        if (detail[0].status.status === "WAITING") {
+      if (detail[0].status) {
+        if (detail[0].status === "WAITING") {
           setStatusName("รอรับเรื่อง");
         }
-        if (detail[0].status.status === "RECEIVED") {
+        if (detail[0].status === "RECEIVED") {
           setStatusName("รับเรื่องแล้ว รอพิจารณา");
         }
-        if (detail[0].status.status === "CONSIDERING") {
+        if (detail[0].status === "CONSIDERING") {
           setStatusName("กำลังพิจารณา");
         }
-        if (detail[0].status.status === "EDIT") {
+        if (detail[0].status === "EDIT") {
           setStatusName("ต้องการข้อมูลเพิ่มเติม รอข้อมูลจากผู้แจ้ง");
         }
-        if (detail[0].status.status === "RESULT") {
+        if (detail[0].status === "RESULT") {
           setStatusName("เสร็จสิ้นการพิจารณา");
         }
       }
@@ -95,19 +95,19 @@ const UpdateStatusModal = (props) => {
     const EditStatus = [{ id: 0, value: "RECEIVED", name: "รับเรื่อง" }];
     const ResultStatus = [{ id: 0, value: null, name: null }];
     if (StatusName) {
-      if (detail[0].status.status === "WAITING") {
+      if (detail[0].status === "WAITING") {
         setStatusChange(WaitingStatus);
       }
-      if (detail[0].status.status === "RECEIVED") {
+      if (detail[0].status === "RECEIVED") {
         setStatusChange(ReceivedStatus);
       }
-      if (detail[0].status.status === "CONSIDERING") {
+      if (detail[0].status === "CONSIDERING") {
         setStatusChange(ConsideringStatus);
       }
-      if (detail[0].status.status === "EDIT") {
+      if (detail[0].status === "EDIT") {
         setStatusChange(EditStatus);
       }
-      if (detail[0].status.status === "RESULT") {
+      if (detail[0].status === "RESULT") {
         setStatusChange(ResultStatus);
         setdisButton(true);
       }
@@ -219,24 +219,38 @@ const UpdateStatusModal = (props) => {
         }
       }
     }
-    await upload();
 
     //
     const newUpdate = await {
       id: e.no_id,
       buasri_id: detail[0].buasri_id,
+      email: detail[0].email,
+      phone: detail[0].phone,
+      topic: detail[0].topic,
       note: e.note,
+      status_before: detail[0].status,
       status: e.status_change,
       file_name: mergeName,
       file_path: filePath,
     };
-    await sendUpdateStatus(newUpdate, token);
+
+    if (await window.confirm("โปรดยืนยันการอัพเดต?")) {
+      await upload();
+      if ((await CheckFileCorrect) || (await CheckNoFile)) {
+        await sendUpdateStatus(newUpdate, token);
+        await setdisButton(true);
+      }
+    } else {
+      return false;
+    }
   };
 
   return (
     <Fragment>
-      {detail[0].status.status !== "RESULT" ? (
-        <Button onClick={toggle}>อัพเดตสถานะ</Button>
+      {detail[0].status !== "RESULT" ? (
+        <Button onClick={toggle} disabled={disButton}>
+          อัพเดตสถานะ
+        </Button>
       ) : null}
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>สถานะที่ต้องการอัพเดต</ModalHeader>
@@ -259,7 +273,7 @@ const UpdateStatusModal = (props) => {
                 type="text"
                 name="current_status"
                 placeholder={StatusName}
-                value={detail[0].status.status}
+                value={detail[0].status}
                 innerRef={register}
                 readOnly
               ></Input>
@@ -268,7 +282,7 @@ const UpdateStatusModal = (props) => {
               <Label for="note">รายละเอียด</Label>
               <Input type="textarea" name="note" innerRef={register}></Input>
             </FormGroup>
-            {detail[0].status.status === "EDIT" ? (
+            {detail[0].status === "EDIT" ? (
               <FormGroup>
                 <Label for="file">
                   Upload File: (เฉพาะไฟล์รูปภาพ PNG, JPG และ GIF เท่านั้น)

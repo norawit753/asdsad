@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 import statusJson from "../../../utilis/typestatus.json";
 import typeJson from "../../../utilis/typecomplaint.json";
 import UpdateStatusModal from "../../complaint/UpdateStatusModal";
+import BackComplaintPage from "../../complaint/BackComplaintPage";
 
 const ComplaintDetailPage = (props) => {
   const detail = useSelector((state) => state.complaint.list.detail);
@@ -21,14 +22,14 @@ const ComplaintDetailPage = (props) => {
         setStatusFilter(
           statusJson
             .filter((data) => {
-              if (data.status === detail[0].status.status) {
+              if (data.status === detail[0].status) {
                 return data.name;
               } else {
                 return null;
               }
             })
             .map((data) => {
-              if (data.status === detail[0].status.status) {
+              if (data.status === detail[0].status) {
                 return <Fragment>{data.name}</Fragment>;
               } else {
                 return null;
@@ -56,18 +57,23 @@ const ComplaintDetailPage = (props) => {
       if (detail[0].status.note) {
         setNoteFilter(detail[0].status.note);
       }
-      if (detail[0].upload.file_name) {
-        setUploadFilter("http://localhost:5002" + detail[0].upload.file_path);
+      if (detail[0].file_name) {
+        setUploadFilter("http://localhost:5002" + detail[0].file_path);
       }
     }
   }, [detail]);
   //   console.log(StatusFilter);
   return (
     <Fragment>
+      <Container>
+        <BackComplaintPage />
+      </Container>
+
       {detail ? (
         <Fragment>
           <Container>
             <h4>รายละเอียด</h4>
+            <br />
             <Table hover responsive>
               <tbody>
                 <tr>
@@ -115,7 +121,19 @@ const ComplaintDetailPage = (props) => {
                 </tr>
               </tbody>
             </Table>
-            {complaintUser.position === "ADMIN" ? <UpdateStatusModal /> : null}
+            {complaintUser.position === "ADMIN" &&
+            detail[0].status !== "EDIT" &&
+            detail[0].member === "MEMBER" ? (
+              <UpdateStatusModal />
+            ) : null}
+            {complaintUser.position === "ADMIN" &&
+            detail[0].member === "GUEST" ? (
+              <UpdateStatusModal />
+            ) : null}
+            {complaintUser.position === "USER" &&
+            detail[0].status === "EDIT" ? (
+              <UpdateStatusModal />
+            ) : null}
           </Container>
         </Fragment>
       ) : null}

@@ -28,12 +28,14 @@ const App = (props) => {
   const [StartApp, setStartApp] = useState(true);
   const [fadeIn] = useState(true);
   const loadPage = useSelector((state) => state.main.trigger.load);
-  const checkError = useSelector((state) => state.main.error.status);
+  const checkError = useSelector((state) => state.main.error);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (checkError == "400" || checkError == "401") {
-      dispatch({ type: "LOGOUT_SUCCESS" });
+    if (checkError.status == "400" || checkError.status == "401") {
+      if (checkError.msg.msg !== "BuasriID ไม่มีอยู่ในระบบ Complaint") {
+        dispatch({ type: "LOGOUT_SUCCESS" });
+      }
     }
   }, [checkError]);
 

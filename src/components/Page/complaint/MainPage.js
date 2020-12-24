@@ -33,6 +33,8 @@ import FormPage from "./FormPage";
 import MainTableUser from "../../complaint/MainTableUser";
 import MainTableAdmin from "../../complaint/MainTableAdmin.js";
 import DetailPage from "./DetailPage";
+import BackMainPage from "../../main/BackMainPage";
+
 const MainPage = (props) => {
   // Main
   const user = useSelector((state) => state.main.auth.user);
@@ -98,6 +100,7 @@ const MainPage = (props) => {
           <Switch>
             <Route exact path="/complaint">
               <FormButton />
+              <BackMainPage />
               {complaintUser.position === "USER" && listdata ? (
                 <MainTableUser />
               ) : null}

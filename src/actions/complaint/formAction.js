@@ -48,6 +48,12 @@ export const newlist = ({
       "x-auth-token": token,
     },
   };
+
+  const configemail = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
   const body = JSON.stringify({
     buasri_id,
     type,
@@ -60,18 +66,72 @@ export const newlist = ({
     file_name,
     file_path,
   });
-  console.log(body);
+
+  const sendemail = JSON.stringify({
+    type,
+    member,
+    email,
+    phone,
+    topic,
+    detail,
+  });
   axios
     .put("http://localhost:5002/api/list/user/add", body, config)
     .then((res) => {
-      dispatch({
-        type: COMPLAINT_ADD_LIST,
-      });
+      if (res) {
+        axios
+          .post(
+            "http://localhost:2279/noti_add_user.php",
+            sendemail,
+            configemail
+          )
+          .then((res) => {
+            if (res.data.Result) {
+              axios
+                .post(
+                  "http://localhost:2279/noti_add_admin.php",
+                  sendemail,
+                  configemail
+                )
+                .then((res) => {
+                  if (res.data.Result) {
+                    dispatch({
+                      type: COMPLAINT_ADD_LIST,
+                    });
+                  }
+                })
+                .catch((err) => {
+                  dispatch({
+                    type: COMPLAINT_ERROR,
+                    payload: err.data,
+                  });
+                });
+            }
+          })
+          .catch((err) => {
+            dispatch({
+              type: COMPLAINT_ERROR,
+              payload: err.data,
+            });
+          });
+      }
     })
     .catch((err) => {
       dispatch({
         type: COMPLAINT_ERROR,
         payload: err.data,
       });
+    });
+
+  //
+  axios
+    .post("http://localhost:2279/noti_add_user.php", sendemail, configemail)
+    .then((res) => {
+      if (res.data.Result) {
+        console.log("OK");
+      }
+      if (!res.data.Result) {
+        console.log("Not OK");
+      }
     });
 };

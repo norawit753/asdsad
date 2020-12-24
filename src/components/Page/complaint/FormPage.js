@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import { COMPLAINT_CLEAN_TRIGGER } from "../../../type/complaint/type";
 import { PAGE_LOADING } from "../../../type/main/type";
+import BackComplaintPage from "../../complaint/BackComplaintPage";
 
 import {
   uploadfile,
@@ -40,7 +41,7 @@ const ComplaintFormPage = (props) => {
   });
 
   ComplaintFormPage.propTypes = {
-    uploadfile: PropTypes.array,
+    uploadfile: PropTypes.func.isRequired,
     sendNewList: PropTypes.func.isRequired,
   };
 
@@ -165,6 +166,8 @@ const ComplaintFormPage = (props) => {
         file_name: mergeName,
         file_path: filePath,
       };
+      await sendNewList(newList);
+      await upload();
     } else {
       const newList = await {
         token: token,
@@ -179,20 +182,20 @@ const ComplaintFormPage = (props) => {
         file_name: mergeName,
         file_path: filePath,
       };
-
       await sendNewList(newList);
       await upload();
     }
   };
 
-  // console.log(watch("email"));
-
   return (
     <Fragment>
       <Container>
+        <BackComplaintPage />
         <h4>
           <b>แบบฟอร์มการร้องเรียน</b>
         </h4>
+
+        <br />
       </Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
@@ -249,7 +252,7 @@ const ComplaintFormPage = (props) => {
             name="phone"
             innerRef={register}
             placeholder="เบอร์ที่ใช้ติดต่อ (สูงสุด 20 ตัวอักษร)"
-            maxlength="20"
+            maxLength="20"
           />
         </FormGroup>
         {/* ประเภทการร้องเรียน */}
@@ -323,7 +326,7 @@ const ComplaintFormPage = (props) => {
             name="topic"
             innerRef={register}
             placeholder="หัวข้อที่ต้องการร้องเรียน (สูงสุด 80 ตัวอักษร)"
-            maxlength="80"
+            maxLength="80"
             required
           />
         </FormGroup>
@@ -344,6 +347,7 @@ const ComplaintFormPage = (props) => {
           </Label>
           <CustomInput
             type="file"
+            id="fileupload"
             name="fileupload"
             label={LabelFile}
             onChange={onChange}

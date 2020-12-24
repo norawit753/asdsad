@@ -1,8 +1,13 @@
 import React, { useState, useMemo, Fragment, useEffect } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
-import { Table, Button } from "reactstrap";
+import { Table, Label, Button, Pagination, PaginationLink } from "reactstrap";
 import PropTypes from "prop-types";
-import { useTable } from "react-table";
+import {
+  useTable,
+  useGlobalFilter,
+  useAsyncDebounce,
+  usePagination,
+} from "react-table";
 import { withRouter } from "react-router-dom";
 
 import { getdetail_list } from "../../actions/complaint/listAction";
@@ -40,12 +45,38 @@ const MainTableUser = (props) => {
       {
         Header: "ประเภท",
         accessor: "type",
+        Cell: ({ cell }) => (
+          <p>
+            {cell.row.values.type === "BUILDING" ? "อาคารและสถานที่" : null}
+            {cell.row.values.type === "LEARNING" ? "การเรียนการสอน" : null}
+            {cell.row.values.type === "ACTIVITY" ? "กิจกรรม" : null}
+            {cell.row.values.type === "SERVICES" ? "การบริการ" : null}
+            {cell.row.values.type === "OTHER" ? "อื่น ๆ" : null}
+          </p>
+        ),
       },
       {
         Header: "หัวข้อ",
         accessor: "topic",
       },
-      { Header: "สถานะ", accessor: "status.status" },
+      {
+        Header: "สถานะ",
+        accessor: "status",
+        Cell: ({ cell }) => (
+          <p>
+            {cell.row.values.status === "WAITING" ? "รอรับเรื่อง" : null}
+            {cell.row.values.status === "RECEIVED"
+              ? "รับเรื่องแล้ว รอพิจารณา"
+              : null}
+            {cell.row.values.status === "CONSIDERING" ? "กำลังพิจารณา" : null}
+            {cell.row.values.status === "EDIT"
+              ? "ต้องการข้อมูลเพิ่มเติม รอข้อมูลจากผู้แจ้ง"
+              : null}
+            {cell.row.values.status === "RESULT" ? "เสร็จสิ้นการพิจารณา" : null}
+          </p>
+        ),
+      },
+
       {
         Header: "รายละเอียด",
         accessor: "_id",
@@ -61,20 +92,90 @@ const MainTableUser = (props) => {
     ],
     []
   );
+
+  // Define a default UI for filtering
+  function GlobalFilter({
+    preGlobalFilteredRows,
+    globalFilter,
+    setGlobalFilter,
+  }) {
+    const count = preGlobalFilteredRows.length;
+    const [value, setValue] = React.useState(globalFilter);
+    const onChange = useAsyncDebounce((value) => {
+      setGlobalFilter(value || undefined);
+    }, 200);
+
+    return (
+      <span>
+        Search:{" "}
+        <input
+          value={value || ""}
+          onChange={(e) => {
+            setValue(e.target.value);
+            onChange(e.target.value);
+          }}
+          placeholder={`${count} records...`}
+          style={{
+            fontSize: "1.1rem",
+            border: "0",
+          }}
+        />
+      </span>
+    );
+  }
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({
-    columns,
-    data,
-  });
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state,
+    state: { pageIndex, pageSize },
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 2 },
+    },
+    useGlobalFilter,
+    usePagination
+  );
+
   return (
     <Fragment>
       <br />
       <br />
+      <Table>
+        <thead>
+          <tr>
+            <th
+              colSpan={visibleColumns.length}
+              style={{
+                textAlign: "left",
+              }}
+            >
+              <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </th>
+          </tr>
+        </thead>
+      </Table>
       <Table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -100,6 +201,58 @@ const MainTableUser = (props) => {
           })}
         </tbody>
       </Table>
+      <Pagination>
+        <PaginationLink onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {"<<"}
+        </PaginationLink>{" "}
+        <PaginationLink
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
+          {"<"}
+        </PaginationLink>{" "}
+        <PaginationLink onClick={() => nextPage()} disabled={!canNextPage}>
+          {">"}
+        </PaginationLink>{" "}
+        <PaginationLink
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+        >
+          {">>"}
+        </PaginationLink>{" "}
+        <PaginationLink disabled>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </PaginationLink>
+        <PaginationLink>
+          <Label>| Go to page:</Label>{" "}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              gotoPage(page);
+            }}
+            style={{ width: "100px" }}
+          />
+        </PaginationLink>{" "}
+        <PaginationLink>
+          <select
+            value={pageSize}
+            onChange={(e) => {
+              setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show {pageSize}
+              </option>
+            ))}
+          </select>
+        </PaginationLink>
+      </Pagination>
     </Fragment>
   );
 };
