@@ -57,6 +57,7 @@ const AppNavbar = (props) => {
       }
     }
   }, [startClear]);
+
   return (
     <Navbar color="dark" dark expand="sm" className="mb-5 fixed-top">
       <Container>
