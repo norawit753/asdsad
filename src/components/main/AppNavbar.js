@@ -62,7 +62,7 @@ const AppNavbar = (props) => {
   const GoUserPage = (e) => {
     e.preventDefault();
     dispatch({ type: "PAGE_LOADING" });
-    props.history.push("/");
+    props.history.push("/users");
   };
 
   return (
@@ -89,11 +89,9 @@ const AppNavbar = (props) => {
                     </span>
                   </DropdownToggle>
                   <DropdownMenu>
-                    <Link to="/users">
-                      <DropdownItem onClick={GoUserPage}>
-                        ข้อมูลส่วนตัว
-                      </DropdownItem>
-                    </Link>
+                    <DropdownItem onClick={GoUserPage}>
+                      ข้อมูลส่วนตัว
+                    </DropdownItem>
                     <Link to="/">
                       <DropdownItem divider />
                       <Logout />
