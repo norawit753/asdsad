@@ -19,7 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect, useSelector, useDispatch } from "react-redux";
-
+import { withRouter } from "react-router-dom";
 import { START_APP } from "../../type/main/type";
 import RegisterModal from "./RegisterModal";
 import Logout from "./Logout";
@@ -30,6 +30,7 @@ import { loadUser } from "../../actions/main/authAction";
 const AppNavbar = (props) => {
   const [isOpen, setisOpen] = useState(false);
   const [startClear, setstartClear] = useState(false);
+  const dispatch = useDispatch();
 
   const checkToken = useSelector((state) => state.main.auth.token);
   const checkAuth = useSelector((state) => state.main.auth.isAuthenticated);
@@ -58,6 +59,12 @@ const AppNavbar = (props) => {
     }
   }, [startClear]);
 
+  const GoUserPage = (e) => {
+    e.preventDefault();
+    dispatch({ type: "PAGE_LOADING" });
+    props.history.push("/");
+  };
+
   return (
     <Navbar color="dark" dark expand="sm" className="mb-5 fixed-top">
       <Container>
@@ -83,7 +90,9 @@ const AppNavbar = (props) => {
                   </DropdownToggle>
                   <DropdownMenu>
                     <Link to="/users">
-                      <DropdownItem>ข้อมูลส่วนตัว</DropdownItem>
+                      <DropdownItem onClick={GoUserPage}>
+                        ข้อมูลส่วนตัว
+                      </DropdownItem>
                     </Link>
                     <Link to="/">
                       <DropdownItem divider />
@@ -144,4 +153,4 @@ const AppNavbar = (props) => {
   );
 };
 
-export default connect(null, { clearErrors, loadUser })(AppNavbar);
+export default withRouter(connect(null, { clearErrors, loadUser })(AppNavbar));
