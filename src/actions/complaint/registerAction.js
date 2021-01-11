@@ -18,7 +18,7 @@ export const register = ({ buasri_id, email, position, active }) => (
   // Request body
   const body = JSON.stringify({ buasri_id, email, position, active });
   axios
-    .post("http://10.1.5.143:5002/api/register", body, config)
+    .post("http://localhost:5002/api/register", body, config)
     .then((res) => {
       dispatch({
         type: COMPLAINT_REGISTER_SUCCESS,

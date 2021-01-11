@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useMemo, useEffect, Fragment } from "react";
 import {
   Nav,
   NavItem,
@@ -14,18 +14,41 @@ import {
 import classnames from "classnames";
 import { connect, useSelector } from "react-redux";
 import { Route, Switch, Link, useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
+
+import { getAllServiceUserForAdmin } from "../../../actions/main/serviceAction";
 
 import DepJson from "../../../utilis/typedep";
 import UserJson from "../../../utilis/typeuser";
 import BackMainPage from "../../main/BackMainPage";
+import AdminTable from "../../main/UserPage/AdminTable";
 
 const UserPage = (props) => {
   const [activeTab, setActiveTab] = useState("userDetail");
   const user = useSelector((state) => state.main.auth.user);
+  const token = useSelector((state) => state.main.auth.token);
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };
+
+  UserPage.propTypes = {
+    getAllServiceUserForAdmin: PropTypes.func.isRequired,
+  };
+
+  const { getAllServiceUserForAdmin } = props;
+
+  useMemo(() => {
+    if (user.position === "ADMIN") {
+      const getService = async () => {
+        const sendToken = await {
+          token,
+        };
+        await getAllServiceUserForAdmin(sendToken);
+      };
+      getService();
+    }
+  }, [user.position]);
 
   const depFilter = DepJson.filter((data) => {
     if (data.currentNameEN === user.dep) {
@@ -136,18 +159,7 @@ const UserPage = (props) => {
                     </Container>
                   </TabPane>
                   <TabPane tabId="userList">
-                    <Row>
-                      <Table hover responsive>
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Status</th>
-                            <th>Edit</th>
-                          </tr>
-                        </thead>
-                      </Table>
-                    </Row>
+                    <AdminTable />
                   </TabPane>
                 </TabContent>
               </Fragment>
@@ -159,4 +171,4 @@ const UserPage = (props) => {
   );
 };
 
-export default connect(null, null)(UserPage);
+export default connect(null, { getAllServiceUserForAdmin })(UserPage);

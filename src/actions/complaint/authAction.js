@@ -17,7 +17,7 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
   // Request body
   const body = JSON.stringify({ buasri_id });
   axios
-    .post("http://10.1.5.143:5002/api/auth", body, config)
+    .post("http://localhost:5002/api/auth", body, config)
 
     .then((res) => {
       // console.log(res.data);

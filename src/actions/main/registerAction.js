@@ -43,12 +43,12 @@ export const register = ({
   });
   const bodyLDAP = JSON.stringify({ buasri_id, password });
   axios
-    .post("http://10.1.5.143:2279/ldap.php", bodyLDAP, config)
+    .post("http://localhost:2279/ldap.php", bodyLDAP, config)
     .then((ldap) => {
       if (ldap.data.Result) {
         // register สำเร็จ
         return axios
-          .post("http://10.1.5.143:5000/api/register", body, config)
+          .post("http://localhost:5000/api/register", body, config)
           .then((res) => {
             dispatch({
               type: REGISTER_SUCCESS,

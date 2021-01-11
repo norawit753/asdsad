@@ -58,7 +58,7 @@ const ComplaintDetailPage = (props) => {
         setNoteFilter(detail[0].status.note);
       }
       if (detail[0].file_name) {
-        setUploadFilter("http://10.1.5.143:5002" + detail[0].file_path);
+        setUploadFilter("http://localhost:5002" + detail[0].file_path);
       }
     }
   }, [detail]);

@@ -56,12 +56,12 @@ export const sendUpdateStatus = (
   //   console.log(body);
 
   axios
-    .put("http://10.1.5.143:5002/api/update/status", body, config)
+    .put("http://localhost:5002/api/update/status", body, config)
     .then((res) => {
       if (res) {
         axios
           .post(
-            "http://10.1.5.143:2279/noti_update_user.php",
+            "http://localhost:2279/noti_update_user.php",
             sendemail,
             configemail
           )
@@ -69,7 +69,7 @@ export const sendUpdateStatus = (
             if (res.data.Result) {
               axios
                 .post(
-                  "http://10.1.5.143:2279/noti_update_admin.php",
+                  "http://localhost:2279/noti_update_admin.php",
                   sendemail,
                   configemail
                 )
