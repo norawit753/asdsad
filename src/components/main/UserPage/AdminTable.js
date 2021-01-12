@@ -1,5 +1,5 @@
 import React, { useState, useMemo, Fragment, useEffect } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import {
   Row,
   Table,
@@ -15,14 +15,22 @@ import {
   useAsyncDebounce,
   usePagination,
 } from "react-table";
+import { withRouter } from "react-router-dom";
 
 import depJSON from "../../../utilis/typedep.json";
 import userJSON from "../../../utilis/typeuser.json";
+import { getServiceUser } from "../../../actions/main/serviceAction";
 
 const AdminTable = (props) => {
   const list = useSelector((state) => state.main.list.userlist);
+  const tokenMain = useSelector((state) => state.main.auth.token);
+  const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
+  AdminTable.propTypes = {
+    getServiceUser: PropTypes.func.isRequired,
+  };
+  const { getServiceUser } = props;
   useEffect(() => {
     if (list) {
       setData(list);
@@ -31,6 +39,14 @@ const AdminTable = (props) => {
 
   const onClick = async (e) => {
     const getValue = await e.target.value.split(",");
+    const Detail = await {
+      token: tokenMain,
+      id: getValue[0],
+      buasri_id: getValue[1],
+    };
+    await getServiceUser(Detail);
+    await dispatch({ type: "PAGE_LOADING" });
+    await props.history.push("/users/active");
   };
 
   const columns = React.useMemo(
@@ -41,7 +57,7 @@ const AdminTable = (props) => {
       },
       {
         Header: "ชื่อ - นามสกุล",
-        accessor: (cell) => `${cell.firstname} ${cell.lastname}`,
+        accessor: (name) => `${name.firstname} ${name.lastname}`,
       },
       {
         Header: "ประเภทผู้ใช้",
@@ -50,7 +66,7 @@ const AdminTable = (props) => {
           <Fragment>
             {userJSON.map((usermap) => {
               if (usermap.type === cell.row.values.type) {
-                return <span>{usermap.name}</span>;
+                return <span key={usermap.type}>{usermap.name}</span>;
               }
             })}
           </Fragment>
@@ -63,7 +79,9 @@ const AdminTable = (props) => {
           <Fragment>
             {depJSON.map((depmap) => {
               if (depmap.currentNameEN === cell.row.values.dep) {
-                return <span>{depmap.currentNameTH}</span>;
+                return (
+                  <span key={depmap.currentNameEN}>{depmap.currentNameTH}</span>
+                );
               }
             })}
           </Fragment>
@@ -133,4 +151,4 @@ const AdminTable = (props) => {
   );
 };
 
-export default connect(null, null)(AdminTable);
+export default withRouter(connect(null, { getServiceUser })(AdminTable));

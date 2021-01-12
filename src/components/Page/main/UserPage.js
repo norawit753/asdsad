@@ -13,7 +13,8 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import { connect, useSelector } from "react-redux";
-import { Route, Switch, Link, useLocation } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+
 import PropTypes from "prop-types";
 
 import { getAllServiceUserForAdmin } from "../../../actions/main/serviceAction";
@@ -22,6 +23,7 @@ import DepJson from "../../../utilis/typedep";
 import UserJson from "../../../utilis/typeuser";
 import BackMainPage from "../../main/BackMainPage";
 import AdminTable from "../../main/UserPage/AdminTable";
+import AdminActive from "../../main/UserPage/AdminActive";
 
 const UserPage = (props) => {
   const [activeTab, setActiveTab] = useState("userDetail");
@@ -58,7 +60,7 @@ const UserPage = (props) => {
     }
   }).map((data) => {
     if (data.currentNameEN === user.dep) {
-      return <>{data.currentNameTH}</>;
+      return <Fragment key={data.currentNameEN}>{data.currentNameTH}</Fragment>;
     } else {
       return null;
     }
@@ -72,7 +74,7 @@ const UserPage = (props) => {
     }
   }).map((data) => {
     if (data.type === user.type) {
-      return <>{data.name}</>;
+      return <Fragment key={data.type}>{data.name}</Fragment>;
     } else {
       return null;
     }
@@ -149,9 +151,7 @@ const UserPage = (props) => {
                                 </tr>
                               </tbody>
                             </Table>
-                            {/* <Link to="/users/edit"> */}
                             <Button color="warning">แก้ไข</Button>
-                            {/* </Link> */}
                             <BackMainPage />
                           </Container>
                         </Col>
@@ -165,6 +165,7 @@ const UserPage = (props) => {
               </Fragment>
             ) : null}
           </Route>
+          <Route path="/users/active" component={AdminActive} />
         </Switch>
       </Container>
     </Fragment>

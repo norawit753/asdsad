@@ -35,3 +35,27 @@ export const getAllServiceUserForAdmin = ({ token }) => (dispatch) => {
       }
     });
 };
+
+export const getServiceUser = ({ token, buasri_id }) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+
+  const body = JSON.stringify({ buasri_id });
+  //   console.log(body);
+  axios
+    .post("http://localhost:5000/api/users/service/list", body, config)
+    .then((res) => {
+      dispatch({
+        type: GET_USER_SERVICE,
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
