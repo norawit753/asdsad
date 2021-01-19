@@ -65,7 +65,7 @@ export const login = ({ buasri_id, password }) => (dispatch) => {
   // Request body
   const body = JSON.stringify({ buasri_id, password });
   axios
-    .post("http://localhost:2279/ldap.php", body, config)
+    .post("http://10.1.5.143:2279/ldap.php", body, config)
     .then((res) => {
       if (res.data.Result) {
         axios

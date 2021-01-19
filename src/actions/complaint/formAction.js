@@ -81,7 +81,7 @@ export const newlist = ({
       if (res) {
         axios
           .post(
-            "http://localhost:2279/noti_add_user.php",
+            "http://10.1.5.143:2279/dev_add_user.php",
             sendemail,
             configemail
           )
@@ -89,7 +89,7 @@ export const newlist = ({
             if (res.data.Result) {
               axios
                 .post(
-                  "http://localhost:2279/noti_add_admin.php",
+                  "http://10.1.5.143:2279/dev_add_admin.php",
                   sendemail,
                   configemail
                 )
@@ -125,7 +125,7 @@ export const newlist = ({
 
   //
   axios
-    .post("http://localhost:2279/noti_add_user.php", sendemail, configemail)
+    .post("http://10.1.5.143:2279/dev_add_user.php", sendemail, configemail)
     .then((res) => {
       if (res.data.Result) {
         console.log("OK");

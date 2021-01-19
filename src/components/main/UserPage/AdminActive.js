@@ -13,7 +13,7 @@ import {
   Input,
 } from "reactstrap";
 
-import researchActive from "../../main/ServiceActive/researchActive";
+import ResearchActive from "../../main/ServiceActive/researchActive";
 
 const AdminPageActive = (props) => {
   const servicelist = useSelector((state) => state.main.service);
@@ -44,7 +44,7 @@ const AdminPageActive = (props) => {
                 </Form>
               </Container>
               <br />
-              {user.position === "ADMIN" ? <researchActive /> : null}
+              {user.position === "ADMIN" ? <ResearchActive /> : null}
             </Container>
           </Col>
         </Row>
