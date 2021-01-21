@@ -49,6 +49,13 @@ const UserPage = (props) => {
         await getAllServiceUserForAdmin(sendToken);
       };
       getService();
+    } else {
+      const getUService = async () => {
+        const sendToken = await {
+          token,
+        };
+      };
+      getUService();
     }
   }, [user.position]);
 

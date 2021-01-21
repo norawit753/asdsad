@@ -26,7 +26,6 @@ const AdminPageActive = (props) => {
       setName(servicelist.firstname + " " + servicelist.lastname);
     }
   }, [servicelist]);
-  console.log(user.position);
   return (
     <Fragment>
       <Container>

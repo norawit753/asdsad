@@ -26,6 +26,11 @@ const initialState = {
     type: null,
     active: null,
   },
+  service: {
+    e_research: null,
+    e_qa: null,
+    e_scihuris: null,
+  },
 };
 
 export default function authReducer(state = initialState, action) {
@@ -62,6 +67,11 @@ export default function authReducer(state = initialState, action) {
               type: regisSuccess.user.type,
               active: regisSuccess.user.active,
             },
+            service: {
+              e_research: null,
+              e_qa: null,
+              e_scihuris: null,
+            },
             isAuthenticated: true,
             isLoading: false,
           }
@@ -87,6 +97,11 @@ export default function authReducer(state = initialState, action) {
               type: userLoad.user.type,
               active: userLoad.user.active,
             },
+            service: {
+              e_research: null,
+              e_qa: null,
+              e_scihuris: null,
+            },
             isAuthenticated: true,
             isLoading: false,
           }
@@ -111,6 +126,11 @@ export default function authReducer(state = initialState, action) {
           type: null,
           active: null,
         },
+        service: {
+          e_research: null,
+          e_qa: null,
+          e_scihuris: null,
+        },
       };
     case LOGOUT_SUCCESS:
       localStorage.removeItem("token");
@@ -130,6 +150,11 @@ export default function authReducer(state = initialState, action) {
           type: null,
           active: null,
         },
+        service: {
+          e_research: null,
+          e_qa: null,
+          e_scihuris: null,
+        },
       };
     case REGISTER_FAIL:
       localStorage.removeItem("token");
@@ -148,6 +173,11 @@ export default function authReducer(state = initialState, action) {
           position: null,
           type: null,
           active: null,
+        },
+        service: {
+          e_research: null,
+          e_qa: null,
+          e_scihuris: null,
         },
       };
     case AUTH_ERROR:
