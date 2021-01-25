@@ -10,12 +10,17 @@ import {
   LOGOUT_SUCCESS,
 } from "../../type/main/type";
 
+// Env
+import { config } from "../../utilis/config";
+const connect = config.connectMainAPI;
+
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
   // User loading
   dispatch({ type: USER_LOADING });
+
   axios
-    .get("http://localhost:5000/api/auth/user", tokenMain(getState))
+    .get(connect + "/api/auth/user", tokenMain(getState))
     .then((res) =>
       dispatch({
         type: USER_LOADED,
@@ -64,12 +69,13 @@ export const login = ({ buasri_id, password }) => (dispatch) => {
   };
   // Request body
   const body = JSON.stringify({ buasri_id, password });
+  console.log(connect);
   axios
     .post("http://10.1.5.143:2279/ldap.php", body, config)
     .then((res) => {
       if (res.data.Result) {
         axios
-          .post("http://localhost:5000/api/auth", body, config)
+          .post(connect + "/api/auth", body, config)
           .then((res) =>
             dispatch({
               type: LOGIN_SUCCESS,

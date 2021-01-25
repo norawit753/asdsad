@@ -24,6 +24,9 @@ import { clearErrors } from "../../actions/main/errorAction";
 import { withRouter } from "react-router-dom";
 import delay from "../../utilis/delay";
 
+// Env
+import { config } from "../../utilis/config";
+
 // Complaint
 import CardComplaint from "../complaint/Card";
 
@@ -40,6 +43,7 @@ const Login = (props) => {
   const [ToLogin, setToLogin] = useState(false);
   const error = useSelector((state) => state.main.error);
   const auth = useSelector((state) => state.main.auth.isAuthenticated);
+  const hello = config.Hello;
 
   Login.propTypes = {
     login: PropTypes.func.isRequired,
@@ -115,7 +119,7 @@ const Login = (props) => {
               <Col xs="10">
                 <p style={{ whiteSpace: "pre-wrap" }}>{"\n"}</p>
                 <Card>
-                  <CardHeader>ลงชื่อเข้าใช้</CardHeader>
+                  <CardHeader>ลงชื่อเข้าใช้ {hello}</CardHeader>
                   <CardBody>
                     {errorMsg ? <Alert color="danger">{errorMsg}</Alert> : null}
                     <Form onSubmit={onSubmit}>
