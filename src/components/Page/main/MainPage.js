@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import { Container, Col, Row } from "reactstrap";
 import { Route, Switch } from "react-router-dom";
@@ -7,12 +7,41 @@ import { Route, Switch } from "react-router-dom";
 import Login from "../../main/Login";
 import UserPage from "./UserPage";
 import CardComplaint from "../../complaint/Card";
+import CardResearch from "../../research/Card";
+
+import PropTypes from "prop-types";
+
+// GetServiceActive
+import { getServiceForUserPage } from "../../../actions/main/serviceAction";
 
 // Complaint
 import ComplaintPage from "../complaint/MainPage";
 
 const MainPage = (props) => {
   const checkToken = useSelector((state) => state.main.auth.token);
+  const user = useSelector((state) => state.main.auth.user);
+  const [LoadService, setLoadService] = useState(true);
+
+  MainPage.propTypes = {
+    getServiceForUserPage: PropTypes.func.isRequired,
+  };
+
+  const { getServiceForUserPage } = props;
+
+  useMemo(() => {
+    if (LoadService) {
+      const getUService = async () => {
+        const sendData = await {
+          token: checkToken,
+          buasri_id: user.buasri_id,
+        };
+        await getServiceForUserPage(sendData);
+      };
+      getUService();
+      setLoadService(false);
+    }
+    // eslint-disable-next-line
+  }, [LoadService]);
 
   return (
     <Fragment>
@@ -24,7 +53,9 @@ const MainPage = (props) => {
                 <Col>
                   <CardComplaint />
                 </Col>
-                <Col></Col>
+                <Col>
+                  <CardResearch />
+                </Col>
                 <Col></Col>
               </Row>
             </Container>
@@ -39,4 +70,4 @@ const MainPage = (props) => {
   );
 };
 
-export default connect(null, null)(MainPage);
+export default connect(null, { getServiceForUserPage })(MainPage);

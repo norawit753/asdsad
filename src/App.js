@@ -11,7 +11,7 @@ import AppFooter from "./components/main/AppFooter";
 // Main Page
 import MainPage from "./components/Page/main/MainPage";
 // Loading
-import * as loadingData from "./utilis/lf30_editor_wvri0o27.json";
+import * as loadingData from "./utilis//lf30_editor_wvri0o27.json";
 import Lottie from "react-lottie";
 
 const loadingOption = {
@@ -32,11 +32,12 @@ const App = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (checkError.status == "400" || checkError.status == "401") {
+    if (checkError.status === "400" || checkError.status === "401") {
       if (checkError.msg.msg !== "BuasriID ไม่มีอยู่ในระบบ Complaint") {
         dispatch({ type: "LOGOUT_SUCCESS" });
       }
     }
+    // eslint-disable-next-line
   }, [checkError]);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ const App = (props) => {
       dispatch({ type: "PAGE_LOADING" });
       setStartApp(false);
     }
+    // eslint-disable-next-line
   }, [StartApp]);
 
   useEffect(() => {
@@ -55,8 +57,9 @@ const App = (props) => {
     } else {
       setloading(false);
     }
+    // eslint-disable-next-line
   }, [loadPage]);
-  App.propTypes = {};
+
   return (
     <div className="App">
       {loading ? (

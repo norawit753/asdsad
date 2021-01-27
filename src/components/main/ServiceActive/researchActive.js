@@ -1,11 +1,10 @@
-import React, { useState, useEffect, Fragment, useMemo } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect, Fragment } from "react";
+import { connect, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import {
   Row,
   Col,
   Container,
-  Table,
   Button,
   Form,
   FormGroup,
@@ -14,25 +13,35 @@ import {
 } from "reactstrap";
 
 const ResearchActive = (props) => {
-  const { handleSubmit, register, watch } = useForm();
+  const ColoredLine = ({ color }) => (
+    <hr
+      style={{
+        color: color,
+        backgroundColor: color,
+        height: 1,
+      }}
+    />
+  );
+
+  const { handleSubmit, register } = useForm();
   const servicelist = useSelector((state) => state.main.service);
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
   const [levelvalue, setlevelvalue] = useState("USER");
-  const [activevalue, setactivevalue] = useState("ACTIVE");
+  const [activevalue, setactivevalue] = useState("INACTIVE");
   const [actives] = useState([
     {
-      label: "เปิดสิทธิ์ใช้งาน",
+      label: "Active",
       value: "ACTIVE",
     },
     {
-      label: "ปิดสิทธิ์ใช้งาน",
+      label: "Inactive",
       value: "INACTIVE",
     },
   ]);
   const [activefirst] = useState([
     {
-      label: "เปิดสิทธิ์ใช้งาน",
+      label: "Active",
       value: "ACTIVE",
     },
   ]);
@@ -62,17 +71,76 @@ const ResearchActive = (props) => {
       position: e.levelinput,
       active: e.activeinput,
     };
-
     await console.log(newSet);
   };
 
   return (
     <Fragment>
       <h4>E-Research</h4>
+      <ColoredLine color="grey" />
       <Container>
+        <Row>
+          <Label className="font-weight-bolder">ข้อมูลปัจจุบัน</Label>
+        </Row>
+        <Row>
+          <Col sm={3}>
+            <Label>การเปิดสิทธิ์:</Label>
+          </Col>
+          <Col sm={8}>
+            <Label>
+              <p>
+                {actives
+                  .filter((data) => {
+                    if (data.value === activevalue) {
+                      return data.label;
+                    } else {
+                      return null;
+                    }
+                  })
+                  .map((data) => {
+                    if (data.value === activevalue) {
+                      return <Fragment key={data.value}>{data.label}</Fragment>;
+                    } else {
+                      return null;
+                    }
+                  })}
+              </p>
+            </Label>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={3}>
+            <Label>ระดับการเข้าใช้งาน:</Label>
+          </Col>
+          <Col sm={8}>
+            <Label>
+              {levels
+                .filter((data) => {
+                  if (data.value === levelvalue) {
+                    return data.label;
+                  } else {
+                    return null;
+                  }
+                })
+                .map((data) => {
+                  if (data.value === levelvalue) {
+                    return <Fragment key={data.value}>{data.label}</Fragment>;
+                  } else {
+                    return null;
+                  }
+                })}
+            </Label>
+          </Col>
+        </Row>
+        <ColoredLine color="white" />
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <Row>
+            <Label className="font-weight-bolder">
+              ข้อมูลที่ต้องการเปลี่ยน
+            </Label>
+          </Row>
           <FormGroup row>
-            <Label for="exampleSelect" sm={3}>
+            <Label for="activeinput" sm={3}>
               การเปิดสิทธิ์:
             </Label>
             <Col sm={8}>
@@ -112,7 +180,9 @@ const ResearchActive = (props) => {
             </Col>
           </FormGroup>
           <FormGroup row>
-            <Label sm={3}>ระดับการเข้าใช้งาน:</Label>
+            <Label for="levelinput" sm={3}>
+              ระดับการเข้าใช้งาน:
+            </Label>
             <Col sm={8}>
               {servicelist.E_Research ? (
                 <Fragment>
@@ -137,7 +207,6 @@ const ResearchActive = (props) => {
                     name="levelinput"
                     id="levelinput"
                     innerRef={register}
-                    defaultValue={levelvalue}
                   >
                     {levels.map(({ label, value }) => (
                       <option key={value} value={value}>
@@ -158,6 +227,7 @@ const ResearchActive = (props) => {
           </FormGroup>
         </Form>
       </Container>
+      <ColoredLine color="grey" />
     </Fragment>
   );
 };

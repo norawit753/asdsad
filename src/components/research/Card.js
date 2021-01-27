@@ -10,10 +10,10 @@ import {
 import { withRouter } from "react-router-dom";
 import { connect, useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import image from "../../images/PicComplaint.png";
-import { auth_user } from "../../actions/complaint/authAction";
+import image from "../../images/PicResearch.png";
+// import { auth_user } from "../../actions/complaint/authAction";
 
-const CardComplaint = (props) => {
+const CardResearch = (props) => {
   const auth = useSelector((state) => state.main.auth.user);
   const dispatch = useDispatch();
 
@@ -21,27 +21,22 @@ const CardComplaint = (props) => {
     maxWidth: 300,
   };
 
-  CardComplaint.prototypes = {
-    auth_user: PropTypes.func.isRequired,
-  };
-  const { auth_user } = props;
-
   const onClick = async (e) => {
     e.preventDefault();
-    const newUserComplaint = await {
-      buasri_id: auth.buasri_id,
-    };
-    await auth_user(newUserComplaint);
-    await dispatch({ type: "PAGE_LOADING" });
-    await props.history.push("/complaint");
+    // const newUserComplaint = await {
+    //   buasri_id: auth.buasri_id,
+    // };
+    // await auth_user(newUserComplaint);
+    // await dispatch({ type: "PAGE_LOADING" });
+    // await props.history.push("/complaint");
   };
 
   return (
     <Fragment>
       <Card>
         <CardImg
-          top
           className="align-self-center"
+          top
           width="100%"
           src={image}
           style={imgStyle}
@@ -49,9 +44,12 @@ const CardComplaint = (props) => {
         />
         <CardBody>
           <CardTitle>
-            <h4>Complaint</h4>
+            <h4>Research</h4>
           </CardTitle>
-          <CardText>แจ้งร้องเรียน - ปัญหาต่าง ๆ ภายในคณะวิทยาศาสตร์</CardText>
+          <CardText>
+            จัดการข้อมูลงานวิจัย - เพิ่ม แก้ไข และอัพเดตข้อมูลงานวิจัย
+            ภายในคณะวิทยาศาสตร์
+          </CardText>
           {auth ? (
             <Fragment>
               <Button color="dark" onClick={onClick} block>
@@ -67,4 +65,4 @@ const CardComplaint = (props) => {
   );
 };
 
-export default withRouter(connect(null, { auth_user })(CardComplaint));
+export default withRouter(connect(null, null)(CardResearch));
