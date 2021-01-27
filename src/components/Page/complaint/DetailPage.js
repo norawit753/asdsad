@@ -8,6 +8,9 @@ import typeJson from "../../../utilis/typecomplaint.json";
 import UpdateStatusModal from "../../complaint/UpdateStatusModal";
 import BackComplaintPage from "../../complaint/BackComplaintPage";
 
+// Env
+import { config } from "../../../utilis/config";
+
 const ComplaintDetailPage = (props) => {
   const detail = useSelector((state) => state.complaint.list.detail);
   const complaintUser = useSelector((state) => state.complaint.auth.user);
@@ -15,6 +18,7 @@ const ComplaintDetailPage = (props) => {
   const [StatusFilter, setStatusFilter] = useState(null);
   const [NoteFilter, setNoteFilter] = useState("ไม่มีรายละเอียด");
   const [UploadFilter, setUploadFilter] = useState(null);
+  const conComplaint = config.connectComplaintAPI;
 
   useMemo(() => {
     if (detail) {
@@ -58,7 +62,7 @@ const ComplaintDetailPage = (props) => {
         setNoteFilter(detail[0].status.note);
       }
       if (detail[0].file_name) {
-        setUploadFilter("http://localhost:5002" + detail[0].file_path);
+        setUploadFilter(conComplaint + detail[0].file_path);
       }
     }
   }, [detail]);

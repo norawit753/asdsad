@@ -4,6 +4,11 @@ import {
   COMPLAINT_ERROR,
 } from "../../type/complaint/type";
 
+// Env
+import { config } from "../../utilis/config";
+const conComplaint = config.connectComplaintAPI;
+const conphp = config.connectPHP;
+
 // Update Status
 export const sendUpdateStatus = (
   {
@@ -56,23 +61,15 @@ export const sendUpdateStatus = (
   //   console.log(body);
 
   axios
-    .put("http://localhost:5002/api/update/status", body, config)
+    .put(conComplaint + "/api/update/status", body, config)
     .then((res) => {
       if (res) {
         axios
-          .post(
-            "http://10.1.5.143:2279/dev_update_user.php",
-            sendemail,
-            configemail
-          )
+          .post(conphp + "/dev_update_user.php", sendemail, configemail)
           .then((res) => {
             if (res.data.Result) {
               axios
-                .post(
-                  "http://10.1.5.143:2279/dev_update_admin.php",
-                  sendemail,
-                  configemail
-                )
+                .post(conphp + "/dev_update_admin.php", sendemail, configemail)
                 .then((res) => {
                   if (res.data.Result) {
                     dispatch({

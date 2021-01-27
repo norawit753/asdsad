@@ -5,6 +5,11 @@ import {
   COMPLAINT_ERROR,
 } from "../../type/complaint/type";
 
+// Env
+import { config } from "../../utilis/config";
+const conComplaint = config.connectComplaintAPI;
+const conphp = config.connectPHP;
+
 // Upload File
 export const uploadfile = (NewUploadFile, token) => (dispatch) => {
   // Headers
@@ -15,7 +20,7 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
     },
   };
   axios
-    .post("http://localhost:5002/api/list/upload", NewUploadFile, config)
+    .post(conComplaint + "/api/list/upload", NewUploadFile, config)
     .then((res) => {
       dispatch({
         type: COMPLAINT_GET_UPLOAD_FILE,
@@ -76,23 +81,15 @@ export const newlist = ({
     detail,
   });
   axios
-    .put("http://localhost:5002/api/list/user/add", body, config)
+    .put(conComplaint + "/api/list/user/add", body, config)
     .then((res) => {
       if (res) {
         axios
-          .post(
-            "http://10.1.5.143:2279/dev_add_user.php",
-            sendemail,
-            configemail
-          )
+          .post(conphp + "/dev_add_user.php", sendemail, configemail)
           .then((res) => {
             if (res.data.Result) {
               axios
-                .post(
-                  "http://10.1.5.143:2279/dev_add_admin.php",
-                  sendemail,
-                  configemail
-                )
+                .post(conphp + "/dev_add_admin.php", sendemail, configemail)
                 .then((res) => {
                   if (res.data.Result) {
                     dispatch({
@@ -125,7 +122,7 @@ export const newlist = ({
 
   //
   axios
-    .post("http://10.1.5.143:2279/dev_add_user.php", sendemail, configemail)
+    .post(conphp + "/dev_add_user.php", sendemail, configemail)
     .then((res) => {
       if (res.data.Result) {
         console.log("OK");

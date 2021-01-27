@@ -1,17 +1,6 @@
-import React, { useState, useEffect, Fragment, useMemo } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import {
-  Row,
-  Col,
-  Container,
-  Table,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-} from "reactstrap";
+import React, { useState, useEffect, Fragment } from "react";
+import { connect, useSelector } from "react-redux";
+import { Row, Col, Container, Form, FormGroup, Label } from "reactstrap";
 
 import ResearchActive from "../../main/ServiceActive/researchActive";
 
@@ -19,7 +8,6 @@ const AdminPageActive = (props) => {
   const servicelist = useSelector((state) => state.main.service);
   const user = useSelector((state) => state.main.auth.user);
   const [Name, setName] = useState(null);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (servicelist) {

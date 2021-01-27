@@ -13,7 +13,7 @@ export const returnErrorsLdap = () => {
   return {
     type: GET_ERRORS,
     payload: {
-      msg: { msg: "Buasri ID หรือ password ไม่ถูกต้อง" },
+      msg: { msg: "Buasri ID หรือ password ไม่ถูกต้อง (ldap)" },
       status: "400",
       id: "LOGIN_FAIL",
     },

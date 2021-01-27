@@ -5,6 +5,10 @@ import {
   COMPLAINT_AUTH_FAIL,
 } from "../../type/complaint/type";
 
+// Env
+import { config } from "../../utilis/config";
+const conComplaint = config.connectComplaintAPI;
+
 // Auth User
 export const auth_user = ({ buasri_id }) => (dispatch) => {
   // Headers
@@ -17,7 +21,7 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
   // Request body
   const body = JSON.stringify({ buasri_id });
   axios
-    .post("http://localhost:5002/api/auth", body, config)
+    .post(conComplaint + "/api/auth", body, config)
 
     .then((res) => {
       // console.log(res.data);

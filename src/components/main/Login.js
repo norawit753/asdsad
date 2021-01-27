@@ -27,9 +27,6 @@ import delay from "../../utilis/delay";
 // Env
 import { config } from "../../utilis/config";
 
-// Complaint
-import CardComplaint from "../complaint/Card";
-
 const Login = (props) => {
   const imgStyle = {
     maxWidth: 350,

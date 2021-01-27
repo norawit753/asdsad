@@ -5,6 +5,10 @@ import {
   COMPLAINT_REGISTER_FAIL,
 } from "../../type/complaint/type";
 
+// Env
+import { config } from "../../utilis/config";
+const conComplaint = config.connectComplaintAPI;
+
 // registerUser
 export const register = ({ buasri_id, email, position, active }) => (
   dispatch
@@ -18,7 +22,7 @@ export const register = ({ buasri_id, email, position, active }) => (
   // Request body
   const body = JSON.stringify({ buasri_id, email, position, active });
   axios
-    .post("http://localhost:5002/api/register", body, config)
+    .post(conComplaint + "/api/register", body, config)
     .then((res) => {
       dispatch({
         type: COMPLAINT_REGISTER_SUCCESS,

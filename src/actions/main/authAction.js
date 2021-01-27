@@ -13,7 +13,7 @@ import {
 // Env
 import { config } from "../../utilis/config";
 const connect = config.connectMainAPI;
-
+const conphp = config.connectPHP;
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
   // User loading
@@ -69,9 +69,8 @@ export const login = ({ buasri_id, password }) => (dispatch) => {
   };
   // Request body
   const body = JSON.stringify({ buasri_id, password });
-  console.log(connect);
   axios
-    .post("http://10.1.5.143:2279/ldap.php", body, config)
+    .post(conphp + "/ldap.php", body, config)
     .then((res) => {
       if (res.data.Result) {
         axios

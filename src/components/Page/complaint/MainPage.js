@@ -1,28 +1,16 @@
-import React, { useState, useMemo, Fragment, useEffect } from "react";
+import React, { useMemo, Fragment } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
-  Alert,
   Row,
   Col,
-  Card,
-  CardHeader,
-  CardBody,
   Form,
   FormGroup,
-  Input,
   Label,
   Button,
-  Media,
-  Fade,
   Container,
 } from "reactstrap";
 import PropTypes from "prop-types";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useLocation,
-} from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { register } from "../../../actions/complaint/registerAction";
 import {
   getlist_all,
@@ -91,6 +79,7 @@ const MainPage = (props) => {
 
       getListData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [complaintUser.position]);
 
   return (
