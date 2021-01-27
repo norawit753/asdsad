@@ -17,7 +17,10 @@ import { Route, Switch } from "react-router-dom";
 
 import PropTypes from "prop-types";
 
-import { getAllServiceUserForAdmin } from "../../../actions/main/serviceAction";
+import {
+  getAllServiceUserForAdmin,
+  getServiceForUserPage,
+} from "../../../actions/main/serviceAction";
 
 import DepJson from "../../../utilis/typedep";
 import UserJson from "../../../utilis/typeuser";
@@ -27,7 +30,10 @@ import AdminActive from "../../main/UserPage/AdminActive";
 
 const UserPage = (props) => {
   const [activeTab, setActiveTab] = useState("userDetail");
+  const [LoadService, setLoadService] = useState(true);
+  const [Subtab, setSubtab] = useState(false);
   const user = useSelector((state) => state.main.auth.user);
+  const service = useSelector((state) => state.main.auth.service);
   const token = useSelector((state) => state.main.auth.token);
 
   const toggle = (tab) => {
@@ -36,12 +42,57 @@ const UserPage = (props) => {
 
   UserPage.propTypes = {
     getAllServiceUserForAdmin: PropTypes.func.isRequired,
+    getServiceForUserPage: PropTypes.func.isRequired,
   };
 
-  const { getAllServiceUserForAdmin } = props;
+  const { getAllServiceUserForAdmin, getServiceForUserPage } = props;
 
   useMemo(() => {
-    if (user.position === "ADMIN") {
+    if (LoadService) {
+      if (user.position === "ADMIN") {
+        const getService = async () => {
+          const sendToken = await {
+            token,
+          };
+          await getAllServiceUserForAdmin(sendToken);
+        };
+        getService();
+      } else {
+        const getUService = async () => {
+          const sendData = await {
+            token,
+            buasri_id: user.buasri_id,
+          };
+          await getServiceForUserPage(sendData);
+        };
+        getUService();
+      }
+      setLoadService(false);
+    }
+
+    // eslint-disable-next-line
+  }, [LoadService]);
+
+  useEffect(() => {
+    if (service.e_research) {
+      if (service.e_research.position === "ADMIN") {
+        setSubtab(true);
+      }
+    }
+    if (service.e_qa) {
+      if (service.e_qa.position === "ADMIN") {
+        setSubtab(true);
+      }
+    }
+    if (service.e_scihuris) {
+      if (service.e_scihuris.position === "ADMIN") {
+        setSubtab(true);
+      }
+    }
+  }, [service]);
+
+  useEffect(() => {
+    if (Subtab) {
       const getService = async () => {
         const sendToken = await {
           token,
@@ -49,15 +100,9 @@ const UserPage = (props) => {
         await getAllServiceUserForAdmin(sendToken);
       };
       getService();
-    } else {
-      const getUService = async () => {
-        const sendToken = await {
-          token,
-        };
-      };
-      getUService();
     }
-  }, [user.position]);
+    // eslint-disable-next-line
+  }, [Subtab]);
 
   const depFilter = DepJson.filter((data) => {
     if (data.currentNameEN === user.dep) {
@@ -109,6 +154,19 @@ const UserPage = (props) => {
                     </NavLink>
                   </NavItem>
                   {user.position === "ADMIN" ? (
+                    <NavItem>
+                      <NavLink
+                        className={classnames({
+                          active: activeTab === "userList",
+                        })}
+                        onClick={() => {
+                          toggle("userList");
+                        }}
+                      >
+                        รายชื่อผู้ใช้งาน
+                      </NavLink>
+                    </NavItem>
+                  ) : Subtab ? (
                     <NavItem>
                       <NavLink
                         className={classnames({
@@ -179,4 +237,7 @@ const UserPage = (props) => {
   );
 };
 
-export default connect(null, { getAllServiceUserForAdmin })(UserPage);
+export default connect(null, {
+  getAllServiceUserForAdmin,
+  getServiceForUserPage,
+})(UserPage);

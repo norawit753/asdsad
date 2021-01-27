@@ -1,5 +1,4 @@
 import {
-  START_APP,
   USER_LOADED,
   USER_LOADING,
   AUTH_ERROR,
@@ -8,6 +7,7 @@ import {
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  GET_CURRENT_USER_SERVICE,
 } from "../../type/main/type";
 
 const initialState = {
@@ -78,6 +78,26 @@ export default function authReducer(state = initialState, action) {
         : {
             ...state,
           };
+    case GET_CURRENT_USER_SERVICE:
+      const serviceLoad = action.payload;
+      localStorage.setItem("token", serviceLoad.token);
+      return serviceLoad
+        ? {
+            ...state,
+            service: {
+              e_research: serviceLoad[0].e_research,
+              e_qa: serviceLoad[0].e_qa,
+              e_scihuris: serviceLoad[0].e_scihuris,
+            },
+          }
+        : {
+            ...state,
+            service: {
+              e_research: null,
+              e_qa: null,
+              e_scihuris: null,
+            },
+          };
     case LOGIN_SUCCESS:
       const userLoad = action.payload;
       localStorage.setItem("token", userLoad.token);
@@ -96,11 +116,6 @@ export default function authReducer(state = initialState, action) {
               position: userLoad.user.position,
               type: userLoad.user.type,
               active: userLoad.user.active,
-            },
-            service: {
-              e_research: null,
-              e_qa: null,
-              e_scihuris: null,
             },
             isAuthenticated: true,
             isLoading: false,
