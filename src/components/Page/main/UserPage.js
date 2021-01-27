@@ -75,17 +75,26 @@ const UserPage = (props) => {
 
   useEffect(() => {
     if (service.e_research) {
-      if (service.e_research.position === "ADMIN") {
+      if (
+        service.e_research.position === "ADMIN" &&
+        service.e_research.active === "ACTIVE"
+      ) {
         setSubtab(true);
       }
     }
     if (service.e_qa) {
-      if (service.e_qa.position === "ADMIN") {
+      if (
+        service.e_qa.position === "ADMIN" &&
+        service.e_qa.active === "ACTIVE"
+      ) {
         setSubtab(true);
       }
     }
     if (service.e_scihuris) {
-      if (service.e_scihuris.position === "ADMIN") {
+      if (
+        service.e_scihuris.position === "ADMIN" &&
+        service.e_scihuris.active === "ACTIVE"
+      ) {
         setSubtab(true);
       }
     }

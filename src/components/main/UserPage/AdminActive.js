@@ -7,6 +7,7 @@ import ResearchActive from "../../main/ServiceActive/researchActive";
 const AdminPageActive = (props) => {
   const servicelist = useSelector((state) => state.main.service);
   const user = useSelector((state) => state.main.auth.user);
+  const subservice = useSelector((state) => state.main.auth.service);
   const [Name, setName] = useState(null);
 
   useEffect(() => {
@@ -32,6 +33,24 @@ const AdminPageActive = (props) => {
               </Container>
               <br />
               {user.position === "ADMIN" ? <ResearchActive /> : null}
+              {subservice.e_research ? (
+                subservice.e_research.position === "ADMIN" &&
+                subservice.e_research.active === "ACTIVE" ? (
+                  <ResearchActive />
+                ) : null
+              ) : null}
+              {subservice.e_qa ? (
+                subservice.e_qa.position === "ADMIN" &&
+                subservice.e_qa.active === "ACTIVE" ? (
+                  <ResearchActive />
+                ) : null
+              ) : null}
+              {subservice.e_scihuris ? (
+                subservice.e_scihuris.position === "ADMIN" &&
+                subservice.e_scihuris.active === "ACTIVE" ? (
+                  <ResearchActive />
+                ) : null
+              ) : null}
             </Container>
           </Col>
         </Row>
