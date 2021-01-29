@@ -4,6 +4,8 @@ import {
   GET_ALL_SERVICE_USER,
   GET_USER_SERVICE,
   GET_CURRENT_USER_SERVICE,
+  SEND_ACTIVE_SERVICE,
+  LOGOUT_SUCCESS,
   ERROR_GET_SERVICE,
 } from "../../type/main/type";
 
@@ -30,8 +32,11 @@ export const getServiceForUserPage = ({ token, buasri_id }) => (dispatch) => {
         payload: res.data,
       });
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
+      // alert("Session ของคุณหมดอายุ โปรด Login ใหม่");
+      dispatch({
+        type: LOGOUT_SUCCESS,
+      });
     });
 };
 
@@ -82,6 +87,40 @@ export const getServiceUser = ({ token, buasri_id }) => (dispatch) => {
       dispatch({
         type: GET_USER_SERVICE,
         payload: res.data,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export const sendResearchActive = ({
+  token,
+  user_order,
+  buasri_id,
+  active,
+  position,
+}) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+
+  const body = JSON.stringify({
+    user_order,
+    buasri_id,
+    position,
+    active,
+  });
+  console.log(body);
+  axios
+    .put(connect + "/api/users/service/add/research", body, config)
+    .then(() => {
+      dispatch({
+        type: SEND_ACTIVE_SERVICE,
       });
     })
     .catch((err) => {

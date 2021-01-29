@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo, useState } from "react";
 import { connect, useSelector } from "react-redux";
-import { Container, Col, Row } from "reactstrap";
+import { Container, Col, Row, Fade } from "reactstrap";
 import { Route, Switch } from "react-router-dom";
 
 // Main
@@ -16,16 +16,18 @@ import { getServiceForUserPage } from "../../../actions/main/serviceAction";
 
 // Complaint
 import ComplaintPage from "../complaint/MainPage";
+// import { faIgloo } from "@fortawesome/free-solid-svg-icons";
 
 const MainPage = (props) => {
   const checkToken = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
+  const checkService = useSelector((state) => state.main.auth.service);
   const [LoadService, setLoadService] = useState(true);
+  const [fadeIn] = useState(true);
 
   MainPage.propTypes = {
     getServiceForUserPage: PropTypes.func.isRequired,
   };
-
   const { getServiceForUserPage } = props;
 
   useMemo(() => {
@@ -42,7 +44,6 @@ const MainPage = (props) => {
     }
     // eslint-disable-next-line
   }, [LoadService]);
-
   return (
     <Fragment>
       {checkToken ? (
@@ -51,12 +52,17 @@ const MainPage = (props) => {
             <Container>
               <Row xs="1" sm="2" md="3">
                 <Col>
-                  <CardComplaint />
+                  <Fade in={fadeIn}>
+                    <CardComplaint />
+                  </Fade>
                 </Col>
-                <Col>
-                  <CardResearch />
-                </Col>
-                <Col></Col>
+                {checkService.e_research ? (
+                  checkService.e_research.active === "ACTIVE" ? (
+                    <Fade in={fadeIn}>
+                      <CardResearch />
+                    </Fade>
+                  ) : null
+                ) : null}
               </Row>
             </Container>
           </Route>

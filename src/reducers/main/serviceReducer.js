@@ -1,6 +1,5 @@
 import {
   GET_USER_SERVICE,
-  GET_NAME_FOR_SERVICE,
   LOGOUT_SUCCESS,
   ERROR_GET_SERVICE,
 } from "../../type/main/type";

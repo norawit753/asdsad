@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { connect, useSelector } from "react-redux";
+import React, { useState, useEffect, useMemo, Fragment } from "react";
+import { connect, useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import {
   Row,
@@ -11,6 +11,11 @@ import {
   Label,
   Input,
 } from "reactstrap";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router-dom";
+import { PAGE_LOADING } from "../../../type/main/type";
+// Send Service
+import { sendResearchActive } from "../../../actions/main/serviceAction";
 
 const ResearchActive = (props) => {
   const ColoredLine = ({ color }) => (
@@ -27,6 +32,9 @@ const ResearchActive = (props) => {
   const servicelist = useSelector((state) => state.main.service);
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
+  const trigger = useSelector((state) => state.main.trigger);
+  const [triggerOnlyOne, settriggerOnlyOne] = useState(true);
+  const dispatch = useDispatch();
   const [levelvalue, setlevelvalue] = useState("USER");
   const [activevalue, setactivevalue] = useState("INACTIVE");
   const [actives] = useState([
@@ -56,12 +64,32 @@ const ResearchActive = (props) => {
     },
   ]);
 
+  ResearchActive.propTypes = {
+    sendResearchActive: PropTypes.func.isRequired,
+  };
+  const { sendResearchActive } = props;
+
   useEffect(() => {
     if (servicelist.E_Research) {
       setactivevalue(servicelist.E_Research.active);
       setlevelvalue(servicelist.E_Research.position);
     }
   }, [servicelist]);
+
+  useMemo(() => {
+    const goMainPage = async () => {
+      if (trigger.active) {
+        if (triggerOnlyOne) {
+          await settriggerOnlyOne(false);
+          await alert("อัพเดตรายการสำเร็จ");
+          await dispatch({ type: PAGE_LOADING });
+          await props.history.push("/");
+        }
+      }
+    };
+    goMainPage();
+    // eslint-disable-next-line
+  }, [trigger]);
 
   const onSubmit = async (e) => {
     const newSet = await {
@@ -71,7 +99,7 @@ const ResearchActive = (props) => {
       position: e.levelinput,
       active: e.activeinput,
     };
-    await console.log(newSet);
+    await sendResearchActive(newSet);
   };
 
   return (
@@ -232,4 +260,6 @@ const ResearchActive = (props) => {
   );
 };
 
-export default connect(null, null)(ResearchActive);
+export default withRouter(
+  connect(null, { sendResearchActive })(ResearchActive)
+);

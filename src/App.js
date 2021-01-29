@@ -32,9 +32,12 @@ const App = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (checkError.status === "400" || checkError.status === "401") {
-      if (checkError.msg.msg !== "BuasriID ไม่มีอยู่ในระบบ Complaint") {
-        dispatch({ type: "LOGOUT_SUCCESS" });
+    if (checkError.status) {
+      if (checkError.status === "400" || checkError.status === "401") {
+        if (checkError.msg.msg !== "BuasriID ไม่มีอยู่ในระบบ Complaint") {
+          dispatch({ type: "LOGOUT_SUCCESS" });
+          alert("Session ของคุณหมดอายุ โปรด Login ใหม่");
+        }
       }
     }
     // eslint-disable-next-line

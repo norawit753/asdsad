@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
   Button,
@@ -9,10 +9,9 @@ import {
   FormGroup,
   Label,
   Input,
-  Container,
   CustomInput,
 } from "reactstrap";
-import statusJson from "../../utilis/typestatus.json";
+// import statusJson from "../../utilis/typestatus.json";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -37,9 +36,9 @@ const UpdateStatusModal = (props) => {
   const updatestatus = useSelector(
     (state) => state.complaint.trigger.updatestatus
   );
-  const { handleSubmit, register, watch } = useForm();
+  const { handleSubmit, register } = useForm();
 
-  const [LabelFile, setLabelFile] = useState("Choose File");
+  const [LabelFile] = useState("Choose File");
   const [CheckFileCorrect, setCheckFileCorrect] = useState(false);
   const [CheckFile, setCheckFile] = useState(false);
   const [CheckNoFile, setCheckNoFile] = useState(true);
@@ -81,6 +80,7 @@ const UpdateStatusModal = (props) => {
         }
       }
     }
+    // eslint-disable-next-line
   }, [detail]);
 
   // status สำหรับเปลี่ยน
@@ -92,6 +92,7 @@ const UpdateStatusModal = (props) => {
       { id: 1, value: "CONSIDERING", name: "พิจารณาอีกรอบ" },
       { id: 2, value: "RESULT", name: "เสร็จสิ้นการพิจารณา" },
     ];
+
     const EditStatus = [{ id: 0, value: "RECEIVED", name: "รับเรื่อง" }];
     const ResultStatus = [{ id: 0, value: null, name: null }];
     if (StatusName) {
@@ -112,6 +113,7 @@ const UpdateStatusModal = (props) => {
         setdisButton(true);
       }
     }
+    // eslint-disable-next-line
   }, [StatusName]);
 
   const toggle = async () => {
@@ -136,6 +138,7 @@ const UpdateStatusModal = (props) => {
       }
     };
     setImageName();
+    // eslint-disable-next-line
   }, [Image]);
 
   useEffect(() => {
@@ -173,6 +176,7 @@ const UpdateStatusModal = (props) => {
       };
       checkUpdateStatus();
     }
+    // eslint-disable-next-line
   }, [updatestatus]);
 
   const onChange = async (e) => {
