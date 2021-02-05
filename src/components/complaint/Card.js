@@ -51,7 +51,9 @@ const CardComplaint = (props) => {
           <CardTitle>
             <h4>Complaint</h4>
           </CardTitle>
-          <CardText>แจ้งร้องเรียน - ปัญหาต่าง ๆ ภายในคณะวิทยาศาสตร์</CardText>
+          <CardText>
+            แจ้งร้องเรียน - แจ้งร้องเรียนปัญหาต่าง ๆ ภายในคณะวิทยาศาสตร์
+          </CardText>
           {auth ? (
             <Fragment>
               <Button color="dark" onClick={onClick} block>

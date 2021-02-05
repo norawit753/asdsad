@@ -1,13 +1,13 @@
 import axios from "axios";
 import { returnErrors } from "../main/errorAction";
 import {
-  COMPLAINT_AUTH_SUCCESS,
-  COMPLAINT_AUTH_FAIL,
-} from "../../type/complaint/type";
+  RESEARCH_AUTH_SUCCESS,
+  RESEARCH_AUTH_FAIL,
+} from "../../type/research/type";
 
-// Env
+// ENV
 import { config } from "../../utilis/config";
-const conComplaint = config.connectComplaintAPI;
+const conResearch = config.connectResearchAPI;
 
 // Auth User
 export const auth_user = ({ buasri_id }) => (dispatch) => {
@@ -20,29 +20,30 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
 
   // Request body
   const body = JSON.stringify({ buasri_id });
+  console.log(body);
   axios
-    .post(conComplaint + "/api/auth", body, config)
+    .post(conResearch + "/api/user/id", body, config)
     .then((res) => {
-      // console.log(res.data);
       if (res.data.token) {
         dispatch({
-          type: COMPLAINT_AUTH_SUCCESS,
+          type: RESEARCH_AUTH_SUCCESS,
           payload: res.data,
         });
       }
     })
     .catch((err) => {
-      dispatch(returnErrors(err.response.data, err.response.status));
-      dispatch({
-        type: COMPLAINT_AUTH_FAIL,
-      });
+      console.log(err);
+      //   dispatch(returnErrors(err.response.data, err.response.status));
+      //   dispatch({
+      //     type: RESEARCH_AUTH_FAIL,
+      //   });
     });
 };
 
 // Setup config/headers and token
-export const tokenComplaint = (getState) => {
+export const tokenResearch = (getState) => {
   // Get token from localstorage
-  const token_complaint = getState().complaint.auth.token;
+  const token_research = getState().research.auth.token;
   // Headers
   const config = {
     headers: {
@@ -51,8 +52,8 @@ export const tokenComplaint = (getState) => {
   };
 
   // If token, add to headers
-  if (token_complaint) {
-    config.headers["x-auth-token"] = token_complaint;
+  if (token_research) {
+    config.headers["x-auth-token"] = token_research;
   }
 
   return config;

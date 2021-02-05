@@ -16,6 +16,7 @@ import { getServiceForUserPage } from "../../../actions/main/serviceAction";
 
 // Complaint
 import ComplaintPage from "../complaint/MainPage";
+import ResearchPage from "../research/MainPage";
 // import { faIgloo } from "@fortawesome/free-solid-svg-icons";
 
 const MainPage = (props) => {
@@ -68,6 +69,7 @@ const MainPage = (props) => {
           </Route>
           <Route path="/users" component={UserPage} />
           <Route path="/complaint" component={ComplaintPage} />
+          <Route path="/research" component={ResearchPage} />
         </Switch>
       ) : (
         <Login />

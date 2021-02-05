@@ -32,8 +32,9 @@ const AdminPageActive = (props) => {
                 </Form>
               </Container>
               <br />
-              {user.position === "ADMIN" ? <ResearchActive /> : null}
-              {subservice.e_research ? (
+              {user.position === "ADMIN" ? (
+                <ResearchActive />
+              ) : subservice.e_research ? (
                 subservice.e_research.position === "ADMIN" &&
                 subservice.e_research.active === "ACTIVE" ? (
                   <ResearchActive />
