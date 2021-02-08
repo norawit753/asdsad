@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment } from "react";
+import React, { useMemo, Fragment, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
   Row,
@@ -12,24 +12,47 @@ import {
 import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
 import { register } from "../../../actions/research/registerAction";
+import { auth_user } from "../../../actions/research/authAction";
 
+import FormButton from "../../research/FormButton";
+import FormPage from "../research/FormPage";
 import BackMainPage from "../../main/BackMainPage";
 
 const MainPage = (props) => {
   // Main
   const user = useSelector((state) => state.main.auth.user);
   const service = useSelector((state) => state.main.auth.service);
+  const [Open, setOpen] = useState(true);
 
   // Research
-  const researchUser = useSelector((state) => state.research.auth.user);
+  // const researchUser = useSelector((state) => state.research.auth.user);
   const checkTokenResearch = useSelector((state) => state.research.auth.token);
 
   const dispatch = useDispatch();
 
   MainPage.propTypes = {
     register: PropTypes.func.isRequired,
+    auth_user: PropTypes.func.isRequired,
   };
-  const { register } = props;
+
+  const { register, auth_user } = props;
+
+  useMemo(() => {
+    if (Open) {
+      const opening = async () => {
+        if (user.buasri_id) {
+          const newUserResearch = await {
+            buasri_id: user.buasri_id,
+          };
+          await auth_user(newUserResearch);
+          await setOpen(false);
+        }
+      };
+      opening();
+    }
+    // eslint-disable-next-line
+  }, [Open]);
+
   const RegisterResearch = (e) => {
     e.preventDefault();
     const newUser = {
@@ -48,7 +71,17 @@ const MainPage = (props) => {
 
   return (
     <Fragment>
-      {checkTokenResearch ? null : (
+      {checkTokenResearch ? (
+        <Container>
+          <Switch>
+            <Route exact path="/research">
+              <FormButton />
+              <BackMainPage />
+            </Route>
+            <Route path="/research/form" component={FormPage} />
+          </Switch>
+        </Container>
+      ) : (
         <Container>
           <Row>
             <Col>
@@ -79,4 +112,4 @@ const MainPage = (props) => {
   );
 };
 
-export default connect(null, { register })(MainPage);
+export default connect(null, { register, auth_user })(MainPage);

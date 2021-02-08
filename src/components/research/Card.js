@@ -9,9 +9,7 @@ import {
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
 import image from "../../images/PicResearch.png";
-import { auth_user } from "../../actions/research/authAction";
 
 const CardResearch = (props) => {
   const auth = useSelector((state) => state.main.auth.user);
@@ -21,17 +19,8 @@ const CardResearch = (props) => {
     maxWidth: 300,
   };
 
-  CardResearch.prototypes = {
-    auth_user: PropTypes.func.isRequired,
-  };
-  const { auth_user } = props;
-
   const onClick = async (e) => {
     e.preventDefault();
-    const newUserResearch = await {
-      buasri_id: auth.buasri_id,
-    };
-    await auth_user(newUserResearch);
     await dispatch({ type: "PAGE_LOADING" });
     await props.history.push("/research");
   };
@@ -70,4 +59,4 @@ const CardResearch = (props) => {
   );
 };
 
-export default withRouter(connect(null, { auth_user })(CardResearch));
+export default withRouter(connect(null, null)(CardResearch));

@@ -9,9 +9,7 @@ import {
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import { connect, useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
 import image from "../../images/PicComplaint.png";
-import { auth_user } from "../../actions/complaint/authAction";
 
 const CardComplaint = (props) => {
   const auth = useSelector((state) => state.main.auth.user);
@@ -21,17 +19,8 @@ const CardComplaint = (props) => {
     maxWidth: 300,
   };
 
-  CardComplaint.prototypes = {
-    auth_user: PropTypes.func.isRequired,
-  };
-  const { auth_user } = props;
-
   const onClick = async (e) => {
     e.preventDefault();
-    const newUserComplaint = await {
-      buasri_id: auth.buasri_id,
-    };
-    await auth_user(newUserComplaint);
     await dispatch({ type: "PAGE_LOADING" });
     await props.history.push("/complaint");
   };
@@ -69,4 +58,4 @@ const CardComplaint = (props) => {
   );
 };
 
-export default withRouter(connect(null, { auth_user })(CardComplaint));
+export default withRouter(connect(null, null)(CardComplaint));

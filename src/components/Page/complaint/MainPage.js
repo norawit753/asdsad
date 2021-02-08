@@ -1,4 +1,4 @@
-import React, { useMemo, Fragment } from "react";
+import React, { useMemo, Fragment, useState } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import {
   Row,
@@ -12,6 +12,7 @@ import {
 import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
 import { register } from "../../../actions/complaint/registerAction";
+import { auth_user } from "../../../actions/complaint/authAction";
 import {
   getlist_all,
   getlist_user,
@@ -26,6 +27,7 @@ import BackMainPage from "../../main/BackMainPage";
 const MainPage = (props) => {
   // Main
   const user = useSelector((state) => state.main.auth.user);
+  const [Open, setOpen] = useState(true);
   // Complaint
   const complaintUser = useSelector((state) => state.complaint.auth.user);
   const listdata = useSelector((state) => state.complaint.list.list);
@@ -38,10 +40,11 @@ const MainPage = (props) => {
 
   MainPage.propTypes = {
     register: PropTypes.func.isRequired,
+    auth_user: PropTypes.func.isRequired,
     getlist_all: PropTypes.func.isRequired,
     getlist_user: PropTypes.func.isRequired,
   };
-  const { register, getlist_all, getlist_user } = props;
+  const { register, auth_user, getlist_all, getlist_user } = props;
 
   const RegisterComplaint = (e) => {
     e.preventDefault();
@@ -60,6 +63,22 @@ const MainPage = (props) => {
     dispatch({ type: "PAGE_LOADING" });
     props.history.push("/");
   };
+
+  useMemo(() => {
+    if (Open) {
+      const opening = async () => {
+        if (user.buasri_id) {
+          const newUserComplaint = await {
+            buasri_id: user.buasri_id,
+          };
+          await auth_user(newUserComplaint);
+          await setOpen(false);
+        }
+      };
+      opening();
+    }
+    // eslint-disable-next-line
+  }, [Open]);
 
   useMemo(() => {
     if (complaintUser.position) {
@@ -132,4 +151,9 @@ const MainPage = (props) => {
   );
 };
 
-export default connect(null, { register, getlist_all, getlist_user })(MainPage);
+export default connect(null, {
+  register,
+  auth_user,
+  getlist_all,
+  getlist_user,
+})(MainPage);
