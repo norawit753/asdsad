@@ -21,7 +21,7 @@ export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
 
   axios
-    .get(connect + "/api/auth/user", tokenMain(getState))
+    .get(connect + "/api/auth/user", token(getState))
     .then((res) =>
       dispatch({
         type: USER_LOADED,
@@ -42,9 +42,9 @@ export const loadUser = () => (dispatch, getState) => {
 };
 
 // Setup config/headers and token
-export const tokenMain = (getState) => {
+export const token = (getState) => {
   // Get token from localstorage
-  const token_main = getState().main.auth.token;
+  const token = getState().main.auth.token;
   // Headers
   const config = {
     headers: {
@@ -53,8 +53,8 @@ export const tokenMain = (getState) => {
   };
 
   // If token, add to headers
-  if (token_main) {
-    config.headers["x-auth-token"] = token_main;
+  if (token) {
+    config.headers["x-auth-token"] = token;
   }
 
   return config;

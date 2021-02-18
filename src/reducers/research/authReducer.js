@@ -9,7 +9,6 @@ import {
 import { LOGOUT_SUCCESS } from "../../type/main/type";
 
 const initialState = {
-  token: localStorage.getItem("token_research"),
   isAuthenticated: false,
   isLoading: false,
   user: {
@@ -35,11 +34,9 @@ export default function authReducer(state = initialState, action) {
       };
     case RESEARCH_REGISTER_SUCCESS:
       const regisSuccess = action.payload;
-      localStorage.setItem("token_research", regisSuccess.token);
       return regisSuccess
         ? {
             ...state,
-            token: regisSuccess.token,
             isAuthenticated: true,
             isLoading: false,
             user: {
@@ -53,9 +50,7 @@ export default function authReducer(state = initialState, action) {
             ...state,
           };
     case RESEARCH_REGISTER_FAIL:
-      localStorage.removeItem("token_research");
       return {
-        token: null,
         isAuthenticated: false,
         isLoading: false,
         user: {
@@ -68,11 +63,9 @@ export default function authReducer(state = initialState, action) {
       };
     case RESEARCH_AUTH_SUCCESS:
       const researchUser = action.payload;
-      localStorage.setItem("token_research", researchUser.token);
       return researchUser
         ? {
             ...state,
-            token: researchUser.token,
             isAuthenticated: true,
             isLoading: false,
             user: {
@@ -86,9 +79,7 @@ export default function authReducer(state = initialState, action) {
             ...state,
           };
     case LOGOUT_SUCCESS:
-      localStorage.removeItem("token_research");
       return {
-        token: null,
         isAuthenticated: false,
         isLoading: false,
         user: {

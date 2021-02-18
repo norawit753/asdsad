@@ -26,7 +26,9 @@ const MainPage = (props) => {
 
   // Research
   // const researchUser = useSelector((state) => state.research.auth.user);
-  const checkTokenResearch = useSelector((state) => state.research.auth.token);
+  const checkResearchActive = useSelector(
+    (state) => state.main.auth.service.e_research
+  );
 
   const dispatch = useDispatch();
 
@@ -71,7 +73,7 @@ const MainPage = (props) => {
 
   return (
     <Fragment>
-      {checkTokenResearch ? (
+      {checkResearchActive.active === "ACTIVE" ? (
         <Container>
           <Switch>
             <Route exact path="/research">

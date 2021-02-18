@@ -41,9 +41,9 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
 };
 
 // Setup config/headers and token
-export const tokenResearch = (getState) => {
+export const token = (getState) => {
   // Get token from localstorage
-  const token_research = getState().research.auth.token;
+  const token = getState().main.auth.token;
   // Headers
   const config = {
     headers: {
@@ -52,8 +52,8 @@ export const tokenResearch = (getState) => {
   };
 
   // If token, add to headers
-  if (token_research) {
-    config.headers["x-auth-token"] = token_research;
+  if (token) {
+    config.headers["x-auth-token"] = token;
   }
 
   return config;

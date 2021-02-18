@@ -31,12 +31,9 @@ const MainPage = (props) => {
   // Complaint
   const complaintUser = useSelector((state) => state.complaint.auth.user);
   const listdata = useSelector((state) => state.complaint.list.list);
-  const complaintToken = useSelector((state) => state.complaint.auth.token);
+  const Token = useSelector((state) => state.main.auth.token);
 
   const dispatch = useDispatch();
-  const checkTokenComplaint = useSelector(
-    (state) => state.complaint.auth.token
-  );
 
   MainPage.propTypes = {
     register: PropTypes.func.isRequired,
@@ -84,7 +81,7 @@ const MainPage = (props) => {
     if (complaintUser.position) {
       const getListData = async () => {
         const sendBuasriID = await {
-          token: complaintToken,
+          token: Token,
           buasri_id: complaintUser.buasri_id,
         };
         if (complaintUser.position === "ADMIN") {
@@ -103,7 +100,7 @@ const MainPage = (props) => {
 
   return (
     <Fragment>
-      {checkTokenComplaint ? (
+      {complaintUser.buasri_id ? (
         <Container>
           <Switch>
             <Route exact path="/complaint">

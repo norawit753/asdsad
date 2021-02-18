@@ -15,7 +15,7 @@ import { getdetail_list } from "../../actions/complaint/listAction";
 const MainTableUser = (props) => {
   // Complaint
   const data = useSelector((state) => state.complaint.list.list);
-  const token = useSelector((state) => state.complaint.auth.token);
+  const token = useSelector((state) => state.main.auth.token);
   const dispatch = useDispatch();
 
   MainTableUser.propTypes = {

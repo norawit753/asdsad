@@ -9,7 +9,6 @@ import {
 import { LOGOUT_SUCCESS } from "../../type/main/type";
 
 const initialState = {
-  token: localStorage.getItem("token_complaint"),
   isAuthenticated: false,
   isLoading: false,
   user: {
@@ -37,11 +36,9 @@ export default function authReducer(state = initialState, action) {
       };
     case COMPLAINT_REGISTER_SUCCESS:
       const regisSuccess = action.payload;
-      localStorage.setItem("token_complaint", regisSuccess.token);
       return regisSuccess
         ? {
             ...state,
-            token: regisSuccess.token,
             isAuthenticated: true,
             isLoading: false,
             user: {
@@ -56,9 +53,7 @@ export default function authReducer(state = initialState, action) {
             ...state,
           };
     case COMPLAINT_REGISTER_FAIL:
-      localStorage.removeItem("token_complaint");
       return {
-        token: null,
         isAuthenticated: false,
         isLoading: false,
         user: {
@@ -71,11 +66,9 @@ export default function authReducer(state = initialState, action) {
       };
     case COMPLAINT_AUTH_SUCCESS:
       const complaintUser = action.payload;
-      localStorage.setItem("token_complaint", complaintUser.token);
       return complaintUser
         ? {
             ...state,
-            token: complaintUser.token,
             isAuthenticated: true,
             isLoading: false,
             user: {
@@ -90,9 +83,7 @@ export default function authReducer(state = initialState, action) {
             ...state,
           };
     case LOGOUT_SUCCESS:
-      localStorage.removeItem("token_complaint");
       return {
-        token: null,
         isAuthenticated: false,
         isLoading: false,
         user: {

@@ -23,7 +23,7 @@ import { getServiceUser } from "../../../actions/main/serviceAction";
 
 const AdminTable = (props) => {
   const list = useSelector((state) => state.main.list.userlist);
-  const tokenMain = useSelector((state) => state.main.auth.token);
+  const token = useSelector((state) => state.main.auth.token);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
@@ -40,7 +40,7 @@ const AdminTable = (props) => {
   const onClick = async (e) => {
     const getValue = await e.target.value.split(",");
     const Detail = await {
-      token: tokenMain,
+      token: token,
       id: getValue[0],
       buasri_id: getValue[1],
     };

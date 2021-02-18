@@ -24,7 +24,7 @@ import { withRouter } from "react-router-dom";
 const ComplaintFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
   const user = useSelector((state) => state.complaint.auth.user);
-  const token = useSelector((state) => state.complaint.auth.token);
+  const token = useSelector((state) => state.main.auth.token);
   const addlist = useSelector((state) => state.complaint.trigger.addlist);
   const dispatch = useDispatch();
 

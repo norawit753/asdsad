@@ -40,9 +40,9 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
 };
 
 // Setup config/headers and token
-export const tokenComplaint = (getState) => {
+export const token = (getState) => {
   // Get token from localstorage
-  const token_complaint = getState().complaint.auth.token;
+  const token = getState().main.auth.token;
   // Headers
   const config = {
     headers: {
@@ -51,8 +51,8 @@ export const tokenComplaint = (getState) => {
   };
 
   // If token, add to headers
-  if (token_complaint) {
-    config.headers["x-auth-token"] = token_complaint;
+  if (token) {
+    config.headers["x-auth-token"] = token;
   }
 
   return config;

@@ -32,7 +32,7 @@ const UpdateStatusModal = (props) => {
   const [StatusChange, setStatusChange] = useState(initialValue);
 
   const detail = useSelector((state) => state.complaint.list.detail);
-  const token = useSelector((state) => state.complaint.auth.token);
+  const token = useSelector((state) => state.main.auth.token);
   const updatestatus = useSelector(
     (state) => state.complaint.trigger.updatestatus
   );

@@ -15,7 +15,7 @@ import { getdetail_list } from "../../actions/complaint/listAction";
 const MainTableAdmin = (props) => {
   // Complaint
   const data = useSelector((state) => state.complaint.list.list);
-  const token = useSelector((state) => state.complaint.auth.token);
+  const Token = useSelector((state) => state.main.auth.token);
   const dispatch = useDispatch();
 
   MainTableAdmin.propTypes = {
@@ -26,7 +26,7 @@ const MainTableAdmin = (props) => {
   const onClick = async (e) => {
     const getValue = await e.target.value.split(",");
     const Detail = await {
-      token: token,
+      token: Token,
       id: getValue[0],
       buasri_id: getValue[1],
     };
