@@ -29,6 +29,9 @@ const MainPage = (props) => {
   const checkResearchActive = useSelector(
     (state) => state.main.auth.service.e_research
   );
+  const checkResearchUser = useSelector(
+    (state) => state.research.auth.user.buasri_id
+  );
 
   const dispatch = useDispatch();
 
@@ -40,7 +43,7 @@ const MainPage = (props) => {
   const { register, auth_user } = props;
 
   useMemo(() => {
-    if (Open) {
+    if (Open && checkResearchUser === "ACTVE" && !checkResearchUser) {
       const opening = async () => {
         if (user.buasri_id) {
           const newUserResearch = await {
@@ -73,7 +76,7 @@ const MainPage = (props) => {
 
   return (
     <Fragment>
-      {checkResearchActive.active === "ACTIVE" ? (
+      {checkResearchUser ? (
         <Container>
           <Switch>
             <Route exact path="/research">
