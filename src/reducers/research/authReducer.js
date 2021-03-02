@@ -43,7 +43,6 @@ export default function authReducer(state = initialState, action) {
               id: regisSuccess.user.id,
               buasri_id: regisSuccess.user.buasri_id,
               email: regisSuccess.user.email,
-              position: regisSuccess.user.position,
             },
           }
         : {
@@ -57,8 +56,6 @@ export default function authReducer(state = initialState, action) {
           id: null,
           buasri_id: null,
           email: null,
-          position: null,
-          active: null,
         },
       };
     case RESEARCH_AUTH_SUCCESS:
@@ -72,7 +69,6 @@ export default function authReducer(state = initialState, action) {
               id: researchUser.user.id,
               buasri_id: researchUser.user.buasri_id,
               email: researchUser.user.email,
-              position: researchUser.user.position,
             },
           }
         : {

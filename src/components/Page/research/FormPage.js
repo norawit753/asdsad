@@ -17,6 +17,8 @@ import { withRouter } from "react-router-dom";
 const ResearchFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
 
+  const onSubmit = async (e) => {};
+
   return (
     <Fragment>
       <Container>
@@ -27,6 +29,14 @@ const ResearchFormPage = (props) => {
 
         <br />
       </Container>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormGroup>
+          <p className="text-danger">
+            แบบฟอร์มนี้มีไว้สำหรับการส่งงานวิจัย
+            โดยข้อมูลต่างๆที่ท่านกรอกผ่านแบบฟอร์มนี้{" "}
+          </p>
+        </FormGroup>
+      </Form>
     </Fragment>
   );
 };
