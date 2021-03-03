@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import BackResearchPage from "../../research/BackResearchPage";
 import { withRouter } from "react-router-dom";
+import articleJson from "../../../utilis/research/typearticle.json";
 
 const ResearchFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
@@ -35,6 +36,14 @@ const ResearchFormPage = (props) => {
             แบบฟอร์มนี้มีไว้สำหรับการส่งงานวิจัย
             โดยข้อมูลต่างๆที่ท่านกรอกผ่านแบบฟอร์มนี้{" "}
           </p>
+        </FormGroup>
+        <FormGroup>
+          <Label for="article">ประเภทของบทความ*:</Label>
+          <Input type="select" name="article" innerRef={register}>
+            {articleJson.map((article) => (
+              <option key={article.articleKEY}>{article.article}</option>
+            ))}
+          </Input>
         </FormGroup>
       </Form>
     </Fragment>

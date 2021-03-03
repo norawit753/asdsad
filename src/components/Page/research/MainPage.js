@@ -43,7 +43,7 @@ const MainPage = (props) => {
   const { register, auth_user } = props;
 
   useMemo(() => {
-    if (Open && checkResearchUser === "ACTVE" && !checkResearchUser) {
+    if (Open && checkResearchActive && !checkResearchUser) {
       const opening = async () => {
         if (user.buasri_id) {
           const newUserResearch = await {
