@@ -197,179 +197,181 @@ const ComplaintFormPage = (props) => {
 
         <br />
       </Container>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormGroup>
-          <p className="text-danger">
-            แบบฟอร์มนี้มีไว้สำหรับการรับข้อร้องเรียนต่างๆ
-            โดยข้อมูลต่างๆที่ท่านกรอกผ่านแบบฟอร์มนี้ จะถูกเก็บเป็นความลับ ชื่อ
-            เบอร์โทรศัพท์ และอีเมล์ ของท่านมีไว้เพื่อติดต่อกลับ
-            ทางคณะผู้บริหารจะนำข้อร้องเรียนและข้อเสนอแนะไปปรับปรุงการให้บริการของคณะวิทยาศาสตร์ต่อไป
-            ขอขอบพระคุณสำหรับความร่วมมือ{" "}
-          </p>
-          <p>
-            **หมายเหตุ:
-            ท่านจำเป็นต้องกรอกข้อมูลทุกข้อให้ครับถ้วนจึงถือเป็นข้อร้องเรียน
-          </p>
-        </FormGroup>
-        {user.position === "ADMIN" ? (
-          <Fragment>
-            <FormGroup>
-              <Label for="email">*Email:</Label>
-              <Input
-                type="email"
-                name="email"
-                innerRef={register}
-                placeholder="E-mail ผู้แจ้ง"
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="member">*ประเภทผู้ร้องเรียน:</Label>
-              <Input type="select" name="member" innerRef={register}>
-                <option value="GUEST">บุคคลภายนอกมหาวิทยาลัย</option>
-                <option value="MEMBER">บุคคลภายในมหาวิทยาลัย</option>
-              </Input>
-            </FormGroup>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <FormGroup>
-              <Label for="email">*Email:</Label>
-              <Input
-                type="email"
-                name="email"
-                placeholder={user.email}
-                innerRef={register}
-                value={user.email}
-                readOnly
-              ></Input>
-            </FormGroup>
-          </Fragment>
-        )}
-        <FormGroup>
-          <Label for="phone">เบอร์ติดต่อ:</Label>
-          <Input
-            type="text"
-            name="phone"
-            innerRef={register}
-            placeholder="เบอร์ที่ใช้ติดต่อ (สูงสุด 20 ตัวอักษร)"
-            maxLength="20"
-          />
-        </FormGroup>
-        {/* ประเภทการร้องเรียน */}
-        <FormGroup tag="fieldset">
-          <Label>*ประเภทการร้องเรียน:</Label>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="radio"
-                name="type"
-                innerRef={register}
-                value="BUILDING"
-                required
-              />{" "}
-              อาคารและสถานที่
-            </Label>
+      <Container>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <FormGroup>
+            <p className="text-danger">
+              แบบฟอร์มนี้มีไว้สำหรับการรับข้อร้องเรียนต่างๆ
+              โดยข้อมูลต่างๆที่ท่านกรอกผ่านแบบฟอร์มนี้ จะถูกเก็บเป็นความลับ ชื่อ
+              เบอร์โทรศัพท์ และอีเมล์ ของท่านมีไว้เพื่อติดต่อกลับ
+              ทางคณะผู้บริหารจะนำข้อร้องเรียนและข้อเสนอแนะไปปรับปรุงการให้บริการของคณะวิทยาศาสตร์ต่อไป
+              ขอขอบพระคุณสำหรับความร่วมมือ{" "}
+            </p>
+            <p>
+              **หมายเหตุ:
+              ท่านจำเป็นต้องกรอกข้อมูลทุกข้อให้ครับถ้วนจึงถือเป็นข้อร้องเรียน
+            </p>
           </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="radio"
-                name="type"
-                innerRef={register}
-                value="LEARNING"
-                required
-              />{" "}
-              การเรียนการสอน
-            </Label>
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="radio"
-                name="type"
-                innerRef={register}
-                value="ACTIVITY"
-                required
-              />{" "}
-              กิจกรรม
-            </Label>
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="radio"
-                name="type"
-                innerRef={register}
-                value="SERVICES"
-                required
-              />{" "}
-              การบริการ
-            </Label>
-          </FormGroup>
-          <FormGroup check>
-            <Label check>
-              <Input
-                type="radio"
-                name="type"
-                innerRef={register}
-                value="OTHER"
-                required
-              />{" "}
-              อื่น ๆ
-            </Label>
-          </FormGroup>
-        </FormGroup>
-        <FormGroup>
-          <Label for="topic">*หัวข้อ:</Label>
-          <Input
-            type="text"
-            name="topic"
-            innerRef={register}
-            placeholder="หัวข้อที่ต้องการร้องเรียน (สูงสุด 80 ตัวอักษร)"
-            maxLength="80"
-            required
-          />
-        </FormGroup>
-        {/*  */}
-        <FormGroup>
-          <Label for="detail">*รายละเอียด:</Label>
-          <Input
-            type="textarea"
-            name="detail"
-            innerRef={register}
-            placeholder="อธิบายรายละเอียดที่ต้องการร้องเรียน"
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label for="uploadfile">
-            Upload File: (เฉพาะไฟล์รูปภาพ PNG, JPG และ GIF เท่านั้น)
-          </Label>
-          <CustomInput
-            type="file"
-            id="fileupload"
-            name="fileupload"
-            label={LabelFile}
-            onChange={onChange}
-            accept="image/PNG, image/JPEG, image/GIF"
-          />
-          {Image.preview ? (
+          {user.position === "ADMIN" ? (
             <Fragment>
-              <br />
-              <br />
-              <Button color={"danger"} onClick={cancelUpload}>
-                ยกเลิก Upload
-              </Button>
-              <br />
-              <br />
-              <img src={Image.preview} alt="" width="300" />
+              <FormGroup>
+                <Label for="email">*Email:</Label>
+                <Input
+                  type="email"
+                  name="email"
+                  innerRef={register}
+                  placeholder="E-mail ผู้แจ้ง"
+                ></Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="member">*ประเภทผู้ร้องเรียน:</Label>
+                <Input type="select" name="member" innerRef={register}>
+                  <option value="GUEST">บุคคลภายนอกมหาวิทยาลัย</option>
+                  <option value="MEMBER">บุคคลภายในมหาวิทยาลัย</option>
+                </Input>
+              </FormGroup>
             </Fragment>
-          ) : null}
-        </FormGroup>
-        <FormGroup>
-          <Button color="dark">Submit</Button>
-        </FormGroup>
-      </Form>
+          ) : (
+            <Fragment>
+              <FormGroup>
+                <Label for="email">*Email:</Label>
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder={user.email}
+                  innerRef={register}
+                  value={user.email}
+                  readOnly
+                ></Input>
+              </FormGroup>
+            </Fragment>
+          )}
+          <FormGroup>
+            <Label for="phone">เบอร์ติดต่อ:</Label>
+            <Input
+              type="text"
+              name="phone"
+              innerRef={register}
+              placeholder="เบอร์ที่ใช้ติดต่อ (สูงสุด 20 ตัวอักษร)"
+              maxLength="20"
+            />
+          </FormGroup>
+          {/* ประเภทการร้องเรียน */}
+          <FormGroup tag="fieldset">
+            <Label>*ประเภทการร้องเรียน:</Label>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="type"
+                  innerRef={register}
+                  value="BUILDING"
+                  required
+                />{" "}
+                อาคารและสถานที่
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="type"
+                  innerRef={register}
+                  value="LEARNING"
+                  required
+                />{" "}
+                การเรียนการสอน
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="type"
+                  innerRef={register}
+                  value="ACTIVITY"
+                  required
+                />{" "}
+                กิจกรรม
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="type"
+                  innerRef={register}
+                  value="SERVICES"
+                  required
+                />{" "}
+                การบริการ
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="radio"
+                  name="type"
+                  innerRef={register}
+                  value="OTHER"
+                  required
+                />{" "}
+                อื่น ๆ
+              </Label>
+            </FormGroup>
+          </FormGroup>
+          <FormGroup>
+            <Label for="topic">*หัวข้อ:</Label>
+            <Input
+              type="text"
+              name="topic"
+              innerRef={register}
+              placeholder="หัวข้อที่ต้องการร้องเรียน (สูงสุด 80 ตัวอักษร)"
+              maxLength="80"
+              required
+            />
+          </FormGroup>
+          {/*  */}
+          <FormGroup>
+            <Label for="detail">*รายละเอียด:</Label>
+            <Input
+              type="textarea"
+              name="detail"
+              innerRef={register}
+              placeholder="อธิบายรายละเอียดที่ต้องการร้องเรียน"
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="uploadfile">
+              Upload File: (เฉพาะไฟล์รูปภาพ PNG, JPG และ GIF เท่านั้น)
+            </Label>
+            <CustomInput
+              type="file"
+              id="fileupload"
+              name="fileupload"
+              label={LabelFile}
+              onChange={onChange}
+              accept="image/PNG, image/JPEG, image/GIF"
+            />
+            {Image.preview ? (
+              <Fragment>
+                <br />
+                <br />
+                <Button color={"danger"} onClick={cancelUpload}>
+                  ยกเลิก Upload
+                </Button>
+                <br />
+                <br />
+                <img src={Image.preview} alt="" width="300" />
+              </Fragment>
+            ) : null}
+          </FormGroup>
+          <FormGroup>
+            <Button color="dark">Submit</Button>
+          </FormGroup>
+        </Form>
+      </Container>
     </Fragment>
   );
 };
