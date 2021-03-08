@@ -15,6 +15,7 @@ import BackResearchPage from "../../research/BackResearchPage";
 import { withRouter } from "react-router-dom";
 import articleJson from "../../../utilis/research/typearticle.json";
 import levelJson from "../../../utilis/research/typelevel.json";
+import { useEffect } from "react";
 
 const ResearchFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
@@ -45,18 +46,65 @@ const ResearchFormPage = (props) => {
       sublevel_2: "---โปรดเลือก---",
     },
   ]);
+
   const [ConfName, setConfName] = useState(false);
   const fullyear = new Date().getFullYear();
+
   // Upload File
   const [LabelFile, setLabelFile] = useState("Choose File");
   const [CheckFile, setCheckFile] = useState(false);
   const [CheckFileCorrect, setCheckFileCorrect] = useState(false);
-  const [CheckNoFile, setCheckNoFile] = useState(true);
   const [mergeName, setMergeName] = useState("");
   const [filePath, setfilePath] = useState("");
+  const [PDF, setPDF] = useState({
+    preview: "",
+    raw: "",
+  });
+
+  // MergeName
+  useEffect(() => {
+    const timenow = Date.now();
+    const setPDFName = async () => {
+      if ((await PDF.raw.type) === "application/pdf") {
+        await setMergeName(timenow + ".pdf");
+        await setCheckFileCorrect(true);
+      } else {
+        await setCheckFileCorrect(false);
+      }
+    };
+    setPDFName();
+    // eslint-disable-next-line
+  }, [PDF]);
+
+  // create name upload
+  useEffect(() => {
+    const setPDFPath = async () => {
+      if (await mergeName) {
+        await setfilePath("/uploads/" + user.buasri_id + "/" + mergeName);
+      }
+    };
+    setPDFPath();
+    // eslint-disable-next-line
+  }, [mergeName]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "fileupload") {
+      if (e.target.files.length) {
+        setCheckFile(true);
+        setPDF({
+          preview: URL.createObjectURL(e.target.files[0]),
+          raw: e.target.files[0],
+        });
+      } else {
+        setPDF({
+          preview: "",
+          raw: "",
+        });
+      }
+    }
+
     if (name === "article") {
       if (value === "CONFERENCE") {
         setConfName(true);
@@ -92,6 +140,24 @@ const ResearchFormPage = (props) => {
     console.log("Level0: " + e.level);
     console.log("Level1: " + e.sub_level_1);
     console.log("Level2: " + e.sub_level_2);
+
+    async function upload() {
+      if (CheckFile) {
+        if (PDF) {
+          if (PDF.raw.type === "application/pdf") {
+            const NewUploadFile = new FormData();
+            await NewUploadFile.append("file", PDF.raw, mergeName);
+            await NewUploadFile.append("buasri_id", user.buasri_id);
+            await NewUploadFile.append("filePath", filePath);
+            // ทำเพิ่ม
+            // await uploadfile(NewUploadFile, token);
+          } else {
+            await alert("ประเภทไฟล์ของคุณไม่ถูกต้อง");
+          }
+        }
+      }
+    }
+
     if (ConfName) {
       const newList = await {
         token,
@@ -108,6 +174,9 @@ const ResearchFormPage = (props) => {
         conference_name: e.conf_name,
         status: "WAITING",
       };
+
+      // ทำเพิ่ม
+      await upload();
       console.log(newList);
     } else {
       const newList = await {
@@ -124,6 +193,9 @@ const ResearchFormPage = (props) => {
         name: e.name,
         status: "WAITING",
       };
+
+      // ทำเพิ่ม
+      await upload();
       console.log(newList);
     }
   };
@@ -274,8 +346,8 @@ const ResearchFormPage = (props) => {
               type="file"
               id="fileupload"
               name="fileupload"
-              // label={LabelFile}
-              // onChange={onChange}
+              label={LabelFile}
+              onChange={onChange}
               accept="application/pdf"
             />
           </FormGroup>
