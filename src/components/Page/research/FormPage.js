@@ -46,6 +46,7 @@ const ResearchFormPage = (props) => {
       sublevel_2: "---โปรดเลือก---",
     },
   ]);
+  const [OpenSublv2, setOpenSublv2] = useState(false);
 
   const [ConfName, setConfName] = useState(false);
   const fullyear = new Date().getFullYear();
@@ -120,12 +121,14 @@ const ResearchFormPage = (props) => {
           { sublevel_2_Key: "SCOPUS", sublevel_2: "Scopus" },
           { sublevel_2_Key: "WEB-OF-SCIENCE", sublevel_2: "lsi" },
         ]);
+        setOpenSublv2(true);
       } else if (value === "COUNTRY" && Level1) {
         setLevel2([
           { sublevel_2_Key: "", sublevel_2: "---โปรดเลือก---" },
           { sublevel_2_Key: "TCI-TYPE-1", sublevel_2: "TCI-TYPE-1" },
           { sublevel_2_Key: "TCI-TYPE-2", sublevel_2: "TCI-TYPE-2" },
         ]);
+        setOpenSublv2(true);
       } else {
         setLevel2([
           {
@@ -133,6 +136,7 @@ const ResearchFormPage = (props) => {
             sublevel_2: "---โปรดเลือก---",
           },
         ]);
+        setOpenSublv2(false);
       }
     }
   };
@@ -173,6 +177,8 @@ const ResearchFormPage = (props) => {
         name: e.name,
         conference_name: e.conf_name,
         status: "WAITING",
+        file_name: mergeName,
+        file_path: filePath,
       };
 
       // ทำเพิ่ม
@@ -192,6 +198,8 @@ const ResearchFormPage = (props) => {
         author: e.author,
         name: e.name,
         status: "WAITING",
+        file_name: mergeName,
+        file_path: filePath,
       };
 
       // ทำเพิ่ม
@@ -253,38 +261,42 @@ const ResearchFormPage = (props) => {
               ))}
             </Input>
           </FormGroup>
-          <FormGroup>
-            <Label for="sub_level_1">*อยู่ในเกณฑ์ กพอ หรือไม่?</Label>
-            <Input
-              type="select"
-              name="sub_level_1"
-              innerRef={register}
-              onChange={onChange}
-              required
-            >
-              <option value="">---โปรดเลือก---</option>
-              <option value="OCSC">อยู่ในเกณฑ์</option>
-              <option value="NON-OCSC">ไม่อยู่ในเกณฑ์</option>
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label for="sub_level_2">*ฐานข้อมูล</Label>
-            <Input
-              type="select"
-              name="sub_level_2"
-              innerRef={register}
-              required
-            >
-              {Level2.map((sublevel_2) => (
-                <option
-                  key={sublevel_2.sublevel_2_Key}
-                  value={sublevel_2.sublevel_2_Key}
+          {OpenSublv2 ? (
+            <Fragment>
+              <FormGroup>
+                <Label for="sub_level_1">*อยู่ในเกณฑ์ กพอ หรือไม่?</Label>
+                <Input
+                  type="select"
+                  name="sub_level_1"
+                  innerRef={register}
+                  onChange={onChange}
+                  required
                 >
-                  {sublevel_2.sublevel_2}
-                </option>
-              ))}
-            </Input>
-          </FormGroup>
+                  <option value="">---โปรดเลือก---</option>
+                  <option value="OCSC">อยู่ในเกณฑ์</option>
+                  <option value="NON-OCSC">ไม่อยู่ในเกณฑ์</option>
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="sub_level_2">*ฐานข้อมูล</Label>
+                <Input
+                  type="select"
+                  name="sub_level_2"
+                  innerRef={register}
+                  required
+                >
+                  {Level2.map((sublevel_2) => (
+                    <option
+                      key={sublevel_2.sublevel_2_Key}
+                      value={sublevel_2.sublevel_2_Key}
+                    >
+                      {sublevel_2.sublevel_2}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Fragment>
+          ) : null}
           <FormGroup>
             <Label for="year">*ปีที่เผยแพร่</Label>
             <Input type="select" name="year" innerRef={register} required>
@@ -349,6 +361,7 @@ const ResearchFormPage = (props) => {
               label={LabelFile}
               onChange={onChange}
               accept="application/pdf"
+              required
             />
           </FormGroup>
           <FormGroup>
