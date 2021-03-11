@@ -13,6 +13,9 @@ import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
 import BackResearchPage from "../../research/BackResearchPage";
 import { withRouter } from "react-router-dom";
+
+import { uploadfile } from "../../../actions/research/formAction";
+
 import articleJson from "../../../utilis/research/typearticle.json";
 import levelJson from "../../../utilis/research/typelevel.json";
 import { useEffect } from "react";
@@ -61,6 +64,13 @@ const ResearchFormPage = (props) => {
     preview: "",
     raw: "",
   });
+
+  // propTypes
+  ResearchFormPage.propTypes = {
+    uploadfile: PropTypes.func.isRequired,
+  };
+
+  const { uploadfile } = props;
 
   // MergeName
   useEffect(() => {
@@ -141,9 +151,9 @@ const ResearchFormPage = (props) => {
     }
   };
   const onSubmit = async (e) => {
-    console.log("Level0: " + e.level);
-    console.log("Level1: " + e.sub_level_1);
-    console.log("Level2: " + e.sub_level_2);
+    // console.log("Level0: " + e.level);
+    // console.log("Level1: " + e.sub_level_1);
+    // console.log("Level2: " + e.sub_level_2);
 
     async function upload() {
       if (CheckFile) {
@@ -153,8 +163,8 @@ const ResearchFormPage = (props) => {
             await NewUploadFile.append("file", PDF.raw, mergeName);
             await NewUploadFile.append("buasri_id", user.buasri_id);
             await NewUploadFile.append("filePath", filePath);
-            // ทำเพิ่ม
-            // await uploadfile(NewUploadFile, token);
+            // await console.log(...NewUploadFile);
+            await uploadfile(NewUploadFile, token);
           } else {
             await alert("ประเภทไฟล์ของคุณไม่ถูกต้อง");
           }
@@ -181,9 +191,8 @@ const ResearchFormPage = (props) => {
         file_path: filePath,
       };
 
-      // ทำเพิ่ม
       await upload();
-      console.log(newList);
+      // console.log(newList);
     } else {
       const newList = await {
         token,
@@ -202,9 +211,8 @@ const ResearchFormPage = (props) => {
         file_path: filePath,
       };
 
-      // ทำเพิ่ม
       await upload();
-      console.log(newList);
+      // console.log(newList);
     }
   };
 
@@ -361,7 +369,6 @@ const ResearchFormPage = (props) => {
               label={LabelFile}
               onChange={onChange}
               accept="application/pdf"
-              required
             />
           </FormGroup>
           <FormGroup>
@@ -373,4 +380,4 @@ const ResearchFormPage = (props) => {
   );
 };
 
-export default withRouter(connect(null, null)(ResearchFormPage));
+export default withRouter(connect(null, { uploadfile })(ResearchFormPage));
