@@ -18,7 +18,6 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
       "x-auth-token": token,
     },
   };
-  //   console.log(...NewUploadFile);
   axios
     .post(conResearch + "/api/upload", NewUploadFile, config)
     .then((res) => {
@@ -30,4 +29,30 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+// PUT LIST TO MONGODB
+export const newlist = ({
+  token,
+  year,
+  buasri_id,
+  email,
+  article,
+  level,
+  sub_level_1,
+  sub_level_2,
+  conf_year,
+  author,
+  name,
+  status,
+  file_name,
+  file_path,
+}) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
 };

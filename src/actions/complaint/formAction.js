@@ -32,7 +32,7 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
     });
 };
 
-// PUT FILE TO MONGODB
+// PUT LIST TO MONGODB
 export const newlist = ({
   token,
   buasri_id,
