@@ -55,4 +55,9 @@ export const newlist = ({
       "x-auth-token": token,
     },
   };
+  const configemail = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 };
