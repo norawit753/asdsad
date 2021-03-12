@@ -100,7 +100,7 @@ export const newlist = ({
                 .catch((err) => {
                   dispatch({
                     type: COMPLAINT_ERROR,
-                    payload: err.data,
+                    payload: err,
                   });
                 });
             }
@@ -108,7 +108,7 @@ export const newlist = ({
           .catch((err) => {
             dispatch({
               type: COMPLAINT_ERROR,
-              payload: err.data,
+              payload: err,
             });
           });
       }
@@ -116,7 +116,7 @@ export const newlist = ({
     .catch((err) => {
       dispatch({
         type: COMPLAINT_ERROR,
-        payload: err.data,
+        payload: err,
       });
     });
 

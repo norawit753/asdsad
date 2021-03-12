@@ -54,7 +54,7 @@ const UpdateStatusModal = (props) => {
   const dispatch = useDispatch();
 
   UpdateStatusModal.propTypes = {
-    uploadfile: PropTypes.array,
+    uploadfile: PropTypes.func.isRequired,
     sendUpdateStatus: PropTypes.func.isRequired,
   };
   const { uploadfile, sendUpdateStatus } = props;

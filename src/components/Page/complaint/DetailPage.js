@@ -10,6 +10,7 @@ import BackComplaintPage from "../../complaint/BackComplaintPage";
 
 // Env
 import { config } from "../../../utilis/config";
+import NewLineToBr from "../../../utilis/newLine";
 
 const ComplaintDetailPage = (props) => {
   const detail = useSelector((state) => state.complaint.list.detail);
@@ -34,7 +35,7 @@ const ComplaintDetailPage = (props) => {
             })
             .map((data) => {
               if (data.status === detail[0].status) {
-                return <Fragment>{data.name}</Fragment>;
+                return <Fragment key={data.status}>{data.name}</Fragment>;
               } else {
                 return null;
               }
@@ -51,7 +52,7 @@ const ComplaintDetailPage = (props) => {
             })
             .map((data) => {
               if (data.type === detail[0].type) {
-                return <Fragment>{data.name}</Fragment>;
+                return <Fragment key={data.type}>{data.name}</Fragment>;
               } else {
                 return null;
               }
@@ -90,7 +91,9 @@ const ComplaintDetailPage = (props) => {
                 </tr>
                 <tr>
                   <th scope="row">รายละเอียด:</th>
-                  <td>{detail[0].detail}</td>
+                  <td>
+                    <NewLineToBr>{detail[0].detail}</NewLineToBr>
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">E-mail:</th>
@@ -121,7 +124,7 @@ const ComplaintDetailPage = (props) => {
                 </tr>
                 <tr>
                   <th scope="row">รายละเอียด:</th>
-                  <td colspan="4">{NoteFilter}</td>
+                  <td colSpan="4">{NoteFilter}</td>
                 </tr>
               </tbody>
             </Table>
