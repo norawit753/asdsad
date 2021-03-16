@@ -1,4 +1,15 @@
-import React, { Fragment, useState, useMemo } from "react";
+import React, {
+  Fragment,
+  useState,
+  useMemo,
+  useEffect,
+  createRef,
+} from "react";
+// test tags
+import InputTags from "react-input-tags-hooks";
+import "react-input-tags-hooks/build/index.css";
+
+// ////////
 import {
   Container,
   Button,
@@ -11,14 +22,14 @@ import {
 import { connect, useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
+
+import Tags from "../../research/Tags";
 import BackResearchPage from "../../research/BackResearchPage";
 import { withRouter } from "react-router-dom";
-
 import { uploadfile } from "../../../actions/research/formAction";
 
 import articleJson from "../../../utilis/research/typearticle.json";
 import levelJson from "../../../utilis/research/typelevel.json";
-import { useEffect } from "react";
 
 const ResearchFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
@@ -64,6 +75,23 @@ const ResearchFormPage = (props) => {
     preview: "",
     raw: "",
   });
+
+  ////////////////////////////////////////
+  const [tags, setTags] = useState([
+    { id: 3, name: "Bananas" },
+    { id: 4, name: "Mangos" },
+  ]);
+  const [suggestions, setsuggestions] = useState([
+    { id: 3, name: "Bananas" },
+    { id: 4, name: "Mangos" },
+    { id: 5, name: "Lemons" },
+    { id: 6, name: "Apricots" },
+  ]);
+
+  const getTags = (tags) => {
+    setTags(tags);
+  };
+  ////////////////////////////////////////
 
   // propTypes
   ResearchFormPage.propTypes = {
@@ -370,6 +398,11 @@ const ResearchFormPage = (props) => {
               onChange={onChange}
               accept="application/pdf"
             />
+          </FormGroup>
+          {/* Tag */}
+          <FormGroup>
+            <Label for="tagResearch">Tag:</Label>
+            <Tags />
           </FormGroup>
           <FormGroup>
             <Button color="dark">Submit</Button>

@@ -22,19 +22,19 @@ const presistedState = loadFromLocalStorage();
 // tool สำหรับดู redux
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-// // store ใช้เก็บ state ทั้งหมด
-// const store = createStore(
-//   rootReducer,
-//   presistedState,
-//   composeEnhancers(applyMiddleware(...middleware))
-// );
-
 // store ใช้เก็บ state ทั้งหมด
 const store = createStore(
   rootReducer,
   presistedState,
-  applyMiddleware(...middleware)
+  composeEnhancers(applyMiddleware(...middleware))
 );
+
+// // store ใช้เก็บ state ทั้งหมด
+// const store = createStore(
+//   rootReducer,
+//   presistedState,
+//   applyMiddleware(...middleware)
+// );
 
 store.subscribe(() => saveToLocalStorage(store.getState()));
 
