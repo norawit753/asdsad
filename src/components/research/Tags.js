@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 import ReactDOM from "react-dom";
 import { Input } from "reactstrap";
 import { WithContext as ReactTags } from "react-tag-input";
+import { collecttag } from "../../actions/research/formAction";
 import "../../utilis/reactTag.css";
+
 const KeyCodes = {
   comma: 188,
   enter: 13,
@@ -55,7 +57,8 @@ class Tags extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.tags !== this.state.tags) {
-      console.log(this.state.tags);
+      // console.log(this.state.tags);
+      this.props.collecttag(this.state.tags);
     }
   }
 
@@ -77,4 +80,4 @@ class Tags extends Component {
   }
 }
 
-export default connect(null, null)(Tags);
+export default connect(null, { collecttag })(Tags);

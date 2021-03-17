@@ -21,17 +21,26 @@ import PropTypes from "prop-types";
 import Tags from "../../research/Tags";
 import BackResearchPage from "../../research/BackResearchPage";
 import { withRouter } from "react-router-dom";
-import { uploadfile } from "../../../actions/research/formAction";
+
+import {
+  uploadfile,
+  newlist as sendList,
+} from "../../../actions/research/formAction";
 
 import articleJson from "../../../utilis/research/typearticle.json";
 import levelJson from "../../../utilis/research/typelevel.json";
 
 const ResearchFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
+  const dispatch = useDispatch();
+
+  // Start Form
+  const [start, setStart] = useState(true);
 
   // From Main
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
+  const tagstate = useSelector((state) => state.research.form.tags);
 
   // Value Level
   const [Level0, setLevel0] = useState(null);
@@ -74,9 +83,18 @@ const ResearchFormPage = (props) => {
   // propTypes
   ResearchFormPage.propTypes = {
     uploadfile: PropTypes.func.isRequired,
+    sendList: PropTypes.func.isRequired,
   };
 
-  const { uploadfile } = props;
+  const { uploadfile, sendList } = props;
+
+  // Start FormPage
+  useEffect(() => {
+    if (start) {
+      dispatch({ type: "CLEAR_TAG" });
+      setStart(false);
+    }
+  }, [start]);
 
   // MergeName
   useEffect(() => {
@@ -194,11 +212,13 @@ const ResearchFormPage = (props) => {
         author: e.author,
         name: e.name,
         conference_name: e.conf_name,
+        tags: tagstate,
         status: "WAITING",
         file_name: mergeName,
         file_path: filePath,
       };
       await upload();
+      await sendList(newList);
       // console.log(newList);
     } else {
       const newList = await {
@@ -213,12 +233,14 @@ const ResearchFormPage = (props) => {
         conf_year: e.year,
         author: e.author,
         name: e.name,
+        tags: tagstate,
         status: "WAITING",
         file_name: mergeName,
         file_path: filePath,
       };
 
       await upload();
+      await sendList(newList);
       // console.log(newList);
     }
   };
@@ -392,4 +414,6 @@ const ResearchFormPage = (props) => {
   );
 };
 
-export default withRouter(connect(null, { uploadfile })(ResearchFormPage));
+export default withRouter(
+  connect(null, { uploadfile, sendList })(ResearchFormPage)
+);

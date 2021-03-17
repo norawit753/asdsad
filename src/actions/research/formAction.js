@@ -45,6 +45,7 @@ export const newlist = ({
   conf_year,
   author,
   name,
+  tags,
   status,
   file_name,
   file_path,
@@ -61,6 +62,29 @@ export const newlist = ({
       "Content-Type": "application/json",
     },
   };
+
+  // body
+  const body = JSON.stringify({
+    year,
+    buasri_id,
+    email,
+    article,
+    level,
+    sub_level_1,
+    sub_level_2,
+    conf_year,
+    author,
+    name,
+    tags,
+    status,
+    file_name,
+    file_path,
+  });
+
+  // console.log(body);
+  axios.put(conResearch + "/api/list/add", body, config).then((res) => {
+    console.log(res);
+  });
 };
 
 // Collect Tags
