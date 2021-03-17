@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { Fade } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+// import "./App.css";
 
 // Main
 import AppNavbar from "./components/main/AppNavbar";

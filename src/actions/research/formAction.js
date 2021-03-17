@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   RESEARCH_GET_UPLOAD_FILE,
   RESEARCH_ADD_LIST,
+  COLLECT_TAG,
 } from "../../type/research/type";
 
 // Env
@@ -61,3 +62,11 @@ export const newlist = ({
     },
   };
 };
+
+// Collect Tags
+export const collecttag = (tag) => ({
+  type: COLLECT_TAG,
+  payload: {
+    tag,
+  },
+});

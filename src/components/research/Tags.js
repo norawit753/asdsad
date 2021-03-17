@@ -1,7 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
 import ReactDOM from "react-dom";
+import { Input } from "reactstrap";
 import { WithContext as ReactTags } from "react-tag-input";
-
+import "../../utilis/reactTag.css";
 const KeyCodes = {
   comma: 188,
   enter: 13,
@@ -14,17 +16,14 @@ class Tags extends Component {
     super(props);
 
     this.state = {
-      tags: [
-        { id: "Thailand", text: "Thailand" },
-        { id: "India", text: "India" },
-      ],
+      tags: [],
       suggestions: [
-        { id: "USA", text: "USA" },
-        { id: "Germany", text: "Germany" },
-        { id: "Austria", text: "Austria" },
-        { id: "Costa Rica", text: "Costa Rica" },
-        { id: "Sri Lanka", text: "Sri Lanka" },
-        { id: "Thailand", text: "Thailand" },
+        { id: "biology", text: "Biology" },
+        { id: "machine-learning", text: "Machine Learning" },
+        { id: "data-science", text: "Data Science" },
+        { id: "physics", text: "Physics" },
+        { id: "chemistry", text: "Chemistry" },
+        { id: "materials", text: "Materials" },
       ],
     };
     this.handleDelete = this.handleDelete.bind(this);
@@ -54,10 +53,16 @@ class Tags extends Component {
     this.setState({ tags: newTags });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.tags !== this.state.tags) {
+      console.log(this.state.tags);
+    }
+  }
+
   render() {
     const { tags, suggestions } = this.state;
     return (
-      <div>
+      <Fragment>
         <ReactTags
           tags={tags}
           suggestions={suggestions}
@@ -65,10 +70,11 @@ class Tags extends Component {
           handleAddition={this.handleAddition}
           handleDrag={this.handleDrag}
           delimiters={delimiters}
+          inputFieldPosition="top"
         />
-      </div>
+      </Fragment>
     );
   }
 }
 
-export default Tags;
+export default connect(null, null)(Tags);

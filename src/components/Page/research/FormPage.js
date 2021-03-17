@@ -5,11 +5,6 @@ import React, {
   useEffect,
   createRef,
 } from "react";
-// test tags
-import InputTags from "react-input-tags-hooks";
-import "react-input-tags-hooks/build/index.css";
-
-// ////////
 import {
   Container,
   Button,
@@ -75,23 +70,6 @@ const ResearchFormPage = (props) => {
     preview: "",
     raw: "",
   });
-
-  ////////////////////////////////////////
-  const [tags, setTags] = useState([
-    { id: 3, name: "Bananas" },
-    { id: 4, name: "Mangos" },
-  ]);
-  const [suggestions, setsuggestions] = useState([
-    { id: 3, name: "Bananas" },
-    { id: 4, name: "Mangos" },
-    { id: 5, name: "Lemons" },
-    { id: 6, name: "Apricots" },
-  ]);
-
-  const getTags = (tags) => {
-    setTags(tags);
-  };
-  ////////////////////////////////////////
 
   // propTypes
   ResearchFormPage.propTypes = {
@@ -191,8 +169,10 @@ const ResearchFormPage = (props) => {
             await NewUploadFile.append("file", PDF.raw, mergeName);
             await NewUploadFile.append("buasri_id", user.buasri_id);
             await NewUploadFile.append("filePath", filePath);
-            // await console.log(...NewUploadFile);
-            await uploadfile(NewUploadFile, token);
+
+            // // await console.log(...NewUploadFile);
+            // // ส่งไฟล์ Upload
+            // await uploadfile(NewUploadFile, token);
           } else {
             await alert("ประเภทไฟล์ของคุณไม่ถูกต้อง");
           }
@@ -218,7 +198,6 @@ const ResearchFormPage = (props) => {
         file_name: mergeName,
         file_path: filePath,
       };
-
       await upload();
       // console.log(newList);
     } else {
