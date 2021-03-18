@@ -20,7 +20,7 @@ export const auth_user = ({ buasri_id }) => (dispatch) => {
 
   // Request body
   const body = JSON.stringify({ buasri_id });
-  console.log(body);
+  // console.log(body);
   axios
     .post(conResearch + "/api/user/id", body, config)
     .then((res) => {
