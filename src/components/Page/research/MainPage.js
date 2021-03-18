@@ -13,13 +13,17 @@ import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
 import { register } from "../../../actions/research/registerAction";
 import { auth_user } from "../../../actions/research/authAction";
+import { getlist_user } from "../../../actions/research/listAction";
 
 import FormButton from "../../research/FormButton";
 import FormPage from "../research/FormPage";
 import BackMainPage from "../../main/BackMainPage";
+import MainTableAdmin from "../../research/MainTableAdmin";
+import MainTableUser from "../../research/MainTableUser";
 
 const MainPage = (props) => {
   // Main
+  const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
   const service = useSelector((state) => state.main.auth.service);
 
@@ -40,9 +44,10 @@ const MainPage = (props) => {
   MainPage.propTypes = {
     register: PropTypes.func.isRequired,
     auth_user: PropTypes.func.isRequired,
+    getlist_user: PropTypes.func.isRequired,
   };
 
-  const { register, auth_user } = props;
+  const { register, auth_user, getlist_user } = props;
 
   // Fetch Data
   useMemo(() => {
@@ -60,6 +65,21 @@ const MainPage = (props) => {
     }
     // eslint-disable-next-line
   }, [Open]);
+  useMemo(() => {
+    if (service.e_research.position) {
+      const getListData = async () => {
+        if (service.e_research.position === "USER") {
+          const newList = {
+            token,
+            buasri_id: user.buasri_id,
+          };
+          getlist_user(newList);
+        }
+      };
+      getListData();
+    }
+    // eslint-disable-next-line
+  }, [service.e_research.position]);
 
   const RegisterResearch = (e) => {
     e.preventDefault();
@@ -86,6 +106,21 @@ const MainPage = (props) => {
             <Route exact path="/research">
               <FormButton />
               <BackMainPage />
+              {service.e_research ? (
+                service.e_research.position === "USER" ? (
+                  <Fragment>
+                    <MainTableUser />
+                  </Fragment>
+                ) : service.e_research.position === "ADMIN" ? (
+                  <Fragment>
+                    <MainTableAdmin />
+                  </Fragment>
+                ) : service.e_research.position === "COMMITTEE" ? (
+                  <Fragment>
+                    <p>Committee</p>
+                  </Fragment>
+                ) : null
+              ) : null}
             </Route>
             <Route path="/research/form" component={FormPage} />
           </Switch>
@@ -121,4 +156,4 @@ const MainPage = (props) => {
   );
 };
 
-export default connect(null, { register, auth_user })(MainPage);
+export default connect(null, { register, auth_user, getlist_user })(MainPage);

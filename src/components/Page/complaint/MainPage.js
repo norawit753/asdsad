@@ -77,6 +77,7 @@ const MainPage = (props) => {
     // eslint-disable-next-line
   }, [Open]);
 
+  // Fetch Data Table
   useMemo(() => {
     if (complaintUser.position) {
       const getListData = async () => {
@@ -95,7 +96,7 @@ const MainPage = (props) => {
 
       getListData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [complaintUser.position]);
 
   return (

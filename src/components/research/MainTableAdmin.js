@@ -20,5 +20,13 @@ const MainTableAdmin = (props) => {
 
   const onClick = async (e) => {};
 
-  return <Fragment></Fragment>;
+  return (
+    <Fragment>
+      <br />
+      <br />
+      Admin
+    </Fragment>
+  );
 };
+
+export default connect(null, null)(MainTableAdmin);

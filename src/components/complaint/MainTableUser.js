@@ -76,7 +76,6 @@ const MainTableUser = (props) => {
           </p>
         ),
       },
-
       {
         Header: "รายละเอียด",
         accessor: "_id",
