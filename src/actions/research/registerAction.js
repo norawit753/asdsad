@@ -10,7 +10,7 @@ import { config } from "../../utilis/config";
 const conResearch = config.connectResearchAPI;
 
 // registerUser
-export const register = ({ buasri_id, email, position }) => (dispatch) => {
+export const register = ({ buasri_id, email, position, dep }) => (dispatch) => {
   // Headers
   const config = {
     headers: {
@@ -18,7 +18,7 @@ export const register = ({ buasri_id, email, position }) => (dispatch) => {
     },
   };
   // Request body
-  const body = JSON.stringify({ buasri_id, position, email });
+  const body = JSON.stringify({ buasri_id, position, email, dep });
   console.log(body);
   axios
     .post(conResearch + "/api/user/register", body, config)

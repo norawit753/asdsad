@@ -22,6 +22,8 @@ const MainPage = (props) => {
   // Main
   const user = useSelector((state) => state.main.auth.user);
   const service = useSelector((state) => state.main.auth.service);
+
+  //Trigger
   const [Open, setOpen] = useState(true);
 
   // Research
@@ -42,6 +44,7 @@ const MainPage = (props) => {
 
   const { register, auth_user } = props;
 
+  // Fetch Data
   useMemo(() => {
     if (Open && checkResearchActive && !checkResearchUser) {
       const opening = async () => {
@@ -64,6 +67,7 @@ const MainPage = (props) => {
       buasri_id: user.buasri_id,
       email: user.email,
       position: service.e_research.position,
+      dep: user.dep,
     };
     register(newUser);
   };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
   RESEARCH_GET_UPLOAD_FILE,
-  RESEARCH_ADD_LIST,
+  RESEARCH_ADD_LIST_SUCCESS,
   COLLECT_TAG,
 } from "../../type/research/type";
 
@@ -82,9 +82,18 @@ export const newlist = ({
   });
 
   // console.log(body);
-  axios.put(conResearch + "/api/list/add", body, config).then((res) => {
-    console.log(res);
-  });
+  axios
+    .put(conResearch + "/api/list/add", body, config)
+    .then((res) => {
+      if (res.data) {
+        dispatch({
+          type: RESEARCH_ADD_LIST_SUCCESS,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 // Collect Tags

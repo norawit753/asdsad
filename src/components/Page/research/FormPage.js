@@ -37,6 +37,9 @@ const ResearchFormPage = (props) => {
   // Start Form
   const [start, setStart] = useState(true);
 
+  // Trigger
+  const sendForm = useSelector((state) => state.research.form.send_success);
+
   // From Main
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
@@ -64,6 +67,7 @@ const ResearchFormPage = (props) => {
       sublevel_2: "---โปรดเลือก---",
     },
   ]);
+
   const [OpenSublv2, setOpenSublv2] = useState(false);
 
   const [ConfName, setConfName] = useState(false);
@@ -91,10 +95,22 @@ const ResearchFormPage = (props) => {
   // Start FormPage
   useEffect(() => {
     if (start) {
-      dispatch({ type: "CLEAR_TAG" });
+      // dispatch({ type: "CLEAR_TAG" });
       setStart(false);
     }
   }, [start]);
+
+  // When Send Form Success
+  useEffect(() => {
+    if (sendForm) {
+      const goMainResearchPage = async () => {
+        await alert("ส่งงานวิจัยสำเร็จ");
+        dispatch({ type: "PAGE_LOADING" });
+        props.history.push("/research");
+      };
+      goMainResearchPage();
+    }
+  }, [sendForm]);
 
   // MergeName
   useEffect(() => {
