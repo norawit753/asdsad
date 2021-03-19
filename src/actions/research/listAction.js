@@ -3,6 +3,7 @@ import {
   RESEARCH_GET_LIST_USER,
   RESEARCH_GET_LIST_ADMIN,
   RESEARCH_GET_LIST_COMMITTEE,
+  RESEARCH_GET_DETAIL,
   RESEARCH_ERROR,
 } from "../../type/research/type";
 
@@ -35,4 +36,24 @@ export const getlist_user = ({ buasri_id, token }) => (dispatch) => {
         payload: error.data,
       });
     });
+};
+
+// get detail when selected
+export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+
+  const body = JSON.stringify({ buasri_id, id });
+  console.log(body);
+  axios.post(conResearch + "/api/list/select", body, config).then((res) => {
+    dispatch({
+      type: RESEARCH_GET_DETAIL,
+      payload: res.data,
+    });
+  });
 };

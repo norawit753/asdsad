@@ -10,18 +10,37 @@ import {
   usePagination,
 } from "react-table";
 import { withRouter } from "react-router-dom";
+import { getdetail_list } from "../../actions/research/listAction";
 
 const MainTableUser = (props) => {
   // Main
-  const Token = useSelector((state) => state.main.auth.token);
+  const token = useSelector((state) => state.main.auth.token);
   const data = useSelector((state) => state.research.list.list);
 
   const dispatch = useDispatch();
 
-  const onClick = async (e) => {};
+  MainTableUser.propTypes = {
+    getdetail_list: PropTypes.func.isRequired,
+  };
+
+  const { getdetail_list } = props;
+
+  const onClick = async (e) => {
+    const getValue = await e.target.value.split(",");
+    const Detail = await {
+      token: token,
+      id: getValue[0],
+      buasri_id: getValue[1],
+    };
+    // console.log(getValue);
+    await getdetail_list(Detail);
+    // await dispatch({ type: "PAGE_LOADING" });
+    // await props.history.push("/complaint/detail");
+  };
 
   const columns = React.useMemo(
     () => [
+      { Header: "buasri_id", accessor: "buasri_id" },
       { Header: "ชื่องานวิจัย", accessor: "name" },
       { Header: "สถานะ", accessor: "status" },
       {
@@ -152,4 +171,4 @@ const MainTableUser = (props) => {
   );
 };
 
-export default connect(null, null)(MainTableUser);
+export default connect(null, { getdetail_list })(MainTableUser);
