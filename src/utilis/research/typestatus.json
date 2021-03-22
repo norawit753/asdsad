@@ -1,0 +1,7 @@
+[
+    {"status":"WAITING","name":"รอกรรมการตรวจสอบ"},
+    {"status":"WAITINGADMIN","name":"รอฝ่ายวิจับตรวจสอบ"},
+    {"status":"EDIT","name":"แก้ไขรายละเอียด"},
+    {"status":"REJECT","name":"ยกเลิก"},
+    { "status": "APPROVED", "name": "ผ่านการตรวจสอบ" }
+]

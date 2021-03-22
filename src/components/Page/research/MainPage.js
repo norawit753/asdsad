@@ -18,6 +18,8 @@ import { getlist_user } from "../../../actions/research/listAction";
 import FormButton from "../../research/FormButton";
 import FormPage from "../research/FormPage";
 import BackMainPage from "../../main/BackMainPage";
+import DetailPage from "../research/DetailPage";
+
 import MainTableAdmin from "../../research/MainTableAdmin";
 import MainTableUser from "../../research/MainTableUser";
 
@@ -123,6 +125,7 @@ const MainPage = (props) => {
               ) : null}
             </Route>
             <Route path="/research/form" component={FormPage} />
+            <Route path="/research/detail" component={DetailPage} />
           </Switch>
         </Container>
       ) : (

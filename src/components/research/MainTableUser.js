@@ -17,6 +17,11 @@ const MainTableUser = (props) => {
   const token = useSelector((state) => state.main.auth.token);
   const data = useSelector((state) => state.research.list.list);
 
+  // Trigger
+  const detail_page = useSelector(
+    (state) => state.research.trigger.detail_page
+  );
+
   const dispatch = useDispatch();
 
   MainTableUser.propTypes = {
@@ -34,9 +39,18 @@ const MainTableUser = (props) => {
     };
     // console.log(getValue);
     await getdetail_list(Detail);
-    // await dispatch({ type: "PAGE_LOADING" });
-    // await props.history.push("/complaint/detail");
   };
+
+  // trigger
+  useEffect(() => {
+    if (detail_page) {
+      const GotoDetailPage = async () => {
+        await dispatch({ type: "PAGE_LOADING" });
+        await props.history.push("/research/detail");
+      };
+      GotoDetailPage();
+    }
+  }, [detail_page]);
 
   const columns = React.useMemo(
     () => [
@@ -171,4 +185,4 @@ const MainTableUser = (props) => {
   );
 };
 
-export default connect(null, { getdetail_list })(MainTableUser);
+export default withRouter(connect(null, { getdetail_list })(MainTableUser));
