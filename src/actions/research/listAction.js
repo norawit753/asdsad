@@ -38,6 +38,32 @@ export const getlist_user = ({ buasri_id, token }) => (dispatch) => {
     });
 };
 
+// get list committee
+export const getlist_committee = ({ dep, token }) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+  const body = JSON.stringify({ dep });
+  axios
+    .post(conResearch + "/api/list/committee", body, config)
+    .then((res) => {
+      dispatch({
+        type: RESEARCH_GET_LIST_COMMITTEE,
+        payload: res.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: RESEARCH_ERROR,
+        payload: error.data,
+      });
+    });
+};
+
 // get detail when selected
 export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
   // Headers
@@ -51,6 +77,7 @@ export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
   const body = JSON.stringify({ buasri_id, id });
   console.log(body);
   axios.post(conResearch + "/api/list/select", body, config).then((res) => {
+    console.log(res.data);
     dispatch({
       type: RESEARCH_GET_DETAIL,
       payload: res.data,

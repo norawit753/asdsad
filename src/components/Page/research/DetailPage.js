@@ -4,6 +4,8 @@ import { Container, Table } from "reactstrap";
 import { withRouter } from "react-router-dom";
 
 import statusJson from "../../../utilis/research/typestatus.json";
+import BackToResearchPage from "../../research/BackResearchPage";
+
 // Env
 import NewLineToBr from "../../../utilis/newLine";
 
@@ -34,13 +36,15 @@ const ResearchDetailPage = (props) => {
             })
         );
       }
-      // if (detail[0].tags) {
-      //     setTagFilter(
-      //         detail[0].tags.map((data) => {
-      //             if(data)
-      //         })
-      //     )
-      // }
+      if (detail[0].tags) {
+        setTagFilter(
+          detail[0].tags.map((data) => {
+            if (data) {
+              return <Fragment key={data._id}>{data.text} </Fragment>;
+            }
+          })
+        );
+      }
       if (detail[0].note) {
         setNoteFilter(detail[0].note);
       }
@@ -55,6 +59,9 @@ const ResearchDetailPage = (props) => {
 
   return (
     <Fragment>
+      <Container>
+        <BackToResearchPage />
+      </Container>
       {detail ? (
         <Fragment>
           <Container>
@@ -89,6 +96,10 @@ const ResearchDetailPage = (props) => {
                 <tr>
                   <th scope="row">ประเภทผู้เขียน</th>
                   <td>{detail[0].author_type}</td>
+                </tr>
+                <tr>
+                  <th scope="row">tags</th>
+                  <td>{TagFilter}</td>
                 </tr>
               </tbody>
             </Table>

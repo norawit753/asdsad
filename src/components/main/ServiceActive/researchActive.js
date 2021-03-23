@@ -59,6 +59,10 @@ const ResearchActive = (props) => {
       value: "USER",
     },
     {
+      label: "กรรมการตรวจสอบ",
+      value: "COMMITTEE",
+    },
+    {
       label: "ผู้ดูแลระบบ",
       value: "ADMIN",
     },

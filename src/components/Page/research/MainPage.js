@@ -13,7 +13,10 @@ import PropTypes from "prop-types";
 import { Route, Switch } from "react-router-dom";
 import { register } from "../../../actions/research/registerAction";
 import { auth_user } from "../../../actions/research/authAction";
-import { getlist_user } from "../../../actions/research/listAction";
+import {
+  getlist_user,
+  getlist_committee,
+} from "../../../actions/research/listAction";
 
 import FormButton from "../../research/FormButton";
 import FormPage from "../research/FormPage";
@@ -21,6 +24,7 @@ import BackMainPage from "../../main/BackMainPage";
 import DetailPage from "../research/DetailPage";
 
 import MainTableAdmin from "../../research/MainTableAdmin";
+import MainTableCommittee from "../../research/MainTableCommittee";
 import MainTableUser from "../../research/MainTableUser";
 
 const MainPage = (props) => {
@@ -47,9 +51,10 @@ const MainPage = (props) => {
     register: PropTypes.func.isRequired,
     auth_user: PropTypes.func.isRequired,
     getlist_user: PropTypes.func.isRequired,
+    getlist_committee: PropTypes.func.isRequired,
   };
 
-  const { register, auth_user, getlist_user } = props;
+  const { register, auth_user, getlist_user, getlist_committee } = props;
 
   // Fetch Data
   useMemo(() => {
@@ -74,8 +79,17 @@ const MainPage = (props) => {
           const newList = {
             token,
             buasri_id: user.buasri_id,
+            dep: user.dep,
           };
           getlist_user(newList);
+        } else if (service.e_research.position === "COMMITTEE") {
+          const newList = {
+            token,
+            buasri_id: user.buasri_id,
+            dep: user.dep,
+          };
+          getlist_committee(newList);
+          // console.log(newList);
         }
       };
       getListData();
@@ -119,7 +133,12 @@ const MainPage = (props) => {
                   </Fragment>
                 ) : service.e_research.position === "COMMITTEE" ? (
                   <Fragment>
-                    <p>Committee</p>
+                    <br />
+                    <br />
+                    <b>หน่วยงาน: {user.dep}</b>
+                    <p>
+                      <MainTableCommittee />
+                    </p>
                   </Fragment>
                 ) : null
               ) : null}
@@ -159,4 +178,9 @@ const MainPage = (props) => {
   );
 };
 
-export default connect(null, { register, auth_user, getlist_user })(MainPage);
+export default connect(null, {
+  register,
+  auth_user,
+  getlist_user,
+  getlist_committee,
+})(MainPage);
