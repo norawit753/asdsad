@@ -5,11 +5,15 @@ import { withRouter } from "react-router-dom";
 
 import statusJson from "../../../utilis/research/typestatus.json";
 import BackToResearchPage from "../../research/BackResearchPage";
+import UpdateStatusModal from "../../research/UpdateStatusModal";
 
 // Env
 import NewLineToBr from "../../../utilis/newLine";
 
 const ResearchDetailPage = (props) => {
+  const researchUser = useSelector(
+    (state) => state.main.auth.service.e_research
+  );
   const detail = useSelector((state) => state.research.list.detail);
   const [StatusFilter, setStatusFilter] = useState(null);
   const [TagFilter, setTagFilter] = useState(null);
@@ -40,7 +44,7 @@ const ResearchDetailPage = (props) => {
         setTagFilter(
           detail[0].tags.map((data) => {
             if (data) {
-              return <Fragment key={data._id}>{data.text} </Fragment>;
+              return <Fragment key={data._id}>{data.text}, </Fragment>;
             }
           })
         );
@@ -118,6 +122,17 @@ const ResearchDetailPage = (props) => {
                 </tr>
               </tbody>
             </Table>
+            {researchUser.position === "COMMITTEE" &&
+            detail[0].status === "WAITING" ? (
+              <UpdateStatusModal />
+            ) : null}
+            {researchUser.position === "ADMIN" &&
+            detail[0].status === "WAITINGADMIN" ? (
+              <UpdateStatusModal />
+            ) : null}
+            {researchUser.position === "USER" && detail[0].status === "EDIT" ? (
+              <UpdateStatusModal />
+            ) : null}
           </Container>
         </Fragment>
       ) : null}

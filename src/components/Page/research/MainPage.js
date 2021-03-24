@@ -95,7 +95,7 @@ const MainPage = (props) => {
       getListData();
     }
     // eslint-disable-next-line
-  }, [service.e_research.position]);
+  }, [service.e_research]);
 
   const RegisterResearch = (e) => {
     e.preventDefault();
@@ -136,9 +136,7 @@ const MainPage = (props) => {
                     <br />
                     <br />
                     <b>หน่วยงาน: {user.dep}</b>
-                    <p>
-                      <MainTableCommittee />
-                    </p>
+                    <MainTableCommittee />
                   </Fragment>
                 ) : null
               ) : null}

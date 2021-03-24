@@ -15,8 +15,13 @@ import { getdetail_list } from "../../actions/research/listAction";
 const MainTableUser = (props) => {
   // Main
   const token = useSelector((state) => state.main.auth.token);
-  const data = useSelector((state) => state.research.list.list);
-
+  const fetchdata = useSelector((state) => state.research.list.list);
+  const [data, setdata] = useState([
+    { _id: 0 },
+    { buasri_id: null },
+    { name: null },
+    { status: null },
+  ]);
   // Trigger
   const detail_page = useSelector(
     (state) => state.research.trigger.detail_page
@@ -51,6 +56,12 @@ const MainTableUser = (props) => {
       GotoDetailPage();
     }
   }, [detail_page]);
+
+  useEffect(() => {
+    if (fetchdata) {
+      setdata(fetchdata);
+    }
+  }, [fetchdata]);
 
   const columns = React.useMemo(
     () => [
