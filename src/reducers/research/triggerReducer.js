@@ -1,8 +1,12 @@
-import { RESEARCH_GET_DETAIL } from "../../type/research/type";
+import {
+  RESEARCH_GET_DETAIL,
+  RESEARCH_UPDATE_STATUS,
+} from "../../type/research/type";
 import { LOGOUT_SUCCESS, PAGE_LOADING } from "../../type/main/type";
 
 const initialState = {
   detail_page: false,
+  update_status: false,
 };
 
 export default function Trigger(state = initialState, action) {
@@ -12,15 +16,20 @@ export default function Trigger(state = initialState, action) {
         ...state,
         detail_page: true,
       };
-    case PAGE_LOADING:
+    case RESEARCH_UPDATE_STATUS:
       return {
         ...state,
+        update_status: true,
+      };
+    case PAGE_LOADING:
+      return {
         detail_page: false,
+        update_status: false,
       };
     case LOGOUT_SUCCESS:
       return {
-        ...state,
         detail_page: false,
+        update_status: false,
       };
     default:
       return state;

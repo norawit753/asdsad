@@ -15,9 +15,27 @@ const ResearchDetailPage = (props) => {
     (state) => state.main.auth.service.e_research
   );
   const detail = useSelector((state) => state.research.list.detail);
+
+  // trigger
+  const trigger_status = useSelector(
+    (state) => state.research.trigger.update_status
+  );
+
   const [StatusFilter, setStatusFilter] = useState(null);
   const [TagFilter, setTagFilter] = useState(null);
   const [NoteFilter, setNoteFilter] = useState("ไม่มีรายละเอียด");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (trigger_status) {
+      const GotoMainPage = async () => {
+        await alert("อัพเดตสถานะสำเร็จ");
+        await dispatch({ type: "PAGE_LOADING" });
+        await props.history.push("/research");
+      };
+      GotoMainPage();
+    }
+  }, [trigger_status]);
 
   useMemo(() => {
     if (detail) {

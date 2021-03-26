@@ -73,27 +73,30 @@ const MainPage = (props) => {
     // eslint-disable-next-line
   }, [Open]);
   useMemo(() => {
-    if (service.e_research.position) {
-      const getListData = async () => {
-        if (service.e_research.position === "USER") {
-          const newList = {
-            token,
-            buasri_id: user.buasri_id,
-            dep: user.dep,
-          };
-          getlist_user(newList);
-        } else if (service.e_research.position === "COMMITTEE") {
-          const newList = {
-            token,
-            buasri_id: user.buasri_id,
-            dep: user.dep,
-          };
-          getlist_committee(newList);
-          // console.log(newList);
-        }
-      };
-      getListData();
+    if (service.e_research) {
+      if (service.e_research.position) {
+        const getListData = async () => {
+          if (service.e_research.position === "USER") {
+            const newList = {
+              token,
+              buasri_id: user.buasri_id,
+              dep: user.dep,
+            };
+            getlist_user(newList);
+          } else if (service.e_research.position === "COMMITTEE") {
+            const newList = {
+              token,
+              buasri_id: user.buasri_id,
+              dep: user.dep,
+            };
+            getlist_committee(newList);
+            // console.log(newList);
+          }
+        };
+        getListData();
+      }
     }
+
     // eslint-disable-next-line
   }, [service.e_research]);
 

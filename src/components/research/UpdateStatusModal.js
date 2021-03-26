@@ -15,9 +15,12 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
+import { status_committee } from "../../actions/research/listAction";
+
 const UpdateStatusModal = (props) => {
   const { handleSubmit, register } = useForm();
 
+  const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
   const token = useSelector((state) => state.main.auth.token);
   const dispatch = useDispatch();
@@ -31,6 +34,11 @@ const UpdateStatusModal = (props) => {
   const [StatusChange, setStatusChange] = useState(initialValue);
   const [modal, setmodal] = useState(false);
   const [disButton, setdisButton] = useState(false);
+
+  UpdateStatusModal.propTypes = {
+    status_committee: PropTypes.func.isRequired,
+  };
+  const { status_committee } = props;
 
   // status ก่อนเปลี่ยน
   useEffect(() => {
@@ -94,13 +102,15 @@ const UpdateStatusModal = (props) => {
 
   const onSubmit = async (e) => {
     const newUpdate = await {
+      token,
       id: e.no_id,
       buasri_id: detail[0].buasri_id,
+      committee: user.buasri_id,
       email: detail[0].email,
       status: e.status_change,
       note: e.note,
     };
-    console.log(newUpdate);
+    status_committee(newUpdate);
   };
 
   return (
@@ -170,4 +180,6 @@ const UpdateStatusModal = (props) => {
   );
 };
 
-export default withRouter(connect(null, null)(UpdateStatusModal));
+export default withRouter(
+  connect(null, { status_committee })(UpdateStatusModal)
+);

@@ -62,7 +62,7 @@ const MainTableAdmin = (props) => {
         Header: "สถานะ",
         accessor: "status",
         Cell: ({ cell }) => (
-          <p>
+          <Fragment>
             {cell.row.values.status === "WAITING" ? "รอรับเรื่อง" : null}
             {cell.row.values.status === "RECEIVED"
               ? "รับเรื่องแล้ว รอพิจารณา"
@@ -72,7 +72,7 @@ const MainTableAdmin = (props) => {
               ? "ต้องการข้อมูลเพิ่มเติม รอข้อมูลจากผู้แจ้ง"
               : null}
             {cell.row.values.status === "RESULT" ? "เสร็จสิ้นการพิจารณา" : null}
-          </p>
+          </Fragment>
         ),
       },
       {

@@ -4,6 +4,7 @@ import {
   RESEARCH_GET_LIST_ADMIN,
   RESEARCH_GET_LIST_COMMITTEE,
   RESEARCH_GET_DETAIL,
+  RESEARCH_UPDATE_STATUS,
   RESEARCH_ERROR,
 } from "../../type/research/type";
 
@@ -75,7 +76,7 @@ export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
   };
 
   const body = JSON.stringify({ buasri_id, id });
-  console.log(body);
+  // console.log(body);
   axios.post(conResearch + "/api/list/select", body, config).then((res) => {
     console.log(res.data);
     dispatch({
@@ -83,4 +84,39 @@ export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
       payload: res.data,
     });
   });
+};
+
+// update status committee
+export const status_committee = ({
+  token,
+  id,
+  buasri_id,
+  committee,
+  email,
+  status,
+  note,
+}) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+  const body = JSON.stringify({ id, buasri_id, committee, status, note });
+  const email_user = JSON.stringify({ email });
+
+  axios
+    .post(conResearch + "/api/list/status_committee", body, config)
+    .then((res) => {
+      dispatch({
+        type: RESEARCH_UPDATE_STATUS,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: RESEARCH_ERROR,
+        payload: error.data,
+      });
+    });
 };

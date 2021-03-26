@@ -2,6 +2,8 @@ import React, { useState, useMemo, Fragment, useEffect } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { Table, Label, Button, Pagination, PaginationLink } from "reactstrap";
 
+import statustype from "../../utilis/research/typestatus.json";
+
 import PropTypes from "prop-types";
 import {
   useTable,
@@ -16,7 +18,15 @@ const MainTableUser = (props) => {
   // Main
   const token = useSelector((state) => state.main.auth.token);
   const fetchdata = useSelector((state) => state.research.list.list);
+  const [Mapstatus, setMapstatus] = useState(false);
   const [data, setdata] = useState([
+    { _id: 0 },
+    { buasri_id: null },
+    { name: null },
+    { status: null },
+  ]);
+  // test
+  const [datatest, setdatatest] = useState([
     { _id: 0 },
     { buasri_id: null },
     { name: null },
@@ -60,14 +70,48 @@ const MainTableUser = (props) => {
   useEffect(() => {
     if (fetchdata) {
       setdata(fetchdata);
+      // test
+      setdatatest(fetchdata);
+      setMapstatus(true);
     }
   }, [fetchdata]);
+
+  // test
+  useEffect(() => {
+    if (Mapstatus) {
+      setdatatest((prevState) => ({
+        ...prevState,
+        status: {
+          ...prevState.status,
+          status: prevState.status?.map((row, index) => (index ? 0 : row)),
+        },
+      }));
+    }
+  }, [Mapstatus]);
+
+  useEffect(() => {
+    console.log(datatest);
+  }, [datatest]);
 
   const columns = React.useMemo(
     () => [
       { Header: "buasri_id", accessor: "buasri_id" },
       { Header: "ชื่องานวิจัย", accessor: "name" },
-      { Header: "สถานะ", accessor: "status" },
+      {
+        Header: "สถานะ",
+        accessor: "status",
+        Cell: ({ cell }) => (
+          <Fragment style={{ color: "red" }}>
+            {cell.row.values.status === "WAITING" ? "รอกรรมการตรวจสอบ" : null}
+            {cell.row.values.status === "WAITINGADMIN"
+              ? "รอฝ่ายวิจับตรวจสอบ"
+              : null}
+            {cell.row.values.status === "EDIT" ? "แก้ไขรายละเอียด" : null}
+            {cell.row.values.status === "REJECT" ? "ยกเลิก" : null}
+            {cell.row.values.status === "APPROVED" ? "ผ่านการตรวจสอบ" : null}
+          </Fragment>
+        ),
+      },
       {
         Header: "รายละเอียด",
         accessor: "_id",
