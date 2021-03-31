@@ -75,8 +75,10 @@ const ResearchActive = (props) => {
 
   useEffect(() => {
     if (servicelist.E_Research) {
-      setactivevalue(servicelist.E_Research.active);
-      setlevelvalue(servicelist.E_Research.position);
+      if (servicelist.E_Research.active)
+        setactivevalue(servicelist.E_Research.active);
+      if (servicelist.E_Research.position)
+        setlevelvalue(servicelist.E_Research.position);
     }
   }, [servicelist]);
 

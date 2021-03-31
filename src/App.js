@@ -33,7 +33,7 @@ const App = (props) => {
 
   useEffect(() => {
     if (checkError.status) {
-      if (checkError.status === "400" || checkError.status === "401") {
+      if (checkError.status === 400 || checkError.status === 401) {
         if (checkError.msg.msg !== "BuasriID ไม่มีอยู่ในระบบ Complaint") {
           dispatch({ type: "LOGOUT_SUCCESS" });
           alert("Session ของคุณหมดอายุ โปรด Login ใหม่");

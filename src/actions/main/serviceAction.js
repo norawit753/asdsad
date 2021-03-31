@@ -32,11 +32,12 @@ export const getServiceForUserPage = ({ token, buasri_id }) => (dispatch) => {
         payload: res.data,
       });
     })
-    .catch(() => {
+    .catch((err) => {
       // alert("Session ของคุณหมดอายุ โปรด Login ใหม่");
-      dispatch({
-        type: LOGOUT_SUCCESS,
-      });
+      // alert(err);
+      // dispatch({
+      //   type: LOGOUT_SUCCESS,
+      // });
     });
 };
 
@@ -80,10 +81,11 @@ export const getServiceUser = ({ token, buasri_id }) => (dispatch) => {
   };
 
   const body = JSON.stringify({ buasri_id });
-  //   console.log(body);
+  console.log("check" + body);
   axios
     .post(connect + "/api/users/service/list", body, config)
     .then((res) => {
+      console.log(res.data);
       dispatch({
         type: GET_USER_SERVICE,
         payload: res.data,

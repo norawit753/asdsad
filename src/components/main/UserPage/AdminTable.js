@@ -44,6 +44,7 @@ const AdminTable = (props) => {
       id: getValue[0],
       buasri_id: getValue[1],
     };
+    // console.log(Detail);
     await getServiceUser(Detail);
     await dispatch({ type: "PAGE_LOADING" });
     await props.history.push("/users/active");

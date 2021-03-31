@@ -9,8 +9,8 @@ const production = {
 const dev = {
   Version: "Develop",
   connectPHP: "http://localhost:2079",
-  connectMainAPI: "http://10.1.5.143:6001",
-  connectComplaintAPI: "http://10.1.5.143:6002",
+  connectMainAPI: "http://10.1.137.53:6001",
+  connectComplaintAPI: "http://10.1.137.53:6002",
   connectResearchAPI: "http://localhost:6003",
 };
 

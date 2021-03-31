@@ -34,11 +34,15 @@ const MainPage = (props) => {
   useMemo(() => {
     if (LoadService) {
       const getUService = async () => {
-        const sendData = await {
-          token: checkToken,
-          buasri_id: user.buasri_id,
-        };
-        await getServiceForUserPage(sendData);
+        if (user) {
+          if (user.buasri_id) {
+            const sendData = await {
+              token: checkToken,
+              buasri_id: user.buasri_id,
+            };
+            await getServiceForUserPage(sendData);
+          }
+        }
       };
       getUService();
       setLoadService(false);

@@ -10,6 +10,7 @@ import {
   useGlobalFilter,
   useAsyncDebounce,
   usePagination,
+  Alert,
 } from "react-table";
 import { withRouter } from "react-router-dom";
 import { getdetail_list } from "../../actions/research/listAction";
@@ -101,7 +102,7 @@ const MainTableUser = (props) => {
         Header: "สถานะ",
         accessor: "status",
         Cell: ({ cell }) => (
-          <Fragment style={{ color: "red" }}>
+          <Fragment>
             {cell.row.values.status === "WAITING" ? "รอกรรมการตรวจสอบ" : null}
             {cell.row.values.status === "WAITINGADMIN"
               ? "รอฝ่ายวิจับตรวจสอบ"
