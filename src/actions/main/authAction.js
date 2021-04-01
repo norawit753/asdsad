@@ -88,6 +88,7 @@ export const login = ({ buasri_id, password }) => (dispatch) => {
             })
           )
           .catch((err) => {
+            // console.log(1);
             dispatch(returnErrorsLdap());
             dispatch({
               type: LOGIN_FAIL,
@@ -95,6 +96,7 @@ export const login = ({ buasri_id, password }) => (dispatch) => {
           });
       } else {
         axios.catch((err) => {
+          // console.log(2);
           dispatch(returnErrorsLdap());
           dispatch({
             type: LOGIN_FAIL,
@@ -103,6 +105,7 @@ export const login = ({ buasri_id, password }) => (dispatch) => {
       }
     })
     .catch((err) => {
+      // console.log(3);
       dispatch(returnErrorsLdap());
       dispatch({
         type: LOGIN_FAIL,

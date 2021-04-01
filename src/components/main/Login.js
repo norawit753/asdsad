@@ -65,13 +65,13 @@ const Login = (props) => {
         buasri_id: buasri_id,
         password: password,
       };
-      const getID = async () => {
-        await clearErrors();
+      const getID = () => {
+        clearErrors();
         // await alert("yes!!!");
-        await login(newLogin);
-        await delay(1000);
-        await setToLogin(false);
-        await props.history.push("/");
+        login(newLogin);
+        delay(1000);
+        setToLogin(false);
+        props.history.push("/");
       };
       getID();
     }

@@ -19,15 +19,7 @@ const MainTableUser = (props) => {
   // Main
   const token = useSelector((state) => state.main.auth.token);
   const fetchdata = useSelector((state) => state.research.list.list);
-  const [Mapstatus, setMapstatus] = useState(false);
   const [data, setdata] = useState([
-    { _id: 0 },
-    { buasri_id: null },
-    { name: null },
-    { status: null },
-  ]);
-  // test
-  const [datatest, setdatatest] = useState([
     { _id: 0 },
     { buasri_id: null },
     { name: null },
@@ -71,28 +63,8 @@ const MainTableUser = (props) => {
   useEffect(() => {
     if (fetchdata) {
       setdata(fetchdata);
-      // test
-      setdatatest(fetchdata);
-      setMapstatus(true);
     }
   }, [fetchdata]);
-
-  // test
-  useEffect(() => {
-    if (Mapstatus) {
-      setdatatest((prevState) => ({
-        ...prevState,
-        status: {
-          ...prevState.status,
-          status: prevState.status?.map((row, index) => (index ? 0 : row)),
-        },
-      }));
-    }
-  }, [Mapstatus]);
-
-  useEffect(() => {
-    console.log(datatest);
-  }, [datatest]);
 
   const columns = React.useMemo(
     () => [
