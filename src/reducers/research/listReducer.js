@@ -24,6 +24,11 @@ export default function listReducer(state = initialState, action) {
         ...state,
         list: action.payload,
       };
+    case RESEARCH_GET_LIST_ADMIN:
+      return {
+        ...state,
+        list: action.payload,
+      };
     case RESEARCH_GET_DETAIL:
       return {
         ...state,

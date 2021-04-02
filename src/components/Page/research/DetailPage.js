@@ -14,6 +14,7 @@ const ResearchDetailPage = (props) => {
   const researchUser = useSelector(
     (state) => state.main.auth.service.e_research
   );
+  const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
 
   // trigger
@@ -142,14 +143,21 @@ const ResearchDetailPage = (props) => {
             </Table>
             {researchUser.position === "COMMITTEE" &&
             detail[0].status === "WAITING" ? (
-              <UpdateStatusModal />
+              detail[0].committee === user.buasri_id ||
+              detail[0].committee === null ? (
+                <UpdateStatusModal />
+              ) : null
             ) : null}
             {researchUser.position === "ADMIN" &&
             detail[0].status === "WAITINGADMIN" ? (
-              <UpdateStatusModal />
+              detail[0].admin === user.buasri_id || detail[0].admin === null ? (
+                <UpdateStatusModal />
+              ) : null
             ) : null}
             {researchUser.position === "USER" && detail[0].status === "EDIT" ? (
-              <UpdateStatusModal />
+              detail[0].buasri_id === user.buasri_id ? (
+                <UpdateStatusModal />
+              ) : null
             ) : null}
           </Container>
         </Fragment>

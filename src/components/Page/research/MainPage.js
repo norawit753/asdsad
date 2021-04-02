@@ -16,6 +16,7 @@ import { auth_user } from "../../../actions/research/authAction";
 import {
   getlist_user,
   getlist_committee,
+  getlist_admin,
 } from "../../../actions/research/listAction";
 
 import FormButton from "../../research/FormButton";
@@ -52,9 +53,16 @@ const MainPage = (props) => {
     auth_user: PropTypes.func.isRequired,
     getlist_user: PropTypes.func.isRequired,
     getlist_committee: PropTypes.func.isRequired,
+    getlist_admin: PropTypes.func.isRequired,
   };
 
-  const { register, auth_user, getlist_user, getlist_committee } = props;
+  const {
+    register,
+    auth_user,
+    getlist_user,
+    getlist_committee,
+    getlist_admin,
+  } = props;
 
   // Fetch Data
   useMemo(() => {
@@ -91,6 +99,12 @@ const MainPage = (props) => {
             };
             getlist_committee(newList);
             // console.log(newList);
+          } else if (service.e_research.position === "ADMIN") {
+            const newList = {
+              token,
+              buasri_id: user.buasri_id,
+            };
+            getlist_admin(newList);
           }
         };
         getListData();
@@ -184,4 +198,5 @@ export default connect(null, {
   auth_user,
   getlist_user,
   getlist_committee,
+  getlist_admin,
 })(MainPage);

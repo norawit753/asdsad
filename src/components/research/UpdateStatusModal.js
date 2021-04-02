@@ -101,7 +101,7 @@ const UpdateStatusModal = (props) => {
   };
 
   const onSubmit = async (e) => {
-    const newUpdate = await {
+    const UpdateCommittee = await {
       token,
       id: e.no_id,
       buasri_id: detail[0].buasri_id,
@@ -110,7 +110,16 @@ const UpdateStatusModal = (props) => {
       status: e.status_change,
       note: e.note,
     };
-    status_committee(newUpdate);
+    const UpdateAdmin = await {
+      token,
+      id: e.no_id,
+      buasri_id: detail[0].buasri_id,
+      admin: user.buasri_id,
+      email: detail[0].email,
+      status: e.status_change,
+      note: e.note,
+    };
+    status_committee(UpdateCommittee);
   };
 
   return (

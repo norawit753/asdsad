@@ -65,6 +65,33 @@ export const getlist_committee = ({ dep, token }) => (dispatch) => {
     });
 };
 
+// get list admin
+export const getlist_admin = ({ token, buasri_id }) => (dispatch) => {
+  // console.log(token);
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+  const body = JSON.stringify({ buasri_id });
+  axios
+    .post(conResearch + "/api/list/admin", body, config)
+    .then((res) => {
+      dispatch({
+        type: RESEARCH_GET_LIST_ADMIN,
+        payload: res.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: RESEARCH_ERROR,
+        payload: error.data,
+      });
+    });
+};
+
 // get detail when selected
 export const getdetail_list = ({ token, id, buasri_id }) => (dispatch) => {
   // Headers

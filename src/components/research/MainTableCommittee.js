@@ -2,15 +2,12 @@ import React, { useState, useMemo, Fragment, useEffect } from "react";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { Table, Label, Button, Pagination, PaginationLink } from "reactstrap";
 
-import statustype from "../../utilis/research/typestatus.json";
-
 import PropTypes from "prop-types";
 import {
   useTable,
   useGlobalFilter,
   useAsyncDebounce,
   usePagination,
-  Alert,
 } from "react-table";
 import { withRouter } from "react-router-dom";
 import { getdetail_list } from "../../actions/research/listAction";
@@ -77,7 +74,7 @@ const MainTableUser = (props) => {
           <Fragment>
             {cell.row.values.status === "WAITING" ? "รอกรรมการตรวจสอบ" : null}
             {cell.row.values.status === "WAITINGADMIN"
-              ? "รอฝ่ายวิจับตรวจสอบ"
+              ? "รอฝ่ายวิจัยตรวจสอบ"
               : null}
             {cell.row.values.status === "EDIT" ? "แก้ไขรายละเอียด" : null}
             {cell.row.values.status === "REJECT" ? "ยกเลิก" : null}
