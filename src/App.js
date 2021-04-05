@@ -10,9 +10,23 @@ import AppFooter from "./components/main/AppFooter";
 
 // Main Page
 import MainPage from "./components/Page/main/MainPage";
+
+import Lottie from "react-lottie";
+
 // Loading
 import * as loadingData from "./utilis//lf30_editor_wvri0o27.json";
-import Lottie from "react-lottie";
+
+// Error Boundary
+import { ErrorBoundary } from "react-error-boundary";
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div role="alert">
+      <p>ระบบเกิดข้อผิดพลาด กรุณาเข้าใช้ใหม่หรือติดต่อเจ้าหน้าที่</p>
+      <pre>{error.message}</pre>
+      {/* <button onClick={resetErrorBoundary}>Try again</button> */}
+    </div>
+  );
+}
 
 const loadingOption = {
   loop: true,
@@ -78,17 +92,19 @@ const App = (props) => {
         </Fade>
       ) : (
         <Fade in={fadeIn}>
-          <AppNavbar />
-          <br />
-          <br />
-          <br />
-          <br />
-          <MainPage />
-          <br />
-          <br />
-          <br />
-          <br />
-          <AppFooter />
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <AppNavbar />
+            <br />
+            <br />
+            <br />
+            <br />
+            <MainPage />
+            <br />
+            <br />
+            <br />
+            <br />
+            <AppFooter />
+          </ErrorBoundary>
         </Fade>
       )}
     </div>

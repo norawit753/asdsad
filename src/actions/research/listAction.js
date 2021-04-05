@@ -147,3 +147,43 @@ export const status_committee = ({
       });
     });
 };
+
+// update status admin
+export const status_admin = ({
+  token,
+  id,
+  buasri_id,
+  admin,
+  email,
+  status,
+  note,
+}) => (dispatch) => {
+  // Headers
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": token,
+    },
+  };
+  const body = JSON.stringify({ id, buasri_id, admin, status, note });
+  const email_user = JSON.stringify({ email });
+  axios
+    .post(conResearch + "/api/list/status_admin", body, config)
+    .then((res) => {
+      if (status === "APPROVED") {
+        dispatch({
+          type: RESEARCH_UPDATE_STATUS,
+        });
+      } else {
+        dispatch({
+          type: RESEARCH_UPDATE_STATUS,
+        });
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: RESEARCH_ERROR,
+        payload: error.data,
+      });
+    });
+};

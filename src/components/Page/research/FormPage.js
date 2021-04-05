@@ -77,8 +77,8 @@ const ResearchFormPage = (props) => {
   const [LabelFile, setLabelFile] = useState("Choose File");
   const [CheckFile, setCheckFile] = useState(false);
   const [CheckFileCorrect, setCheckFileCorrect] = useState(false);
-  const [mergeName, setMergeName] = useState("");
-  const [filePath, setfilePath] = useState("");
+  const [mergeName, setMergeName] = useState(null);
+  const [filePath, setfilePath] = useState(null);
   const [PDF, setPDF] = useState({
     preview: "",
     raw: "",
@@ -214,51 +214,31 @@ const ResearchFormPage = (props) => {
       }
     }
 
-    if (ConfName) {
-      const newList = await {
-        token,
-        year: fullyear,
-        buasri_id: user.buasri_id,
-        email: user.email,
-        article: e.article,
-        level: e.level,
-        sub_level_1: e.sub_level_1,
-        sub_level_2: e.sub_level_2,
-        conf_year: e.year,
-        author: e.author,
-        name: e.name,
-        conference_name: e.conf_name,
-        tags: tagstate,
-        status: "WAITING",
-        file_name: mergeName,
-        file_path: filePath,
-      };
-      await upload();
-      await sendList(newList);
-      // console.log(newList);
-    } else {
-      const newList = await {
-        token,
-        year: fullyear,
-        buasri_id: user.buasri_id,
-        email: user.email,
-        article: e.article,
-        level: e.level,
-        sub_level_1: e.sub_level_1,
-        sub_level_2: e.sub_level_2,
-        conf_year: e.year,
-        author: e.author,
-        name: e.name,
-        tags: tagstate,
-        status: "WAITING",
-        file_name: mergeName,
-        file_path: filePath,
-      };
+    const newList = await {
+      token,
+      year: fullyear,
+      buasri_id: user.buasri_id,
+      title_name: user.title,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      article: e.article,
+      level: e.level,
+      sub_level_1: e.sub_level_1,
+      sub_level_2: e.sub_level_2,
+      conf_year: e.year,
+      conference_name: ConfName ? e.conf_name : undefined,
+      author: e.author,
+      name: e.name,
+      tags: tagstate ? tagstate : undefined,
+      status: "WAITING",
+      file_name: mergeName && filePath ? mergeName : undefined,
+      file_path: mergeName && filePath ? filePath : undefined,
+    };
 
-      await upload();
-      await sendList(newList);
-      // console.log(newList);
-    }
+    await upload();
+    await sendList(newList);
+    // console.log(newList);
   };
 
   return (

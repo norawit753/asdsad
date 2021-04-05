@@ -36,6 +36,9 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
 export const newlist = ({
   token,
   year,
+  title_name,
+  firstname,
+  lastname,
   buasri_id,
   email,
   article,
@@ -43,6 +46,7 @@ export const newlist = ({
   sub_level_1,
   sub_level_2,
   conf_year,
+  conference_name,
   author,
   name,
   tags,
@@ -66,6 +70,9 @@ export const newlist = ({
   // body
   const body = JSON.stringify({
     year,
+    title_name,
+    firstname,
+    lastname,
     buasri_id,
     email,
     article,
@@ -73,15 +80,16 @@ export const newlist = ({
     sub_level_1,
     sub_level_2,
     conf_year,
+    conference_name: conference_name ? conference_name : undefined,
     author,
     name,
-    tags,
+    tags: tags ? tags : undefined,
     status,
     file_name,
     file_path,
   });
 
-  // console.log(body);
+  console.log(body);
   axios
     .put(conResearch + "/api/list/add", body, config)
     .then((res) => {

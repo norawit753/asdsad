@@ -15,12 +15,16 @@ import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { status_committee } from "../../actions/research/listAction";
+import {
+  status_committee,
+  status_admin,
+} from "../../actions/research/listAction";
 
 const UpdateStatusModal = (props) => {
   const { handleSubmit, register } = useForm();
 
   const user = useSelector((state) => state.main.auth.user);
+  const e_research = useSelector((state) => state.main.auth.service.e_research);
   const detail = useSelector((state) => state.research.list.detail);
   const token = useSelector((state) => state.main.auth.token);
   const dispatch = useDispatch();
@@ -37,8 +41,9 @@ const UpdateStatusModal = (props) => {
 
   UpdateStatusModal.propTypes = {
     status_committee: PropTypes.func.isRequired,
+    status_admin: PropTypes.func.isRequired,
   };
-  const { status_committee } = props;
+  const { status_committee, status_admin } = props;
 
   // status ก่อนเปลี่ยน
   useEffect(() => {
@@ -101,25 +106,33 @@ const UpdateStatusModal = (props) => {
   };
 
   const onSubmit = async (e) => {
-    const UpdateCommittee = await {
-      token,
-      id: e.no_id,
-      buasri_id: detail[0].buasri_id,
-      committee: user.buasri_id,
-      email: detail[0].email,
-      status: e.status_change,
-      note: e.note,
-    };
-    const UpdateAdmin = await {
-      token,
-      id: e.no_id,
-      buasri_id: detail[0].buasri_id,
-      admin: user.buasri_id,
-      email: detail[0].email,
-      status: e.status_change,
-      note: e.note,
-    };
-    status_committee(UpdateCommittee);
+    if (e_research) {
+      if (e_research.position) {
+        const Update = await {
+          token,
+          id: e.no_id,
+          buasri_id: detail[0].buasri_id,
+          committee:
+            e_research.position === "COMMITTEE" ? user.buasri_id : undefined,
+          admin: e_research.position === "ADMIN" ? user.buasri_id : undefined,
+          email: detail[0].email,
+          status: e.status_change,
+          note: e.note,
+        };
+
+        if (e_research.position === "ADMIN") {
+          status_admin(Update);
+        } else if (e_research.position === "COMMITTEE") {
+          status_committee(Update);
+        } else if (e_research.position === "USER") {
+        }
+      }
+    }
+
+    if (e_research) {
+      if (e_research.position) {
+      }
+    }
   };
 
   return (
@@ -190,5 +203,5 @@ const UpdateStatusModal = (props) => {
 };
 
 export default withRouter(
-  connect(null, { status_committee })(UpdateStatusModal)
+  connect(null, { status_committee, status_admin })(UpdateStatusModal)
 );
