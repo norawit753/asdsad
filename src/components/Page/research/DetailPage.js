@@ -154,10 +154,9 @@ const ResearchDetailPage = (props) => {
                 <UpdateStatusModal />
               ) : null
             ) : null}
-            {researchUser.position === "USER" && detail[0].status === "EDIT" ? (
-              detail[0].buasri_id === user.buasri_id ? (
-                <UpdateStatusModal />
-              ) : null
+            {detail[0].status === "EDIT" &&
+            detail[0].buasri_id === user.buasri_id ? (
+              <UpdateStatusModal />
             ) : null}
           </Container>
         </Fragment>

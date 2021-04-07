@@ -23,6 +23,7 @@ import FormButton from "../../research/FormButton";
 import FormPage from "../research/FormPage";
 import BackMainPage from "../../main/BackMainPage";
 import DetailPage from "../research/DetailPage";
+import EditPage from "../research/EditPage";
 
 import MainTableAdmin from "../../research/MainTableAdmin";
 import MainTableCommittee from "../../research/MainTableCommittee";
@@ -160,6 +161,7 @@ const MainPage = (props) => {
             </Route>
             <Route path="/research/form" component={FormPage} />
             <Route path="/research/detail" component={DetailPage} />
+            <Route path="/research/edit" component={EditPage} />
           </Switch>
         </Container>
       ) : (
