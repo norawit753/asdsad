@@ -77,6 +77,7 @@ const ResearchActive = (props) => {
     if (servicelist.E_Research) {
       if (servicelist.E_Research.active)
         setactivevalue(servicelist.E_Research.active);
+      // console.log(servicelist.E_Research.active);
       if (servicelist.E_Research.position)
         setlevelvalue(servicelist.E_Research.position);
     }
@@ -185,13 +186,15 @@ const ResearchActive = (props) => {
                     name="activeinput"
                     id="activeinput"
                     innerRef={register}
-                    defaultValue={activevalue}
+                    defaultValue={servicelist.E_Research.active}
                   >
-                    {actives.map(({ label, value }) => (
+                    {/* {actives.map(({ label, value }) => (
                       <option key={value} value={value}>
                         {label}
                       </option>
-                    ))}
+                    ))} */}
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </Input>
                 </Fragment>
               ) : (
@@ -199,15 +202,17 @@ const ResearchActive = (props) => {
                   <Input
                     type="select"
                     name="activeinput"
-                    id="activeinput"
+                    // id="activeinput"
+                    defaultValue={servicelist.E_Research.active}
                     innerRef={register}
-                    defaultValue={activevalue}
                   >
-                    {activefirst.map(({ label, value }) => (
+                    {/* {activefirst.map(({ label, value }) => (
                       <option key={value} value={value}>
                         {label}
                       </option>
-                    ))}
+                    ))} */}
+                    <option value="ACTIVE">Active</option>
+                    <option value="INACTIVE">Inactive</option>
                   </Input>
                 </Fragment>
               )}
