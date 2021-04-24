@@ -27,8 +27,11 @@ import {
   newlist as sendList,
 } from "../../../actions/research/formAction";
 
+// JSON
 import articleJson from "../../../utilis/research/typearticle.json";
 import levelJson from "../../../utilis/research/typelevel.json";
+import patentJson from "../../../utilis/research/typepatent.json";
+import pettypatentJson from "../../../utilis/research/typepettypatent.json";
 
 const ResearchFormPage = (props) => {
   const { handleSubmit, register, watch } = useForm();
@@ -71,6 +74,8 @@ const ResearchFormPage = (props) => {
   const [OpenSublv2, setOpenSublv2] = useState(false);
 
   const [ConfName, setConfName] = useState(false);
+  const [PatentName, setPatentName] = useState(false);
+  const [PettyPatentName, setPettyPatentName] = useState(false);
   const fullyear = new Date().getFullYear();
 
   // Upload File
@@ -159,8 +164,20 @@ const ResearchFormPage = (props) => {
     if (name === "article") {
       if (value === "CONFERENCE") {
         setConfName(true);
+        setPatentName(false);
+        setPettyPatentName(false);
+      } else if (value === "PATENT") {
+        setConfName(false);
+        setPatentName(true);
+        setPettyPatentName(false);
+      } else if (value === "PETTY-PATENT") {
+        setConfName(false);
+        setPatentName(false);
+        setPettyPatentName(true);
       } else {
         setConfName(false);
+        setPatentName(false);
+        setPettyPatentName(false);
       }
     }
     if (name === "level") {
@@ -223,11 +240,15 @@ const ResearchFormPage = (props) => {
       lastname: user.lastname,
       email: user.email,
       article: e.article,
+      type_name: e.type_name ? e.type_name : undefined,
       level: e.level,
       sub_level_1: e.sub_level_1,
       sub_level_2: e.sub_level_2,
       conf_year: e.year,
+      quartile: e.quartile,
       conference_name: ConfName ? e.conf_name : undefined,
+      conf_country: ConfName ? e.conf_country : undefined,
+      conf_local: ConfName ? e.conf_local : undefined,
       author: e.author,
       name: e.name,
       tags: tagstate ? tagstate : undefined,
@@ -276,6 +297,48 @@ const ResearchFormPage = (props) => {
               </FormGroup>
             ))}
           </FormGroup>
+          {PatentName ? (
+            <Fragment>
+              <FormGroup>
+                <Label for="type_name">*กลุ่มงานของสิทธิบัตร:</Label>
+                <Input
+                  type="select"
+                  name="type_name"
+                  innerRef={register}
+                  onChange={onChange}
+                  required
+                >
+                  <option value="">---โปรดเลือก---</option>
+                  {patentJson.map((patent) => (
+                    <option key={patent.No} value={patent.Value}>
+                      {patent.Name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Fragment>
+          ) : null}
+          {PettyPatentName ? (
+            <Fragment>
+              <FormGroup>
+                <Label for="type_name">*กลุ่มงานของอนุสิทธิบัตร:</Label>
+                <Input
+                  type="select"
+                  name="type_name"
+                  innerRef={register}
+                  onChange={onChange}
+                  required
+                >
+                  <option value="">---โปรดเลือก---</option>
+                  {pettypatentJson.map((petty) => (
+                    <option key={petty.No} value={petty.Value}>
+                      {petty.Name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </Fragment>
+          ) : null}
           <FormGroup>
             <Label for="level">*ระดับงานวิจัย</Label>
             <Input
@@ -339,6 +402,15 @@ const ResearchFormPage = (props) => {
               ))}
             </Input>
           </FormGroup>
+          <FormGroup>
+            <Label for="quartile">*Quartile ที่ส่งผลงาน</Label>
+            <Input type="select" name="quartile" innerRef={register} required>
+              <option value="Q1">Q1</option>
+              <option value="Q2">Q2</option>
+              <option value="Q3">Q3</option>
+              <option value="Q4">Q4</option>
+            </Input>
+          </FormGroup>
           <FormGroup tag="fieldset">
             <Label for="author">*ประเภทผู้เขียน</Label>
             <FormGroup check>
@@ -371,15 +443,35 @@ const ResearchFormPage = (props) => {
             <Input type="text" name="name" innerRef={register} required />
           </FormGroup>
           {ConfName ? (
-            <FormGroup>
-              <Label for="conf_name">ชื่อ Conference ที่เข้าร่วม</Label>
-              <Input
-                type="text"
-                name="conf_name"
-                innerRef={register}
-                required
-              />
-            </FormGroup>
+            <Fragment>
+              <FormGroup>
+                <Label for="conf_name">*ชื่อ Conference ที่เข้าร่วม</Label>
+                <Input
+                  type="text"
+                  name="conf_name"
+                  innerRef={register}
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="conf_country">*ชื่อประเทศที่เข้าร่วม</Label>
+                <Input
+                  type="text"
+                  name="conf_country"
+                  innerRef={register}
+                  required
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label for="conf_local">*ชื่อสถานที่ที่เข้าร่วม</Label>
+                <Input
+                  type="text"
+                  name="conf_local"
+                  innerRef={register}
+                  required
+                />
+              </FormGroup>
+            </Fragment>
           ) : null}
 
           <FormGroup>
