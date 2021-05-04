@@ -100,9 +100,37 @@ const ResearchDetailPage = (props) => {
                   <th scope="row">ประเภทงานวิจัย:</th>
                   <td>{detail[0].article_type}</td>
                 </tr>
+                {detail[0].article_type === "PATENT" ||
+                detail[0].article_type === "PETTY-PATENT" ? (
+                  <Fragment>
+                    <tr>
+                      <th scope="row">ประเภทสิทธิบัตร, อนุสิทธิบัตร:</th>
+                      <td>{detail[0].article_type_name[0].type_name}</td>
+                    </tr>
+                  </Fragment>
+                ) : detail[0].article_type === "CONFERENCE" ? (
+                  <Fragment>
+                    <tr>
+                      <th scope="row">ชื่อ conference ที่จัด:</th>
+                      <td>{detail[0].conf[0].conf_name}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">สถานที่จัดงาน conference:</th>
+                      <td>{detail[0].conf[0].local_name}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">ประเทศที่จัดงาน conference:</th>
+                      <td>{detail[0].conf[0].country}</td>
+                    </tr>
+                  </Fragment>
+                ) : null}
                 <tr>
                   <th scope="row">ปีที่ Pubilc</th>
                   <td>{detail[0].research_year}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Quartile</th>
+                  <td>{detail[0].quartile}</td>
                 </tr>
                 <tr>
                   <th scope="row">ระดับงานวิจัย</th>

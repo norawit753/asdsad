@@ -188,11 +188,6 @@ const ResearchActive = (props) => {
                     innerRef={register}
                     defaultValue={servicelist.E_Research.active}
                   >
-                    {/* {actives.map(({ label, value }) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))} */}
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
                   </Input>
@@ -202,15 +197,9 @@ const ResearchActive = (props) => {
                   <Input
                     type="select"
                     name="activeinput"
-                    // id="activeinput"
-                    defaultValue={servicelist.E_Research.active}
+                    defaultValue="INACTIVE"
                     innerRef={register}
                   >
-                    {/* {activefirst.map(({ label, value }) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))} */}
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
                   </Input>
