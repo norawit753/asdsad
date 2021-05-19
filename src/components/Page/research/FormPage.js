@@ -223,7 +223,7 @@ const ResearchFormPage = (props) => {
 
             // // await console.log(...NewUploadFile);
             // // ส่งไฟล์ Upload
-            // await uploadfile(NewUploadFile, token);
+            await uploadfile(NewUploadFile, token);
           } else {
             await alert("ประเภทไฟล์ของคุณไม่ถูกต้อง");
           }

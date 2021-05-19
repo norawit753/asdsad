@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment, useMemo } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
-import { Container, Table } from "reactstrap";
+import { Container, Table,Button } from "reactstrap";
 import { withRouter } from "react-router-dom";
 
 import statusJson from "../../../utilis/research/typestatus.json";
@@ -9,6 +9,7 @@ import UpdateStatusModal from "../../research/UpdateStatusModal";
 
 // Env
 import NewLineToBr from "../../../utilis/newLine";
+import {config } from "../../../utilis/config"
 
 const ResearchDetailPage = (props) => {
   const researchUser = useSelector(
@@ -16,7 +17,9 @@ const ResearchDetailPage = (props) => {
   );
   const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
-
+  const [UploadFilter, setUploadFilter] = useState(null);
+  // config
+  const conResearch = config.connectResearchAPI
   // trigger
   const trigger_status = useSelector(
     (state) => state.research.trigger.update_status
@@ -25,6 +28,7 @@ const ResearchDetailPage = (props) => {
   const [StatusFilter, setStatusFilter] = useState(null);
   const [TagFilter, setTagFilter] = useState(null);
   const [NoteFilter, setNoteFilter] = useState("ไม่มีรายละเอียด");
+  const [GoEdit,setGoEdit] = useState(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,15 +75,39 @@ const ResearchDetailPage = (props) => {
       if (detail[0].note) {
         setNoteFilter(detail[0].note);
       }
+      if (detail[0].file_name) {
+        setUploadFilter(conResearch + detail[0].file_path);
+      }
     }
-  }, [detail]);
-
-  useEffect(() => {
     if (!detail) {
       props.history.push("/research");
     }
   }, [detail]);
 
+  //UploadFilterChange
+  useEffect(()=>{
+    if(UploadFilter){
+      console.log(UploadFilter)
+    }
+
+  },[UploadFilter]) 
+
+  useEffect(()=>{
+    if(GoEdit){
+      props.history.push("/research/edit");
+      dispatch({ type: "PAGE_LOADING" });
+      setGoEdit(false)
+    }
+  },[GoEdit])
+
+  const toggleEdit = () => {
+    setGoEdit(true)
+  }
+
+  // Button PDF
+  const togglePDF = () => {
+    window.open(UploadFilter);
+  }
   return (
     <Fragment>
       <Container>
@@ -148,6 +176,14 @@ const ResearchDetailPage = (props) => {
                   <th scope="row">ประเภทผู้เขียน</th>
                   <td>{detail[0].author_type}</td>
                 </tr>
+                {UploadFilter ? (
+                  <tr>
+                    <th scope="row" >PDF File:</th>
+                    <td>
+                      <Button color="info" size="sm" onClick={togglePDF}>PDF File</Button>
+                    </td>
+                  </tr>
+                ) : null}
                 <tr>
                   <th scope="row">tags</th>
                   <td>{TagFilter}</td>
@@ -184,7 +220,9 @@ const ResearchDetailPage = (props) => {
             ) : null}
             {detail[0].status === "EDIT" &&
             detail[0].buasri_id === user.buasri_id ? (
-              <UpdateStatusModal />
+              <Button onClick={toggleEdit}>
+          อัพเดตสถานะ
+        </Button>
             ) : null}
           </Container>
         </Fragment>
