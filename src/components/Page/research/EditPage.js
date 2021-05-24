@@ -9,18 +9,26 @@ import {
   Label,
   Input,
   FormText,
+  CustomInput,
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { uploadfile } from "../../../actions/research/formAction";
+import PropTypes from "prop-types";
 import typeartical from "../../../utilis/research/typearticle.json";
 import typelevel from "../../../utilis/research/typelevel.json";
 import EditTags from "../../research/TagsEdit";
 
+// Env
+import NewLineToBr from "../../../utilis/newLine";
+import { config } from "../../../utilis/config";
+
 const ResearchEditPage = (props) => {
+  const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
   const fullyear = new Date().getFullYear();
-
+  // Form
   const { register, handleSubmit } = useForm();
 
   // level0
@@ -31,6 +39,26 @@ const ResearchEditPage = (props) => {
   // ใช้ trigger เมื่อเปลี่ยน level sub 2 สำเร็จ
   const [levelStart2, setlevelStart2] = useState(true);
 
+  // config
+  const conResearch = config.connectResearchAPI;
+
+  // Upload File
+  // เก่า
+  const [OldUpload, setOldUpload] = useState(null);
+  const [OldUploadName, setOldUploadName] = useState(null);
+  const [OldUploadPath, setOldUploadPath] = useState(null);
+  // ใหม่
+  const [LabelFile, setLabelFile] = useState("Choose File");
+  const [CheckFile, setCheckFile] = useState(false);
+  const [CheckFileCorrect, setCheckFileCorrect] = useState(false);
+  const [mergeName, setMergeName] = useState(null);
+  const [filePath, setfilePath] = useState(null);
+  const [PDF, setPDF] = useState({
+    preview: "",
+    raw: "",
+  });
+
+  // ประเภทงานวิจัย
   const [Level2, setLevel2] = useState([
     {
       sublevel_2_Key: "",
@@ -38,6 +66,14 @@ const ResearchEditPage = (props) => {
     },
   ]);
 
+  // propTypes
+  ResearchEditPage.propTypes = {
+    uploadfile: PropTypes.func.isRequired,
+  };
+
+  const { uploadfile } = props;
+
+  // หากมีข้อมูล ให้ใส่ข้อมูลลง redux
   useEffect(() => {
     if (detail) {
       if (levelStart) {
@@ -45,9 +81,15 @@ const ResearchEditPage = (props) => {
         setlevelStart2(true);
         setlevelChange(detail[0].level);
       }
+      if (detail[0].file_name) {
+        setOldUpload(conResearch + detail[0].file_path);
+        setOldUploadName(detail[0].file_name);
+        setOldUploadPath(detail[0].file_path);
+      }
     }
   }, [detail]);
 
+  // หาก level มีการเปลี่ยนแปลง ให้เปลี่ยน dropdown เป็น level ที่เลือก
   useEffect(() => {
     if (levelChange) {
       if (levelChange === "INTERNATIONAL") {
@@ -74,6 +116,7 @@ const ResearchEditPage = (props) => {
     }
   }, [levelChange]);
 
+  // หากไม่มีข้อมูลให้กลับไปหน้าก่อน
   useEffect(() => {
     const fetchData = async () => {
       if (!detail) {
@@ -90,18 +133,116 @@ const ResearchEditPage = (props) => {
     };
     fetchData();
   }, [detail]);
+  /////////////////////////////////////Start Upload Zone ////////////////////////////////////////
 
+  // หากมี PDF เก่าให้แสดง
+  useEffect(() => {
+    if (OldUpload) {
+    }
+  }, [OldUpload]);
+
+  // Button Open Old PDF
+  const toggleOldPDF = () => {
+    window.open(OldUpload);
+  };
+
+  // MergeName
+  useEffect(() => {
+    const timenow = Date.now();
+    const setPDFName = async () => {
+      if ((await PDF.raw.type) === "application/pdf") {
+        await setMergeName(timenow + ".pdf");
+        await setCheckFileCorrect(true);
+      } else {
+        await setCheckFileCorrect(false);
+      }
+    };
+    setPDFName();
+    // eslint-disable-next-line
+  }, [PDF]);
+
+  // create name upload
+  useEffect(() => {
+    const setPDFPath = async () => {
+      if (await mergeName) {
+        await setfilePath("/uploads/" + user.buasri_id + "/" + mergeName);
+      }
+    };
+    setPDFPath();
+    // eslint-disable-next-line
+  }, [mergeName]);
+
+  /////////////////////////////////////End Upload Zone ////////////////////////////////////////
+
+  // หากมีการเปลี่ยนแปลงการ form
   const onChange = (e) => {
     const { name, value } = e.target;
+    // level
     if (name === "level") {
       setlevelChange(value);
       console.log(value);
     }
+    // fileupload
+    if (name === "fileupload") {
+      if (e.target.files.length) {
+        setCheckFile(true);
+        setPDF({
+          preview: URL.createObjectURL(e.target.files[0]),
+          raw: e.target.files[0],
+        });
+      } else {
+        setPDF({
+          preview: "",
+          raw: "",
+        });
+      }
+    }
   };
 
-  function onSubmit(data) {
-    console.log(data);
-  }
+  // ส่งข้อมูลใหม่จากฟอร์ม
+  const onSubmit = async (e) => {
+    await console.log("ข้อมูลจากฟอร์ม " + e);
+    await console.log("PDF เก่า " + OldUpload);
+    await console.log("PDF ใหม่ " + mergeName);
+
+    async function upload_newpdf() {
+      if (CheckFile) {
+        if (PDF) {
+          if (PDF.raw.type === "application/pdf") {
+            const NewUploadFile = new FormData();
+            await NewUploadFile.append("file", PDF.raw, mergeName);
+            await NewUploadFile.append("buasri_id", user.buasri_id);
+            await NewUploadFile.append("filePath", filePath);
+
+            // await console.log(...NewUploadFile);
+            // // ส่งไฟล์ Upload
+            await uploadfile(NewUploadFile, token);
+          } else {
+            await alert("ประเภทไฟล์ของคุณไม่ถูกต้อง");
+          }
+        }
+      }
+    }
+
+    const newList = await {
+      token,
+      file_name:
+        mergeName && filePath
+          ? mergeName
+          : OldUploadName
+          ? OldUploadName
+          : undefined,
+      file_path:
+        mergeName && filePath
+          ? filePath
+          : OldUploadPath
+          ? OldUploadPath
+          : undefined,
+    };
+
+    // await upload_newpdf();
+    console.log(newList);
+  };
 
   return (
     <Fragment>
@@ -199,6 +340,29 @@ const ResearchEditPage = (props) => {
               <Label for="tagResearch">Tag:</Label>
               <EditTags />
             </FormGroup>
+
+            <FormGroup>
+              <Label for="uploadfile">
+                *Upload File: (เฉพาะไฟล์ PDF เท่านั้น)
+              </Label>
+              {OldUpload ? (
+                <Fragment>
+                  {" "}
+                  <Button color="link" size="sm" onClick={toggleOldPDF}>
+                    (ตรวจไฟล์ PDF เก่า)
+                  </Button>
+                </Fragment>
+              ) : null}
+
+              <CustomInput
+                type="file"
+                id="fileupload"
+                name="fileupload"
+                label={LabelFile}
+                onChange={onChange}
+                accept="application/pdf"
+              />
+            </FormGroup>
             <FormGroup>
               <Button color="dark">Submit</Button>
             </FormGroup>
@@ -209,4 +373,4 @@ const ResearchEditPage = (props) => {
   );
 };
 
-export default withRouter(connect(null, null)(ResearchEditPage));
+export default withRouter(connect(null, { uploadfile })(ResearchEditPage));

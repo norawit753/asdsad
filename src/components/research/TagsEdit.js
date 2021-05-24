@@ -16,7 +16,7 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter];
 class EditTags extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props.research[0].tags);
+    // console.log(this.props.research[0].tags);
     this.state = {
       tags: this.props.research[0].tags ? this.props.research[0].tags : [],
       suggestions: [
