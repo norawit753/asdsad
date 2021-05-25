@@ -15,8 +15,13 @@ import { withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { uploadfile } from "../../../actions/research/formAction";
 import PropTypes from "prop-types";
+
+// Json
 import typeartical from "../../../utilis/research/typearticle.json";
 import typelevel from "../../../utilis/research/typelevel.json";
+import patentJson from "../../../utilis/research/typepatent.json";
+import pettypatentJson from "../../../utilis/research/typepettypatent.json";
+
 import EditTags from "../../research/TagsEdit";
 
 // Env
@@ -27,9 +32,14 @@ const ResearchEditPage = (props) => {
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
+  const [FullName, setFullName] = useState(null);
   const fullyear = new Date().getFullYear();
   // Form
   const { register, handleSubmit } = useForm();
+  // trigger research type
+  const [ConfName, setConfName] = useState(false);
+  const [PatentName, setPatentName] = useState(false);
+  const [PettyPatentName, setPettyPatentName] = useState(false);
 
   // level0
   // value เปลี่ยนเมื่อ level เปลี่ยน
@@ -41,7 +51,8 @@ const ResearchEditPage = (props) => {
 
   // config
   const conResearch = config.connectResearchAPI;
-
+  // Tag
+  const tagstate = useSelector((state) => state.research.form.tags);
   // Upload File
   // เก่า
   const [OldUpload, setOldUpload] = useState(null);
@@ -85,6 +96,29 @@ const ResearchEditPage = (props) => {
         setOldUpload(conResearch + detail[0].file_path);
         setOldUploadName(detail[0].file_name);
         setOldUploadPath(detail[0].file_path);
+      }
+      if (detail[0].firstname && detail[0].lastname) {
+        setFullName(detail[0].firstname + " " + detail[0].lastname);
+      }
+
+      if (detail[0].article_type) {
+        if (detail[0].article_type === "CONFERENCE") {
+          setConfName(true);
+          setPatentName(false);
+          setPettyPatentName(false);
+        } else if (detail[0].article_type === "PATENT") {
+          setConfName(false);
+          setPatentName(true);
+          setPettyPatentName(false);
+        } else if (detail[0].article_type === "PETTY-PATENT") {
+          setConfName(false);
+          setPatentName(false);
+          setPettyPatentName(true);
+        } else {
+          setConfName(false);
+          setPatentName(false);
+          setPettyPatentName(false);
+        }
       }
     }
   }, [detail]);
@@ -197,6 +231,26 @@ const ResearchEditPage = (props) => {
         });
       }
     }
+    // article_type
+    if (name === "article_type") {
+      if (value === "CONFERENCE") {
+        setConfName(true);
+        setPatentName(false);
+        setPettyPatentName(false);
+      } else if (value === "PATENT") {
+        setConfName(false);
+        setPatentName(true);
+        setPettyPatentName(false);
+      } else if (value === "PETTY-PATENT") {
+        setConfName(false);
+        setPatentName(false);
+        setPettyPatentName(true);
+      } else {
+        setConfName(false);
+        setPatentName(false);
+        setPettyPatentName(false);
+      }
+    }
   };
 
   // ส่งข้อมูลใหม่จากฟอร์ม
@@ -226,6 +280,27 @@ const ResearchEditPage = (props) => {
 
     const newList = await {
       token,
+      _id: detail[0]._id,
+      buasri_id: detail[0].buasri_id,
+      email: detail[0].email,
+      dep: detail[0].dep,
+      firstname: detail[0].firstname,
+      lastname: detail[0].lastname,
+      position: detail[0].position,
+      research_name: e.research_name,
+      article_type: e.article_type,
+      level: e.level,
+      level_sub1: e.level_sub1,
+      level_sub2: e.level_sub2,
+      type_name:
+        e.article_type === "PATENT" || e.article_type === "PETTY-PATENT"
+          ? e.type_name
+          : undefined,
+      quartile: e.quartile,
+      year: detail[0].year,
+      author_type: e.author_type,
+      research_year: e.research_year,
+      tags: tagstate ? tagstate : detail[0].tags ? detail[0].tags : undefined,
       file_name:
         mergeName && filePath
           ? mergeName
@@ -250,19 +325,24 @@ const ResearchEditPage = (props) => {
         <Container>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup>
+              <Label for="fullname">ผู้ส่ง:</Label>
+              <Input name="fullname" defaultValue={FullName} readOnly></Input>
+            </FormGroup>
+            <FormGroup>
               <Label for="research_name">ชื่องานวิจัย:</Label>
               <Input
                 name="research_name"
+                onChange={onChange}
                 innerRef={register}
                 defaultValue={detail[0].research_name}
               ></Input>
             </FormGroup>
-            {/* ต้องแก้ */}
             <FormGroup>
-              <Label for="article_type">ประเภทงานวิจัย:</Label>
+              <Label for="article_type">ประเภทของบทความ:</Label>
               <Input
                 type="select"
                 name="article_type"
+                onChange={onChange}
                 defaultValue={detail[0].article_type}
                 innerRef={register}
               >
@@ -273,22 +353,58 @@ const ResearchEditPage = (props) => {
                 ))}
               </Input>
             </FormGroup>
-            {/* ต้องแก้ */}
-            <FormGroup>
-              <Label for="article_type">ปีที่ Pubilc:</Label>
-              <Input
-                type="select"
-                name="research_year"
-                defaultValue={detail[0].research_year}
-                innerRef={register}
-              >
-                {Array.from(new Array(5), (v, i) => (
-                  <option key={i} value={fullyear - i}>
-                    {fullyear - i}
-                  </option>
-                ))}
-              </Input>
-            </FormGroup>
+
+            {PatentName ? (
+              <Fragment>
+                <FormGroup>
+                  <Label for="type_name">*กลุ่มงานของสิทธิบัตร:</Label>
+                  <Input
+                    type="select"
+                    name="type_name"
+                    innerRef={register}
+                    onChange={onChange}
+                    defaultValue={
+                      detail[0].article_type === "PATENT"
+                        ? detail[0].article_type_name[0].type_name
+                        : null
+                    }
+                    required
+                  >
+                    {patentJson.map((patent) => (
+                      <option key={patent.No} value={patent.Value}>
+                        {patent.Name}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Fragment>
+            ) : null}
+            {PettyPatentName ? (
+              <Fragment>
+                <FormGroup>
+                  <Label for="type_name">*กลุ่มงานของอนุสิทธิบัตร:</Label>
+                  <Input
+                    type="select"
+                    name="type_name"
+                    innerRef={register}
+                    onChange={onChange}
+                    defaultValue={
+                      detail[0].article_type === "PETTY-PATENT"
+                        ? detail[0].article_type_name[0].type_name
+                        : null
+                    }
+                    required
+                  >
+                    {pettypatentJson.map((petty) => (
+                      <option key={petty.No} value={petty.Value}>
+                        {petty.Name}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Fragment>
+            ) : null}
+
             <FormGroup>
               <Label for="level">ระดับงานวิจัย:</Label>
               <Input
@@ -304,6 +420,37 @@ const ResearchEditPage = (props) => {
                 ))}
               </Input>
             </FormGroup>
+            {/* เกณฑ์ กพอ. */}
+            <FormGroup>
+              <Label for="sub_level_1">*อยู่ในเกณฑ์ กพอ หรือไม่?</Label>
+              <Input
+                type="select"
+                name="sub_level_1"
+                defaultValue={detail[0].level_sub1}
+                innerRef={register}
+                required
+              >
+                <option value="OCSC">อยู่ในเกณฑ์</option>
+                <option value="NON-OCSC">ไม่อยู่ในเกณฑ์</option>
+              </Input>
+            </FormGroup>
+            {/* ต้องแก้ */}
+            <FormGroup>
+              <Label for="research_year">ปีที่ Pubilc:</Label>
+              <Input
+                type="select"
+                name="research_year"
+                defaultValue={detail[0].research_year}
+                innerRef={register}
+              >
+                {Array.from(new Array(5), (v, i) => (
+                  <option key={i} value={fullyear - i}>
+                    {fullyear - i}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+
             <FormGroup>
               <Label for="level_sub1">*อยู่ในเกณฑ์ กพอ หรือไม่?</Label>
               <Input
@@ -316,6 +463,7 @@ const ResearchEditPage = (props) => {
                 <option value="NON-OCSC">ไม่อยู่ในเกณฑ์</option>
               </Input>
             </FormGroup>
+
             <FormGroup>
               <Label for="level_sub2">*ฐานข้อมูล</Label>
               {levelStart2 ? null : (
@@ -336,6 +484,91 @@ const ResearchEditPage = (props) => {
                 </Input>
               )}
             </FormGroup>
+
+            <FormGroup>
+              <Label for="quartile">*Quartile ที่ส่งผลงาน</Label>
+              <Input
+                type="select"
+                name="quartile"
+                innerRef={register}
+                defaultValue={detail[0].quartile}
+                required
+              >
+                <option value="Q1">Q1</option>
+                <option value="Q2">Q2</option>
+                <option value="Q3">Q3</option>
+                <option value="Q4">Q4</option>
+              </Input>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="author">*ประเภทผู้เขียน</Label>
+              <Input
+                type="select"
+                innerRef={register}
+                defaultValue={detail[0].author_type}
+                required
+              >
+                <option value="AUTHOR">ผู้เขียนบทความ</option>
+                <option value="CO-AUTHOR">ผู้ร่วมเขียนบทความ</option>
+              </Input>
+            </FormGroup>
+
+            {ConfName ? (
+              <Fragment>
+                <FormGroup>
+                  <Label for="conference_name">
+                    *ชื่อ Conference ที่เข้าร่วม
+                  </Label>
+                  <Input
+                    type="text"
+                    name="conference_name"
+                    defaultValue={
+                      detail[0].article_type === "CONFERENCE"
+                        ? detail[0].conf[0]
+                          ? detail[0].conf[0].conf_name
+                          : null
+                        : null
+                    }
+                    innerRef={register}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="conf_country">*ชื่อประเทศที่เข้าร่วม</Label>
+                  <Input
+                    type="text"
+                    name="conf_country"
+                    defaultValue={
+                      detail[0].article_type === "CONFERENCE"
+                        ? detail[0].conf[0]
+                          ? detail[0].conf[0].country
+                          : null
+                        : null
+                    }
+                    innerRef={register}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Label for="conf_local">*ชื่อสถานที่ที่เข้าร่วม</Label>
+                  <Input
+                    type="text"
+                    name="conf_local"
+                    defaultValue={
+                      detail[0].article_type === "CONFERENCE"
+                        ? detail[0].conf[0]
+                          ? detail[0].conf[0].local_name
+                          : null
+                        : null
+                    }
+                    innerRef={register}
+                    required
+                  />
+                </FormGroup>
+              </Fragment>
+            ) : null}
+            {/* ต้องแก้ ข้อมูล Tag */}
             <FormGroup>
               <Label for="tagResearch">Tag:</Label>
               <EditTags />

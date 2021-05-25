@@ -33,84 +33,88 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
 };
 
 // PUT LIST TO MONGODB
-export const newlist = ({
-  token,
-  year,
-  title_name,
-  firstname,
-  lastname,
-  buasri_id,
-  email,
-  article,
-  type_name,
-  level,
-  sub_level_1,
-  sub_level_2,
-  conf_year,
-  quartile,
-  conference_name,
-  conf_country,
-  conf_local,
-  author,
-  name,
-  tags,
-  status,
-  file_name,
-  file_path,
-}) => (dispatch) => {
-  // Headers
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth-token": token,
-    },
-  };
-  const configemail = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  // body
-  const body = JSON.stringify({
+export const newlist =
+  ({
+    token,
     year,
     title_name,
     firstname,
     lastname,
+    position,
     buasri_id,
     email,
     article,
-    type_name: type_name ? type_name : undefined,
+    type_name,
     level,
     sub_level_1,
     sub_level_2,
     conf_year,
     quartile,
-    conference_name: conference_name ? conference_name : undefined,
-    conf_country: conf_country ? conf_country : undefined,
-    conf_local: conf_local ? conf_local : undefined,
+    conference_name,
+    conf_country,
+    conf_local,
     author,
     name,
-    tags: tags ? tags : undefined,
+    tags,
     status,
     file_name,
     file_path,
-  });
+  }) =>
+  (dispatch) => {
+    // Headers
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token,
+      },
+    };
+    const configemail = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-  console.log(body);
-  axios
-    .put(conResearch + "/api/list/add", body, config)
-    .then((res) => {
-      if (res.data) {
-        dispatch({
-          type: RESEARCH_ADD_LIST_SUCCESS,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
+    // body
+    const body = JSON.stringify({
+      year,
+      title_name,
+      firstname,
+      lastname,
+      position,
+      buasri_id,
+      email,
+      article,
+      type_name: type_name ? type_name : undefined,
+      level,
+      sub_level_1,
+      sub_level_2,
+      conf_year,
+      quartile,
+      conference_name: conference_name ? conference_name : undefined,
+      conf_country: conf_country ? conf_country : undefined,
+      conf_local: conf_local ? conf_local : undefined,
+      author,
+      name,
+      tags: tags ? tags : undefined,
+      status,
+      file_name,
+      file_path,
     });
-};
+
+    console.log(body);
+    axios
+      .put(conResearch + "/api/list/add", body, config)
+      .then((res) => {
+        if (res.data) {
+          dispatch({
+            type: RESEARCH_ADD_LIST_SUCCESS,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
 // Collect Tags
 export const collecttag = (tag) => ({

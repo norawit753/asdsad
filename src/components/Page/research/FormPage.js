@@ -46,6 +46,7 @@ const ResearchFormPage = (props) => {
   // From Main
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
+  const e_research = useSelector((state) => state.main.auth.service.e_research);
   const tagstate = useSelector((state) => state.research.form.tags);
 
   // Value Level
@@ -239,6 +240,7 @@ const ResearchFormPage = (props) => {
       title_name: user.title,
       firstname: user.firstname,
       lastname: user.lastname,
+      position: e_research ? e_research.position : undefined,
       email: user.email,
       article: e.article,
       type_name: e.type_name ? e.type_name : undefined,
