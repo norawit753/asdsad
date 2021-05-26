@@ -13,8 +13,11 @@ import {
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { uploadfile } from "../../../actions/research/formAction";
 import PropTypes from "prop-types";
+
+// Action
+import { uploadfile } from "../../../actions/research/formAction";
+import { newlist as sendList } from "../../../actions/research/editAction";
 
 // Json
 import typeartical from "../../../utilis/research/typearticle.json";
@@ -80,9 +83,10 @@ const ResearchEditPage = (props) => {
   // propTypes
   ResearchEditPage.propTypes = {
     uploadfile: PropTypes.func.isRequired,
+    sendList: PropTypes.func.isRequired,
   };
 
-  const { uploadfile } = props;
+  const { uploadfile, sendList } = props;
 
   // หากมีข้อมูล ให้ใส่ข้อมูลลง redux
   useEffect(() => {
@@ -282,25 +286,67 @@ const ResearchEditPage = (props) => {
       token,
       _id: detail[0]._id,
       buasri_id: detail[0].buasri_id,
+      year: detail[0].year ? detail[0].year : undefined,
       email: detail[0].email,
       dep: detail[0].dep,
       firstname: detail[0].firstname,
       lastname: detail[0].lastname,
       position: detail[0].position,
-      research_name: e.research_name,
-      article_type: e.article_type,
-      level: e.level,
-      level_sub1: e.level_sub1,
-      level_sub2: e.level_sub2,
+      research_name: e.research_name
+        ? e.research_name
+        : detail[0].research_name
+        ? detail[0].research_name
+        : undefined,
+      article_type: e.article_type
+        ? e.article_type
+        : detail[0].article_type
+        ? detail[0].article_type
+        : undefined,
+      level: e.level ? e.level : detail[0].level ? detail[0].level : undefined,
+      level_sub1: e.level_sub1
+        ? e.level_sub1
+        : detail[0].level_sub1
+        ? detail[0].level_sub1
+        : undefined,
+      level_sub2: e.level_sub2
+        ? e.level_sub2
+        : detail[0].level_sub2
+        ? detail[0].level_sub2
+        : undefined,
       type_name:
-        e.article_type === "PATENT" || e.article_type === "PETTY-PATENT"
+        PatentName || PettyPatentName
           ? e.type_name
+            ? e.type_name
+            : detail[0].type_name
           : undefined,
-      quartile: e.quartile,
-      year: detail[0].year,
-      author_type: e.author_type,
+      quartile: e.quartile
+        ? e.quartile
+        : detail[0].quartile
+        ? detail[0].quartile
+        : undefined,
+      author_type: e.author_type
+        ? e.author_type
+        : detail[0].author_type
+        ? detail[0].author_type
+        : undefined,
       research_year: e.research_year,
+      conference_name: ConfName
+        ? e.conference_name
+          ? e.conference_name
+          : detail[0].conf[0].conf_name
+        : undefined,
+      conf_country: ConfName
+        ? e.conf_country
+          ? e.conf_country
+          : detail[0].conf[0].country
+        : undefined,
+      conf_local: ConfName
+        ? e.conf_local
+          ? e.conf_local
+          : detail[0].conf[0].local_name
+        : undefined,
       tags: tagstate ? tagstate : detail[0].tags ? detail[0].tags : undefined,
+      note: detail[0].note,
       file_name:
         mergeName && filePath
           ? mergeName
@@ -313,10 +359,13 @@ const ResearchEditPage = (props) => {
           : OldUploadPath
           ? OldUploadPath
           : undefined,
+      status: "WAITING",
     };
 
     // await upload_newpdf();
-    console.log(newList);
+    await sendList(newList);
+
+    // console.log(newList);
   };
 
   return (
@@ -420,21 +469,7 @@ const ResearchEditPage = (props) => {
                 ))}
               </Input>
             </FormGroup>
-            {/* เกณฑ์ กพอ. */}
-            <FormGroup>
-              <Label for="sub_level_1">*อยู่ในเกณฑ์ กพอ หรือไม่?</Label>
-              <Input
-                type="select"
-                name="sub_level_1"
-                defaultValue={detail[0].level_sub1}
-                innerRef={register}
-                required
-              >
-                <option value="OCSC">อยู่ในเกณฑ์</option>
-                <option value="NON-OCSC">ไม่อยู่ในเกณฑ์</option>
-              </Input>
-            </FormGroup>
-            {/* ต้องแก้ */}
+
             <FormGroup>
               <Label for="research_year">ปีที่ Pubilc:</Label>
               <Input
@@ -606,4 +641,6 @@ const ResearchEditPage = (props) => {
   );
 };
 
-export default withRouter(connect(null, { uploadfile })(ResearchEditPage));
+export default withRouter(
+  connect(null, { uploadfile, sendList })(ResearchEditPage)
+);

@@ -101,7 +101,7 @@ export const newlist =
       file_path,
     });
 
-    console.log(body);
+    // console.log(body);
     axios
       .put(conResearch + "/api/list/add", body, config)
       .then((res) => {
