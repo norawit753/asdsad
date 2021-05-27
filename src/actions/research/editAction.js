@@ -48,7 +48,6 @@ export const newlist =
     // body
     const body = JSON.stringify({
       token,
-
       _id,
       buasri_id,
       year,
@@ -77,10 +76,9 @@ export const newlist =
 
       file_name,
       file_path,
-
       status,
     });
-    console.log(body);
+    // console.log(body);
     axios
       .post(conResearch + "/api/list/edit", body, config)
       .then((res) => {

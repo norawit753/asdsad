@@ -425,7 +425,7 @@ const ResearchFormPage = (props) => {
                   value="AUTHOR"
                   required
                 />{" "}
-                ผู้เขียนบทความ
+                ผู้แต่ง
               </Label>
             </FormGroup>
             <FormGroup check>
@@ -437,7 +437,7 @@ const ResearchFormPage = (props) => {
                   value="CO-AUTHOR"
                   required
                 />{" "}
-                ผู้ร่วมเขียนบทความ
+                ผู้ร่วม
               </Label>
             </FormGroup>
           </FormGroup>

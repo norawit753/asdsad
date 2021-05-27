@@ -38,6 +38,7 @@ const UpdateStatusModal = (props) => {
   const [StatusChange, setStatusChange] = useState(initialValue);
   const [modal, setmodal] = useState(false);
   const [disButton, setdisButton] = useState(false);
+  const [OpenComment, setOpenComment] = useState(false);
 
   UpdateStatusModal.propTypes = {
     status_committee: PropTypes.func.isRequired,
@@ -105,6 +106,17 @@ const UpdateStatusModal = (props) => {
     await setmodal(!modal);
   };
 
+  const onChange = async (e) => {
+    const { name, value } = e.target;
+    if (name === "status_change") {
+      if (value === "EDIT") {
+        setOpenComment(true);
+      } else {
+        setOpenComment(false);
+      }
+    }
+  };
+
   const onSubmit = async (e) => {
     if (e_research) {
       if (e_research.position) {
@@ -130,7 +142,29 @@ const UpdateStatusModal = (props) => {
     }
 
     if (e_research) {
-      if (e_research.position) {
+      if (e_research.position === "COMMITTEE") {
+        if (e.status_change === "WAITINGADMIN") {
+          console.log("ส่ง E-mail ให้ admin และ user");
+          console.log("update log!!!");
+        } else if (e.status_change === "EDIT") {
+          console.log("ส่ง E-mail ให้ user");
+          console.log("update log!!!");
+        } else if (e.status_change === "REJECT") {
+          console.log("ส่ง E-mail ให้ user");
+          console.log("update log!!!");
+        }
+      }
+      if (e_research.position === "ADMIN") {
+        if (e.status_change === "APPROVED") {
+          console.log("ส่ง E-mail ให้ user");
+          console.log("update log!!!");
+        } else if (e.status_change === "REJECT") {
+          console.log("ส่ง E-mail ให้ user");
+          console.log("update log!!!");
+        } else if (e.status_change === "EDIT") {
+          console.log("ส่ง E-mail ให้ user");
+          console.log("update log!!!");
+        }
       }
     }
   };
@@ -168,13 +202,21 @@ const UpdateStatusModal = (props) => {
                 readOnly
               ></Input>
             </FormGroup>
-            <FormGroup>
-              <Label for="note">รายละเอียด</Label>
-              <Input type="textarea" name="note" innerRef={register}></Input>
-            </FormGroup>
+            {OpenComment ? (
+              <FormGroup>
+                <Label for="note">*รายละเอียด</Label>
+                <Input type="textarea" name="note" innerRef={register}></Input>
+              </FormGroup>
+            ) : null}
+
             <FormGroup>
               <Label for="status_change">สถานะที่ต้องการเปลี่ยน</Label>
-              <Input type="select" name="status_change" innerRef={register}>
+              <Input
+                type="select"
+                name="status_change"
+                onChange={onChange}
+                innerRef={register}
+              >
                 {StatusChange.map((currentStatus, index) => (
                   <option
                     key={currentStatus.id}

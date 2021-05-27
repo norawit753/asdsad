@@ -3,7 +3,12 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { Container, Table, Button } from "reactstrap";
 import { withRouter } from "react-router-dom";
 
+// JSON
 import statusJson from "../../../utilis/research/typestatus.json";
+import level0Json from "../../../utilis/research/typelevel.json";
+import level_sub1Json from "../../../utilis/research/typelevel_sub1.json";
+import authorJson from "../../../utilis/research/typeauthor.json";
+
 import BackToResearchPage from "../../research/BackResearchPage";
 import UpdateStatusModal from "../../research/UpdateStatusModal";
 
@@ -25,9 +30,13 @@ const ResearchDetailPage = (props) => {
     (state) => state.research.trigger.update_status
   );
 
+  const [Level0Filter, setLevel0Filter] = useState(null);
+  const [Level1Filter, setLevel1Filter] = useState(null);
+  const [AuthorFilter, setAuthorFilter] = useState(null);
   const [StatusFilter, setStatusFilter] = useState(null);
   const [TagFilter, setTagFilter] = useState(null);
   const [NoteFilter, setNoteFilter] = useState("ไม่มีรายละเอียด");
+
   const [GoEdit, setGoEdit] = useState(false);
   const dispatch = useDispatch();
 
@@ -44,6 +53,67 @@ const ResearchDetailPage = (props) => {
 
   useMemo(() => {
     if (detail) {
+      // LEVEL
+      if (detail[0].level) {
+        setLevel0Filter(
+          level0Json
+            .filter((data) => {
+              if (data.levelKey === detail[0].level) {
+                return data.level;
+              } else {
+                return null;
+              }
+            })
+            .map((data) => {
+              if (data.levelKey === detail[0].level) {
+                return <Fragment key={data.levelKey}>{data.level}</Fragment>;
+              } else {
+                return null;
+              }
+            })
+        );
+      }
+      // LEVEL_SUB1
+      if (detail[0].level_sub1) {
+        setLevel1Filter(
+          level_sub1Json
+            .filter((data) => {
+              if (data.levelKey === detail[0].level_sub1) {
+                return data.level;
+              } else {
+                return null;
+              }
+            })
+            .map((data) => {
+              if (data.levelKey === detail[0].level_sub1) {
+                return <Fragment key={data.levelKey}>{data.level}</Fragment>;
+              } else {
+                return null;
+              }
+            })
+        );
+      }
+      // AUTHOR
+      if (detail[0].author_type) {
+        setAuthorFilter(
+          authorJson
+            .filter((data) => {
+              if (data.authorKey === detail[0].author_type) {
+                return data.author;
+              } else {
+                return null;
+              }
+            })
+            .map((data) => {
+              if (data.authorKey === detail[0].author_type) {
+                return <Fragment key={data.authorKey}>{data.author}</Fragment>;
+              } else {
+                return null;
+              }
+            })
+        );
+      }
+      // STATUS
       if (detail[0].status) {
         setStatusFilter(
           statusJson
@@ -63,6 +133,7 @@ const ResearchDetailPage = (props) => {
             })
         );
       }
+      // TAGS
       if (detail[0].tags) {
         setTagFilter(
           detail[0].tags.map((data) => {
@@ -107,6 +178,7 @@ const ResearchDetailPage = (props) => {
   const togglePDF = () => {
     window.open(UploadFilter);
   };
+
   return (
     <Fragment>
       <Container>
@@ -161,11 +233,11 @@ const ResearchDetailPage = (props) => {
                 </tr>
                 <tr>
                   <th scope="row">ระดับงานวิจัย</th>
-                  <td>{detail[0].level}</td>
+                  <td>{Level0Filter}</td>
                 </tr>
                 <tr>
                   <th scope="row">อยู่ในเกณฑ์ กพอ</th>
-                  <td>{detail[0].level_sub1}</td>
+                  <td>{Level1Filter}</td>
                 </tr>
                 <tr>
                   <th scope="row">ฐานข้อมูล</th>
@@ -173,7 +245,7 @@ const ResearchDetailPage = (props) => {
                 </tr>
                 <tr>
                   <th scope="row">ประเภทผู้เขียน</th>
-                  <td>{detail[0].author_type}</td>
+                  <td>{AuthorFilter}</td>
                 </tr>
                 {UploadFilter ? (
                   <tr>
@@ -198,11 +270,27 @@ const ResearchDetailPage = (props) => {
               <tbody>
                 <tr>
                   <th scope="row">สถานะ:</th>
-                  <td>{StatusFilter}</td>
+                  <td
+                    style={
+                      detail[0].status === "WAITING"
+                        ? { color: "blue" }
+                        : detail[0].status === "WAITINGADMIN"
+                        ? { color: "blue" }
+                        : detail[0].status === "EDIT"
+                        ? { color: "blue" }
+                        : detail[0].status === "REJECT"
+                        ? { color: "red" }
+                        : detail[0].status === "APPROVED"
+                        ? { color: "green" }
+                        : { color: "none" }
+                    }
+                  >
+                    {StatusFilter}
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">รายละเอียด:</th>
-                  <td>{NoteFilter}</td>
+                  <td style={{ color: "red" }}>{NoteFilter}</td>
                 </tr>
               </tbody>
             </Table>

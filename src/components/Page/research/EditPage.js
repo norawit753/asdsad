@@ -32,9 +32,11 @@ import NewLineToBr from "../../../utilis/newLine";
 import { config } from "../../../utilis/config";
 
 const ResearchEditPage = (props) => {
+  const dispatch = useDispatch();
   const token = useSelector((state) => state.main.auth.token);
   const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
+  const trigger = useSelector((state) => state.research.trigger);
   const [FullName, setFullName] = useState(null);
   const fullyear = new Date().getFullYear();
   // Form
@@ -87,6 +89,18 @@ const ResearchEditPage = (props) => {
   };
 
   const { uploadfile, sendList } = props;
+
+  // When Send Form Success
+  useEffect(() => {
+    if (trigger.send_success) {
+      const goMainResearchPage = async () => {
+        await alert("ส่งงานวิจัยสำเร็จ");
+        dispatch({ type: "PAGE_LOADING" });
+        props.history.push("/research");
+      };
+      goMainResearchPage();
+    }
+  }, [trigger]);
 
   // หากมีข้อมูล ให้ใส่ข้อมูลลง redux
   useEffect(() => {
@@ -216,7 +230,7 @@ const ResearchEditPage = (props) => {
   const onChange = (e) => {
     const { name, value } = e.target;
     // level
-    if (name === "level") {
+    if (name === "level0") {
       setlevelChange(value);
       console.log(value);
     }
@@ -302,7 +316,11 @@ const ResearchEditPage = (props) => {
         : detail[0].article_type
         ? detail[0].article_type
         : undefined,
-      level: e.level ? e.level : detail[0].level ? detail[0].level : undefined,
+      level: e.level0
+        ? e.level0
+        : detail[0].level
+        ? detail[0].level
+        : undefined,
       level_sub1: e.level_sub1
         ? e.level_sub1
         : detail[0].level_sub1
@@ -362,7 +380,7 @@ const ResearchEditPage = (props) => {
       status: "WAITING",
     };
 
-    // await upload_newpdf();
+    await upload_newpdf();
     await sendList(newList);
 
     // console.log(newList);
@@ -455,22 +473,6 @@ const ResearchEditPage = (props) => {
             ) : null}
 
             <FormGroup>
-              <Label for="level">ระดับงานวิจัย:</Label>
-              <Input
-                type="select"
-                name="level"
-                defaultValue={detail[0].level}
-                onChange={onChange}
-              >
-                {typelevel.map((opt) => (
-                  <option value={opt.levelKey} key={opt.levelKey}>
-                    {opt.level}
-                  </option>
-                ))}
-              </Input>
-            </FormGroup>
-
-            <FormGroup>
               <Label for="research_year">ปีที่ Pubilc:</Label>
               <Input
                 type="select"
@@ -481,6 +483,23 @@ const ResearchEditPage = (props) => {
                 {Array.from(new Array(5), (v, i) => (
                   <option key={i} value={fullyear - i}>
                     {fullyear - i}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="level0">ระดับงานวิจัย:</Label>
+              <Input
+                type="select"
+                name="level0"
+                defaultValue={detail[0].level}
+                onChange={onChange}
+                innerRef={register}
+              >
+                {typelevel.map((opt) => (
+                  <option value={opt.levelKey} key={opt.levelKey}>
+                    {opt.level}
                   </option>
                 ))}
               </Input>
@@ -539,6 +558,7 @@ const ResearchEditPage = (props) => {
             <FormGroup>
               <Label for="author">*ประเภทผู้เขียน</Label>
               <Input
+                name="author_type"
                 type="select"
                 innerRef={register}
                 defaultValue={detail[0].author_type}

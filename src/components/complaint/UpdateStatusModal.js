@@ -287,6 +287,7 @@ const UpdateStatusModal = (props) => {
               <Label for="note">รายละเอียด</Label>
               <Input type="textarea" name="note" innerRef={register}></Input>
             </FormGroup>
+
             {detail[0].status === "EDIT" ? (
               <FormGroup>
                 <Label for="file">
@@ -315,7 +316,12 @@ const UpdateStatusModal = (props) => {
             ) : null}
             <FormGroup>
               <Label for="status_change">สถานะที่ต้องการเปลี่ยน</Label>
-              <Input type="select" name="status_change" innerRef={register}>
+              <Input
+                type="select"
+                name="status_change"
+                onChange={onChange}
+                innerRef={register}
+              >
                 {StatusChange.map((currentStatus, index) => (
                   <option
                     key={currentStatus.id}
