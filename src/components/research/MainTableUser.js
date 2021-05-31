@@ -67,7 +67,21 @@ const MainTableUser = (props) => {
     () => [
       { Header: "buasri_id", accessor: "buasri_id" },
       { Header: "ชื่องานวิจัย", accessor: "name" },
-      { Header: "สถานะ", accessor: "status" },
+      {
+        Header: "สถานะ",
+        accessor: "status",
+        Cell: ({ cell }) => (
+          <Fragment>
+            {cell.row.values.status === "WAITING" ? "รอกรรมการตรวจสอบ" : null}
+            {cell.row.values.status === "WAITINGADMIN"
+              ? "รอฝ่ายวิจัยตรวจสอบ"
+              : null}
+            {cell.row.values.status === "EDIT" ? "แก้ไขรายละเอียด" : null}
+            {cell.row.values.status === "REJECT" ? "ยกเลิก" : null}
+            {cell.row.values.status === "APPROVED" ? "ผ่านการตรวจสอบ" : null}
+          </Fragment>
+        ),
+      },
       {
         Header: "รายละเอียด",
         accessor: "_id",

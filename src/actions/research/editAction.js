@@ -10,6 +10,8 @@ const conphp = config.connectPHP;
 export const newlist =
   ({
     token,
+    data_email,
+    count_email,
     _id,
     buasri_id,
     email,
@@ -45,9 +47,17 @@ export const newlist =
       },
     };
 
+    const config_email = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
     // body
     const body = JSON.stringify({
       token,
+      data_email,
+      count_email,
       _id,
       buasri_id,
       year,
@@ -78,14 +88,36 @@ export const newlist =
       file_path,
       status,
     });
+
+    const body_email = JSON.stringify({
+      data_email,
+      count_email,
+      firstname,
+      lastname,
+      research_name,
+    });
+
     // console.log(body);
     axios
       .post(conResearch + "/api/list/edit", body, config)
       .then((res) => {
         if (res.data) {
-          dispatch({
-            type: RESEARCH_EDIT_UPDATE,
-          });
+          axios
+            .post(
+              conphp + "/research/detail/email_update_committee.php",
+              body_email,
+              config_email
+            )
+            .then((resEmail) => {
+              if (resEmail.data.Result) {
+                dispatch({
+                  type: RESEARCH_EDIT_UPDATE,
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
       })
       .catch((err) => {

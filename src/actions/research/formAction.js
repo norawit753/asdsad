@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   RESEARCH_GET_UPLOAD_FILE,
   RESEARCH_ADD_LIST_SUCCESS,
+  RESEARCH_SEND_MAIL_COMMITTEE,
   COLLECT_TAG,
 } from "../../type/research/type";
 
@@ -36,6 +37,8 @@ export const uploadfile = (NewUploadFile, token) => (dispatch) => {
 export const newlist =
   ({
     token,
+    data_email,
+    count_email,
     year,
     title_name,
     firstname,
@@ -68,7 +71,7 @@ export const newlist =
         "x-auth-token": token,
       },
     };
-    const configemail = {
+    const config_email = {
       headers: {
         "Content-Type": "application/json",
       },
@@ -101,15 +104,34 @@ export const newlist =
       file_path,
     });
 
+    const body_email = JSON.stringify({
+      data_email,
+      count_email,
+      title_name,
+      firstname,
+      lastname,
+      research_name: name,
+    });
     // console.log(body);
     axios
       .put(conResearch + "/api/list/add", body, config)
       .then((res) => {
-        if (res.data) {
-          dispatch({
-            type: RESEARCH_ADD_LIST_SUCCESS,
+        axios
+          .post(
+            conphp + "/research/form/email_form_committee.php",
+            body_email,
+            config_email
+          )
+          .then((resEmail) => {
+            if (resEmail.data.Result) {
+              dispatch({
+                type: RESEARCH_SEND_MAIL_COMMITTEE,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        }
       })
       .catch((err) => {
         console.log(err);

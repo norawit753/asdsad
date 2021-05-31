@@ -1,7 +1,7 @@
 import {
   COLLECT_TAG,
   CLEAR_TAG,
-  RESEARCH_ADD_LIST_SUCCESS,
+  RESEARCH_SEND_MAIL_COMMITTEE,
 } from "../../type/research/type";
 import { LOGOUT_SUCCESS, PAGE_LOADING } from "../../type/main/type";
 
@@ -20,7 +20,7 @@ export default function formReducer(state = initialState, action) {
             tags: data_tag,
           }
         : { ...state };
-    case RESEARCH_ADD_LIST_SUCCESS:
+    case RESEARCH_SEND_MAIL_COMMITTEE:
       return {
         ...state,
         send_success: true,

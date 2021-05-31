@@ -20,6 +20,9 @@ import {
   status_admin,
 } from "../../actions/research/listAction";
 
+// Get E-mail Action
+import { getemail_admin } from "../../actions/research/emailAction";
+
 const UpdateStatusModal = (props) => {
   const { handleSubmit, register } = useForm();
 
@@ -40,11 +43,19 @@ const UpdateStatusModal = (props) => {
   const [disButton, setdisButton] = useState(false);
   const [OpenComment, setOpenComment] = useState(false);
 
+  // Email Reducer
+  const email_admin = useSelector((state) => state.research.email.email_admin);
+  const [countEmail, setcountEmail] = useState(0);
+
+  // ////////////////////////////////////////////////////////////////////
+
   UpdateStatusModal.propTypes = {
     status_committee: PropTypes.func.isRequired,
     status_admin: PropTypes.func.isRequired,
+    getemail_committee: PropTypes.func.isRequired,
+    getemail_admin: PropTypes.func.isRequired,
   };
-  const { status_committee, status_admin } = props;
+  const { status_committee, status_admin, getemail_admin } = props;
 
   // status ก่อนเปลี่ยน
   useEffect(() => {
@@ -102,6 +113,31 @@ const UpdateStatusModal = (props) => {
     // eslint-disable-next-line
   }, [StatusName]);
 
+  // Check หากมี modal ให้ดึง E-mail
+  useEffect(() => {
+    if (modal) {
+      // Check Status
+      if (detail) {
+        if (detail[0].status === "WAITING") {
+          const get_email_admin = async () => {
+            const SendToken = await {
+              token,
+            };
+            await getemail_admin(SendToken);
+          };
+          get_email_admin();
+        }
+      }
+    }
+  }, [modal]);
+
+  // IF GET EMAIL ADMIN THEN COUNT EMAIL
+  useEffect(() => {
+    if (email_admin) {
+      setcountEmail(email_admin.length);
+    }
+  }, [email_admin]);
+
   const toggle = async () => {
     await setmodal(!modal);
   };
@@ -130,40 +166,16 @@ const UpdateStatusModal = (props) => {
           email: detail[0].email,
           status: e.status_change,
           note: e.note,
+          count_email:
+            e.status_change === "WAITINGADMIN" ? countEmail : undefined,
+          data_email:
+            e.status_change === "WAITINGADMIN" ? email_admin : detail[0].email,
         };
-
+        // console.log(Update);
         if (e_research.position === "ADMIN") {
           status_admin(Update);
         } else if (e_research.position === "COMMITTEE") {
           status_committee(Update);
-        } else if (e_research.position === "USER") {
-        }
-      }
-    }
-
-    if (e_research) {
-      if (e_research.position === "COMMITTEE") {
-        if (e.status_change === "WAITINGADMIN") {
-          console.log("ส่ง E-mail ให้ admin และ user");
-          console.log("update log!!!");
-        } else if (e.status_change === "EDIT") {
-          console.log("ส่ง E-mail ให้ user");
-          console.log("update log!!!");
-        } else if (e.status_change === "REJECT") {
-          console.log("ส่ง E-mail ให้ user");
-          console.log("update log!!!");
-        }
-      }
-      if (e_research.position === "ADMIN") {
-        if (e.status_change === "APPROVED") {
-          console.log("ส่ง E-mail ให้ user");
-          console.log("update log!!!");
-        } else if (e.status_change === "REJECT") {
-          console.log("ส่ง E-mail ให้ user");
-          console.log("update log!!!");
-        } else if (e.status_change === "EDIT") {
-          console.log("ส่ง E-mail ให้ user");
-          console.log("update log!!!");
         }
       }
     }
@@ -245,5 +257,9 @@ const UpdateStatusModal = (props) => {
 };
 
 export default withRouter(
-  connect(null, { status_committee, status_admin })(UpdateStatusModal)
+  connect(null, {
+    status_committee,
+    status_admin,
+    getemail_admin,
+  })(UpdateStatusModal)
 );

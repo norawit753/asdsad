@@ -83,6 +83,10 @@ const MainTableAdmin = (props) => {
         ),
       },
       {
+        Header: "สังกัดหน่วยงาน",
+        accessor: "department",
+      },
+      {
         Header: "รายละเอียด",
         accessor: "_id",
         Cell: ({ cell }) => (

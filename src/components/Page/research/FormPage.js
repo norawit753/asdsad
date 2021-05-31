@@ -22,10 +22,14 @@ import Tags from "../../research/Tags";
 import BackResearchPage from "../../research/BackResearchPage";
 import { withRouter } from "react-router-dom";
 
+// Upload Action & Send Form Action
 import {
   uploadfile,
   newlist as sendList,
 } from "../../../actions/research/formAction";
+
+// Get E-mail Action
+import { getemail_committee } from "../../../actions/research/emailAction";
 
 // JSON
 import articleJson from "../../../utilis/research/typearticle.json";
@@ -49,6 +53,12 @@ const ResearchFormPage = (props) => {
   const e_research = useSelector((state) => state.main.auth.service.e_research);
   const tagstate = useSelector((state) => state.research.form.tags);
 
+  // From Email Reducer
+  // get email
+  const email_committee = useSelector(
+    (state) => state.research.email.email_committee
+  );
+  const [countEmail, setcountEmail] = useState(0);
   // Value Level
   const [Level0, setLevel0] = useState(null);
   const [Level1, setLevel1] = useState([
@@ -94,14 +104,27 @@ const ResearchFormPage = (props) => {
   ResearchFormPage.propTypes = {
     uploadfile: PropTypes.func.isRequired,
     sendList: PropTypes.func.isRequired,
+    getemail_committee: PropTypes.func.isRequired,
   };
 
-  const { uploadfile, sendList } = props;
+  const { uploadfile, sendList, getemail_committee } = props;
 
   // Start FormPage
   useEffect(() => {
     if (start) {
       // dispatch({ type: "CLEAR_TAG" });
+      // Load E-mail
+      if (e_research) {
+        const get_email_committee = async () => {
+          const Department = await {
+            token,
+            dep: user.dep,
+          };
+          // console.log(Department);
+          await getemail_committee(Department);
+        };
+        get_email_committee();
+      }
       setStart(false);
     }
   }, [start]);
@@ -114,6 +137,7 @@ const ResearchFormPage = (props) => {
         dispatch({ type: "PAGE_LOADING" });
         props.history.push("/research");
       };
+      // alert("ส่งเมล์สำเร็จกลับไปหน้าหลัก");
       goMainResearchPage();
     }
   }, [sendForm]);
@@ -143,6 +167,13 @@ const ResearchFormPage = (props) => {
     setPDFPath();
     // eslint-disable-next-line
   }, [mergeName]);
+
+  // IF GET EMAIL COMMITTEE THEN COUNT EMAIL
+  useEffect(() => {
+    if (email_committee) {
+      setcountEmail(email_committee.length);
+    }
+  }, [email_committee]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -235,6 +266,8 @@ const ResearchFormPage = (props) => {
 
     const newList = await {
       token,
+      data_email: email_committee,
+      count_email: countEmail,
       year: fullyear,
       buasri_id: user.buasri_id,
       title_name: user.title,
@@ -505,5 +538,9 @@ const ResearchFormPage = (props) => {
 };
 
 export default withRouter(
-  connect(null, { uploadfile, sendList })(ResearchFormPage)
+  connect(null, {
+    uploadfile,
+    sendList,
+    getemail_committee,
+  })(ResearchFormPage)
 );

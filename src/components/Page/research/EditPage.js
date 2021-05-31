@@ -18,6 +18,7 @@ import PropTypes from "prop-types";
 // Action
 import { uploadfile } from "../../../actions/research/formAction";
 import { newlist as sendList } from "../../../actions/research/editAction";
+import { getemail_committee } from "../../../actions/research/emailAction";
 
 // Json
 import typeartical from "../../../utilis/research/typearticle.json";
@@ -37,15 +38,23 @@ const ResearchEditPage = (props) => {
   const user = useSelector((state) => state.main.auth.user);
   const detail = useSelector((state) => state.research.list.detail);
   const trigger = useSelector((state) => state.research.trigger);
+  const e_research = useSelector((state) => state.main.auth.service.e_research);
   const [FullName, setFullName] = useState(null);
   const fullyear = new Date().getFullYear();
+  // Start Form
+  const [start, setStart] = useState(true);
   // Form
   const { register, handleSubmit } = useForm();
   // trigger research type
   const [ConfName, setConfName] = useState(false);
   const [PatentName, setPatentName] = useState(false);
   const [PettyPatentName, setPettyPatentName] = useState(false);
-
+  // From Email Reducer
+  // get email
+  const email_committee = useSelector(
+    (state) => state.research.email.email_committee
+  );
+  const [countEmail, setcountEmail] = useState(0);
   // level0
   // value เปลี่ยนเมื่อ level เปลี่ยน
   const [levelChange, setlevelChange] = useState("");
@@ -86,9 +95,10 @@ const ResearchEditPage = (props) => {
   ResearchEditPage.propTypes = {
     uploadfile: PropTypes.func.isRequired,
     sendList: PropTypes.func.isRequired,
+    getemail_committee: PropTypes.func.isRequired,
   };
 
-  const { uploadfile, sendList } = props;
+  const { uploadfile, sendList, getemail_committee } = props;
 
   // When Send Form Success
   useEffect(() => {
@@ -101,6 +111,31 @@ const ResearchEditPage = (props) => {
       goMainResearchPage();
     }
   }, [trigger]);
+
+  // Start EditPage
+  useEffect(() => {
+    if (start) {
+      if (e_research) {
+        const get_email_committee = async () => {
+          const Department = await {
+            token,
+            dep: user.dep,
+          };
+          // console.log(Department);
+          await getemail_committee(Department);
+        };
+        get_email_committee();
+      }
+      setStart(false);
+    }
+  }, [start]);
+
+  // IF GET EMAIL COMMITTEE THEN COUNT EMAIL
+  useEffect(() => {
+    if (email_committee) {
+      setcountEmail(email_committee.length);
+    }
+  }, [email_committee]);
 
   // หากมีข้อมูล ให้ใส่ข้อมูลลง redux
   useEffect(() => {
@@ -298,6 +333,8 @@ const ResearchEditPage = (props) => {
 
     const newList = await {
       token,
+      data_email: email_committee,
+      count_email: countEmail,
       _id: detail[0]._id,
       buasri_id: detail[0].buasri_id,
       year: detail[0].year ? detail[0].year : undefined,
@@ -662,5 +699,5 @@ const ResearchEditPage = (props) => {
 };
 
 export default withRouter(
-  connect(null, { uploadfile, sendList })(ResearchEditPage)
+  connect(null, { uploadfile, sendList, getemail_committee })(ResearchEditPage)
 );
